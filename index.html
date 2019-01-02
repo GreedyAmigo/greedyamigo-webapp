@@ -1,9 +1,40 @@
 <!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-	<h1>Greedy Amigo landing page</h1>
-	<p>nice, it is working properly! ;)</p>
-</body>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Sarabun|Work+Sans" rel="stylesheet">
+        <link href="style.css" rel="stylesheet">
+        <link href="css/index_style.css" rel="stylesheet">
+    </head>
+    <body>
+        <!-- nav coming soon -->
+        <main class="main">
+            <h1>Greedy Amigo</h1>
+            <button id="signup_btn">sign up</button>
+            <p>or</p>
+            <button id="login_btn">log in</button>
+
+            <section id="signup_section" class="section">
+                <form>
+                    <label id="nickname_desc" for="nickname">Nickname</label>
+                    <input type="text" id="nickname" name="nickname" placeholder="John" required><br>
+                    
+                    <label id="email_desc" for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="john@domain.com" required><br>
+
+                    <label id="password_desc" for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="***********" required><br>
+                </form>
+            </section>
+            <section id="login_section" class="section">
+                    <input type="text" id="identifier" name="identifier" placeholder="nickname or email" required><br>
+                    <input type="password" id="password" name="password" placeholder="***********" required><br>
+            </section>
+        </main>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="script.js"></script>
+        <script src="js/index.js"></script>
+    </body>
 </html>
