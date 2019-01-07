@@ -1,7 +1,14 @@
 body {
-    --first_color:  #333333;
-    --second_color: #6E5B72;
-    --third_color:  #5A4443;
+    --navbar_background_color: #35293D;
+    --navbar_selected_color: #D55447;
+    --navbar_unselected_color: #FFFFFF;
+
+    --background_color: #ECECD7;
+    
+    --greedy_amigo_color: #913228;
+
+    --header_color: #C48171;
+    --text_color: #000000;
     
     font-family:  'Work Sans', Helvetica, Arial, sans-serif;
 }
@@ -30,5 +37,5 @@ h3 {
 }
 
 p {
-    color: var(--third_color);
+    color: var(--text_color);
 }
