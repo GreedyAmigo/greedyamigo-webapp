@@ -122,7 +122,6 @@ input::placeholder, textarea::placeholder {
 }
 
 h1, h2, h3 {
-    color: var(--header_color);
     font-family: 'Sarabun', Helvetica, Arial, sans-serif;
 }
 
