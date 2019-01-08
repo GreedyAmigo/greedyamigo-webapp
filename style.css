@@ -9,7 +9,7 @@ body {
     
     --greedy_amigo_color: #FFFFFF;
 
-    --header_color: #C48171;
+    --header_color: #000000;
     --text_color: #000000;
     
     font-family:  'Work Sans', Helvetica, Arial, sans-serif;
@@ -79,34 +79,30 @@ body {
 
 @media screen and (max-width: 499px) {
     .navbar {
-        padding-left: 2%;
-        padding-right: 2%;
+        padding-left: 1%;
+        padding-right: 1%;
     }
 }
 
 @media screen and (min-width: 500px) {
     .navbar {
-        padding-left: 10%;
-        padding-right: 10%;
+        padding-left: 5%;
+        padding-right: 5%;
     }
 }
 
 @media screen and (min-width: 600px) {
     .navbar {
-        padding-left: 17%;
-        padding-right: 17%;
+        padding-left: 8.5%;
+        padding-right: 8.5%;
     }
 }
 
 @media screen and (min-width: 1000px) {
     .navbar {
-        padding-left: 25%;
-        padding-right: 25%;
+        padding-left: 12.5%;
+        padding-right: 12.5%;
     }
-}
-
-.greedy_amigo_header {
-    color: var(--greedy_amigo_color);
 }
 
 button {
