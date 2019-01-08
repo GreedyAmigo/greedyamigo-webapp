@@ -49,6 +49,11 @@ body {
     padding-top: 7px;
 }
 
+.nav_item_selected {
+    background: var(--navbar_selected_color);
+    border-radius: 5px 5px 0px 0px;
+}
+
 .nav_greedy_amigo_logo {
     width: 28px;
 
@@ -64,10 +69,12 @@ body {
 }
 
 .nav_right_item {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 
-    padding-top: 23px;
-    padding-left: 15px;
+    margin-top: 13px;
+    padding-top: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
 @media screen and (max-width: 499px) {
