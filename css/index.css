@@ -1,0 +1,59 @@
+.main {
+    text-align: center;
+
+    background: var(--navbar_background_color);
+    color:      var(--navbar_unselected_color);
+}
+
+.btn_signup {
+    background: #999999;
+}
+
+.btn_login {
+    background: #555555;
+}
+
+.input_element {
+    border-width: 1px;
+    border-color: var(--navbar_background_color)
+}
+
+@media screen and (max-width: 499px) {
+    .main {
+        margin:  7% 2% 0% 2%;
+        padding: 3% 7% 5% 7%;
+        border-radius: 2%;
+    }
+
+    .flexbox_container {
+        flex-wrap: wrap;
+    }
+
+    .aligned_item {
+        width: 90%
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .main {
+        margin:  10% 10% 0% 10%;
+        padding: 3% 7% 5% 7%;
+        border-radius: 2%;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .main {
+        margin:  13% 17% 0% 17%;
+        padding: 3% 7% 5% 7%;
+        border-radius: 2%;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .main {
+        margin:  14% 25% 0% 25%;
+        padding: 3% 7% 5% 7%;
+        border-radius: 2%;
+    }
+}

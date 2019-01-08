@@ -1,9 +1,62 @@
 <!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-	<h1>Greedy Amigo landing page</h1>
-	<p>nice, it is working properly! ;)</p>
-</body>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="img/favicon/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="img/favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+        <link rel="manifest" href="img/favicon/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+
+        <link href="https://fonts.googleapis.com/css?family=Sarabun|Work+Sans" rel="stylesheet">
+        <link href="style.css" rel="stylesheet">
+        <link href="css/index.css" rel="stylesheet">
+
+        <title>Greedy Amigo - Log In</title>
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="navbar_left">
+                <a href="index.html">
+                    <object class="nav_item nav_greedy_amigo_logo" type="image/svg+xml" data="img/logo.svg"></object>
+                </a>
+                <a class="nav_item nav_greedy_amigo_text" href="index.html">Greedy Amigo</a>
+            </div>
+            <div class="navbar_right">
+                <a class="nav_item nav_right_item nav_item_selected" href="index.html">Log in</a>
+                <a class="nav_item nav_right_item" href="pages/signup.html">Sign up</a>
+            </div>
+        </nav>
+
+        <main class="main">
+            <h1 class="greedy_amigo_header">Greedy Amigo</h1>
+
+            <form class="aligned_item login_section">
+                <input type="email" id="login_email" name="login_email" class="input_element" placeholder="Email" required><br>
+                <input type="password" id="login_password" name="login_password" class="input_element" placeholder="Password" required><br>
+                <button type="submit" class="btn_login">Log in</button>
+            </form>
+
+            <p>Don't have an account?</p>
+            <a href="pages/signup.html">Sign up here</a>
+        </main>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="script.js"></script>
+        <script src="js/index.js"></script>
+    </body>
 </html>
