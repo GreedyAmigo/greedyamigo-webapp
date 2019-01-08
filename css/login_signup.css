@@ -2,30 +2,23 @@
     text-align: center;
 
     color:      var(--text_color);
-    border-width: 3px;
+    border-width: 2px;
     border-radius: 10px;
     border-color: var(--brand_color_middle);
     border-style: solid;
-    
+
     padding: 3% 7% 5% 7%;
 }
 
 .input_element {
     border-width: 1px;
-    border-color: var(--brand_color_middle)
+    border-color: var(--brand_color_middle);
+    border-style: solid;
 }
 
 @media screen and (max-width: 499px) {
     .main {
         margin:  7% 2% 0% 2%;
-    }
-
-    .flexbox_container {
-        flex-wrap: wrap;
-    }
-
-    .aligned_item {
-        width: 90%
     }
 }
 
