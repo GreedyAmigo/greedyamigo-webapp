@@ -2,7 +2,7 @@ authorized = function() {
 
 };
 
-$(document).ready(function() {
+window.onload = function() {
     if (authorized() === true && windows.location.href.endsWith("index.html")) {
         window.location.replace("/sites/dashboard");
     } else if (authorized() === false) {
@@ -10,4 +10,4 @@ $(document).ready(function() {
     }
 
     //alert('ready');
-});
+};
