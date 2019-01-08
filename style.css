@@ -13,93 +13,6 @@ body {
     background: var(--background_color);
 }
 
-.navbar {
-    height: 60px;
-    background: linear-gradient(to right, var(--brand_color_begin), var(--brand_color_end));
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.navbar_left {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-}
-
-.navbar_right {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-}
-
-.nav_item {
-    text-decoration: none;
-    color: var(--text_color);
-    border: 30px black;
-
-    padding-top: 7px;
-}
-
-.nav_item_selected {
-    background: var(--selected_color);
-    border-radius: 5px 5px 0px 0px;
-}
-
-.nav_greedy_amigo_logo {
-    width: 28px;
-
-    padding-top: 12px;
-    padding-right: 7px;
-}
-
-.nav_greedy_amigo_text {
-    font-size: 1.5rem;
-    font-family: 'Sarabun', Helvetica, Arial, sans-serif;
-    color: var(--inverse_text_color);
-
-    padding-top: 16px;
-}
-
-.nav_right_item {
-    font-size: 1.1rem;
-
-    margin-top: 13px;
-    padding-top: 10px;
-    padding-left: 7px;
-    padding-right: 7px;
-}
-
-@media screen and (max-width: 499px) {
-    .navbar {
-        padding-left: 1%;
-        padding-right: 1%;
-    }
-}
-
-@media screen and (min-width: 500px) {
-    .navbar {
-        padding-left: 5%;
-        padding-right: 5%;
-    }
-}
-
-@media screen and (min-width: 600px) {
-    .navbar {
-        padding-left: 8.5%;
-        padding-right: 8.5%;
-    }
-}
-
-@media screen and (min-width: 1000px) {
-    .navbar {
-        padding-left: 12.5%;
-        padding-right: 12.5%;
-    }
-}
-
 button {
     color: var(--inverse_text_color);
     background: linear-gradient(to bottom, var(--brand_color_begin), var(--brand_color_end));
@@ -139,4 +52,91 @@ h3 {
 
 p {
     color: var(--text_color);
+}
+
+.navbar {
+    height: 60px;
+    background: linear-gradient(to right, var(--brand_color_begin), var(--brand_color_end));
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.navbar_left {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.navbar_right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.nav_item {
+    text-decoration: none;
+    color: var(--inverse_text_color);
+    border: 30px black;
+
+    padding-top: 7px;
+}
+
+.nav_item_selected {
+    color: var(--text_color);
+    background: var(--selected_color);
+    border-radius: 5px 5px 0px 0px;
+}
+
+.nav_greedy_amigo_logo {
+    width: 28px;
+
+    padding-top: 12px;
+    padding-right: 7px;
+}
+
+.nav_greedy_amigo_text {
+    font-size: 1.5rem;
+    font-family: 'Sarabun', Helvetica, Arial, sans-serif;
+
+    padding-top: 16px;
+}
+
+.nav_right_item {
+    font-size: 1.1rem;
+
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+@media screen and (max-width: 499px) {
+    .navbar {
+        padding-left: 1%;
+        padding-right: 1%;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .navbar {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .navbar {
+        padding-left: 8.5%;
+        padding-right: 8.5%;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .navbar {
+        padding-left: 12.5%;
+        padding-right: 12.5%;
+    }
 }
