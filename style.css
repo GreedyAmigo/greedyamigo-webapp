@@ -1,17 +1,11 @@
 body {
-    --navbar_background_color: #4E3C59;
-    --navbar-text_color: #FFFFFF;
-    --navbar_selected_color: #D55447;
-    --navbar_unselected_color: #FFFFFF;
-
-    --background_color: #FFFFFF;
-    --generic_button_color: #FFFFFF;
-    
-    --greedy_amigo_color: #FFFFFF;
-
-    --header_color: #C48171;
     --text_color: #000000;
-    
+    --inverse_text_color: #FFFFFF;
+    --brand_color_begin: #7835a5;
+    --brand_color_end: #5a1882;
+    --brand_color_middle: #692794;
+    --selected_color: #FFFFFF;
+
     font-family:  'Work Sans', Helvetica, Arial, sans-serif;
 
     min-width: 250px;
@@ -21,7 +15,7 @@ body {
 
 .navbar {
     height: 60px;
-    background: var(--navbar_background_color);
+    background: linear-gradient(to right, var(--brand_color_begin), var(--brand_color_end));
 
     display: flex;
     flex-direction: row;
@@ -43,14 +37,14 @@ body {
 
 .nav_item {
     text-decoration: none;
-    color: var(--navbar-text_color);
+    color: var(--text_color);
     border: 30px black;
 
     padding-top: 7px;
 }
 
 .nav_item_selected {
-    background: var(--navbar_selected_color);
+    background: var(--selected_color);
     border-radius: 5px 5px 0px 0px;
 }
 
@@ -64,6 +58,7 @@ body {
 .nav_greedy_amigo_text {
     font-size: 1.5rem;
     font-family: 'Sarabun', Helvetica, Arial, sans-serif;
+    color: var(--inverse_text_color);
 
     padding-top: 16px;
 }
@@ -79,39 +74,37 @@ body {
 
 @media screen and (max-width: 499px) {
     .navbar {
-        padding-left: 2%;
-        padding-right: 2%;
+        padding-left: 1%;
+        padding-right: 1%;
     }
 }
 
 @media screen and (min-width: 500px) {
     .navbar {
-        padding-left: 10%;
-        padding-right: 10%;
+        padding-left: 5%;
+        padding-right: 5%;
     }
 }
 
 @media screen and (min-width: 600px) {
     .navbar {
-        padding-left: 17%;
-        padding-right: 17%;
+        padding-left: 8.5%;
+        padding-right: 8.5%;
     }
 }
 
 @media screen and (min-width: 1000px) {
     .navbar {
-        padding-left: 25%;
-        padding-right: 25%;
+        padding-left: 12.5%;
+        padding-right: 12.5%;
     }
 }
 
-.greedy_amigo_header {
-    color: var(--greedy_amigo_color);
-}
-
 button {
-    background: var(--generic_button_color);
+    color: var(--inverse_text_color);
+    background: linear-gradient(to bottom, var(--brand_color_begin), var(--brand_color_end));
     border-radius: 3.5px;
+    border-width: 0px;
     padding: 1.75% 4% 1.75% 4%;
     margin: 1.75% 4% 1.75% 4%;
 }
@@ -129,7 +122,6 @@ input::placeholder, textarea::placeholder {
 }
 
 h1, h2, h3 {
-    color: var(--header_color);
     font-family: 'Sarabun', Helvetica, Arial, sans-serif;
 }
 
