@@ -1,24 +1,43 @@
 body {
-    --navbar_background_color: #35293D;
+    --navbar_background_color: #4E3C59;
     --navbar_selected_color: #D55447;
     --navbar_unselected_color: #FFFFFF;
 
-    --background_color: #ECECD7;
+    --background_color: #FFFFFF;
+    --generic_button_color: #FFFFFF;
     
-    --greedy_amigo_color: #913228;
+    --greedy_amigo_color: #FFFFFF;
 
     --header_color: #C48171;
     --text_color: #000000;
     
     font-family:  'Work Sans', Helvetica, Arial, sans-serif;
-}
 
-.main {
-    text-align: center;
+    min-width: 250px;
+    background: var(--background_color);
 }
 
 .greedy_amigo_header {
     color: var(--greedy_amigo_color);
+}
+
+button {
+    background: var(--generic_button_color);
+    border-radius: 3.5px;
+    padding: 1.75% 4% 1.75% 4%;
+    margin: 1.75% 4% 1.75% 4%;
+}
+
+input, textarea {
+    border-radius: 3.5px;
+    border-width: 0px;
+    margin:  1% 1% 1% 1%;
+    padding: 2% 2% 2% 2%;
+    width: 100%;
+}
+
+input::placeholder, textarea::placeholder {
+    font-style: italic;
 }
 
 h1, h2, h3 {

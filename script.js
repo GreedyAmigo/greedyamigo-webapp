@@ -9,5 +9,5 @@ $(document).ready(function() {
         window.location.replace("/index");
     }
 
-    alert('ready');
+    //alert('ready');
 });
