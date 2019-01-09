@@ -17,8 +17,8 @@ var signup = function(email, password) {
         "url": "https://" + AUTH0_DOMAIN + "/dbconnections/signup",
         "method": "POST",
         "headers": {
-            "content-type": "application/json"//,
-            // "Access-Control-Allow-Origin": "*",
+            "content-type": "application/json",
+             "Access-Control-Allow-Origin": "*"//,
             // "Access-Control-Allow-Methods": "POST"
         },
         "processData": false,
