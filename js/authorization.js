@@ -18,11 +18,10 @@ var signup = function(email, password) {
         "method": "POST",
         "headers": {
             "content-type": "application/json",
-             "Access-Control-Allow-Origin": "*"//,
-            // "Access-Control-Allow-Methods": "POST"
+             "Access-Control-Allow-Origin": "greedy-amigo.eu.auth0.com"
         },
         "processData": false,
-        "data": ""/* JSON.stringify(payload),*/
+        "data": JSON.stringify(payload)//,
         // "error": function(xhr, _ajaxOptions) {
         //     alert(xhr.responseText);
         // },
