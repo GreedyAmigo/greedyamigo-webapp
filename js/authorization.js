@@ -10,7 +10,7 @@ var webAuth = new auth0.WebAuth({
 webAuth.signup({
         connection: AUTH0_CONNECTION_NAME,
         email: "manuel.fuchs49@gmail.com",
-        password: "fuchs"
+        password: "asdfasdfasdf123123as"
     }, function(err) {
         if (err) {
             alert("something went wrong: " + JSON.stringify(err));
