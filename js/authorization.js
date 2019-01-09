@@ -2,42 +2,61 @@ const AUTH0_CLIENT_ID='xL6qnP2LY5o8PxzctN7jMrqhBJcz8k7t';
 const AUTH0_DOMAIN='greedy-amigo.eu.auth0.com';
 const AUTH0_CONNECTION_NAME="Username-Password-Authentication";
 
-var signup = function(email, password) {
-    let payload = {
-        "client_id": AUTH0_CLIENT_ID,
-        "email": email,
-        "password": password,
-        "connection": AUTH0_CONNECTION_NAME
-     }
+var webAuth = new auth0.WebAuth({
+    domain: AUTH0_DOMAIN,
+    clientID: AUTH0_CLIENT_ID
+});
 
-    //get jwt from auth0
-    $.ajax({
-        "async": false,
-        "crossDomain": true,
-        "url": "https://" + AUTH0_DOMAIN + "/dbconnections/signup",
-        "method": "POST",
-        "headers": {
-            "content-type": "application/json",
-             "Access-Control-Allow-Origin": "greedy-amigo.eu.auth0.com"
-        },
-        "processData": false,
-        "data": JSON.stringify(payload)//,
-        // "error": function(xhr, _ajaxOptions) {
-        //     alert(xhr.responseText);
-        // },
-        // "success": function(result, status, xhr) {
-        //     alert(result);
-        //     alert(status);
-        // }
-    }).done(function(response) {
-        alert(response);
-    });
+webAuth.signup({
+        connection: AUTH0_CONNECTION_NAME,
+        email: "manuel.fuchs49@gmail.com",
+        password: "fuchs"
+    }, function(err) {
+        if (err) {
+            alert("something went wrong: " + JSON.stringify(err));
+            return;
+        }
 
-    //persist on server
+        alert("account created!");
+        return;
+});
 
-}
+// var signup = function(email, password) {
+//     let payload = {
+//         "client_id": AUTH0_CLIENT_ID,
+//         "email": email,
+//         "password": password,
+//         "connection": AUTH0_CONNECTION_NAME
+//      }
 
-signup("manuel.fuchs49@gmail.com", "fuchs");
+//     //get jwt from auth0
+//     $.ajax({
+//         "async": false,
+//         "crossDomain": true,
+//         "url": "https://" + AUTH0_DOMAIN + "/dbconnections/signup",
+//         "method": "POST",
+//         "headers": {
+//             "content-type": "application/json",
+//              "Access-Control-Allow-Origin": "greedy-amigo.eu.auth0.com"
+//         },
+//         "processData": false,
+//         "data": JSON.stringify(payload)//,
+//         // "error": function(xhr, _ajaxOptions) {
+//         //     alert(xhr.responseText);
+//         // },
+//         // "success": function(result, status, xhr) {
+//         //     alert(result);
+//         //     alert(status);
+//         // }
+//     }).done(function(response) {
+//         alert(response);
+//     });
+
+//     //persist on server
+
+// }
+
+// signup("manuel.fuchs49@gmail.com", "fuchs");
 
 // export default class Auth {
 //     authenticated = this.isAuthenticated()
