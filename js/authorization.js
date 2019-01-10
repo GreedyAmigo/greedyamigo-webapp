@@ -77,7 +77,7 @@ let Auth0Wrapper = {
     },
 
     login: async function(email, password) {
-        Auth0Wrapper.jwt = await webAuth.login({
+        webAuth.login({
             realm: AUTH0_CONNECTION_NAME,
             email: email,
             password: password,
