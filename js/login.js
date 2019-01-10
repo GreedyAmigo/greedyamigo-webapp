@@ -1,4 +1,5 @@
 Auth0Wrapper.init();
+Auth0Wrapper.redirectIfAuthenticated();
 
 let signUp_handler = function () {
     let email = $("#login_email").val();

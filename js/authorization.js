@@ -76,7 +76,7 @@ let Auth0Wrapper = {
         });
     },
 
-    login: async function (email, password) {
+    login: async function(email, password) {
         Auth0Wrapper.jwt = await webAuth.login({
             realm: AUTH0_CONNECTION_NAME,
             email: email,
@@ -85,7 +85,7 @@ let Auth0Wrapper = {
         });
     },
 
-    logout: function () {
+    logout: function() {
         Auth0Wrapper.removeCurrentState();
 
         webAuth.logout({
@@ -93,9 +93,15 @@ let Auth0Wrapper = {
         });
     },
 
-    redirectIfUnauthenticated: function () {
+    redirectIfUnauthenticated: function() {
         if (!Auth0Wrapper.isAuthenticated()) {
             window.location.replace(UNAUTH_MAIN_PAGE);
+        }
+    },
+
+    redirectIfAuthenticated: function() {
+        if (Auth0Wrapper.isAuthenticated) {
+            window.location.replace(AUTH_MAIN_PAGE);
         }
     }
 }
