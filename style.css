@@ -85,8 +85,10 @@ p {
 }
 
 .nav_item {
+    font-size: 1rem;
     text-decoration: none;
     color: var(--inverse_text_color);
+    background-color: rgba(0, 0, 0, 0);
     border: 30px black;
 
     padding-top: 7px;
@@ -101,8 +103,7 @@ p {
 .nav_greedy_amigo_logo {
     width: 40px;
 
-    padding-top: 10px;
-    padding-right: 7px;
+    padding: 10px 0px 0px 7px;
 }
 
 .nav_greedy_amigo_text {
@@ -114,17 +115,25 @@ p {
 
 .nav_right_item {
     font-size: 1.1rem;
+    
+    margin: 23px 7px 0px 7px;
+    padding: 10px 7px 0px 7px;
+}
 
-    margin-top: 20px;
-    padding-top: 10px;
-    padding-left: 7px;
-    padding-right: 7px;
+.main {
+    text-align: center;
+
+    padding: 3% 7% 5% 7%;
 }
 
 @media screen and (max-width: 499px) {
     .navbar {
         padding-left: 1%;
         padding-right: 1%;
+    }
+
+    .main {
+        margin:  7% 2% 0% 2%;
     }
 }
 
@@ -133,6 +142,10 @@ p {
         padding-left: 5%;
         padding-right: 5%;
     }
+
+    .main {
+        margin:  7% 10% 0% 10%;
+    }
 }
 
 @media screen and (min-width: 600px) {
@@ -140,11 +153,19 @@ p {
         padding-left: 8.5%;
         padding-right: 8.5%;
     }
+
+    .main {
+        margin:  7% 17% 0% 17%;
+    }
 }
 
 @media screen and (min-width: 1000px) {
     .navbar {
         padding-left: 12.5%;
         padding-right: 12.5%;
+    }
+
+    .main {
+        margin:  7% 25% 0% 25%;
     }
 }

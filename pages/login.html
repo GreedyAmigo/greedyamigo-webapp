@@ -37,29 +37,27 @@
                 <a class="nav_item nav_greedy_amigo_text" href="../index.html">Greedy Amigo</a>
             </div>
             <div class="navbar_right">
-                <a class="nav_item nav_right_item" href="login.html">
+                <a class="nav_item nav_right_item nav_item_selected" href="login.html">
                     Log in
                 </a>
-                <a class="nav_item nav_right_item nav_item_selected" href="signup.html">
+                <a class="nav_item nav_right_item" href="signup.html">
                     Sign up
                 </a>
             </div>
         </nav>
 
         <main class="main">
-            <h1>Hi there!</h1>
+            <h1>Welcome back!</h1>
 
-            <form id="form_signup" class="signup_section" method="POST">
-                <input type="email" id="signup_email" name="signup_email" class="input_element" placeholder="Email" required><br>
-                <input type="text" id="signup_firstname" name="signup_firstname" class="input_element" placeholder="Firstname" required><br>
-                <input type="text" id="signup_lastname" name="signup_lastname" class="input_element" placeholder="Lastname" required><br>
-                <input type="password" id="signup_password" name="signup_password" class="input_element" placeholder="Password" required><br>
-                <button type="submit">Sign up</button>
+            <form id="form_login" class="aligned_item login_section" method="POST">
+                <input type="email" id="login_email" name="login_email" class="input_element" placeholder="Email" required><br>
+                <input type="password" id="login_password" name="login_password" class="input_element" placeholder="Password" required><br>
+                <button type="submit">Log in</button>
             </form>
 
             <p>
-                Already have an account?<br>
-                <a href="../index.html">Log in here</a>
+                Don't have an account?<br>
+                <a href="pages/signup.html">Sign up here</a>
             </p>
         </main>
 
@@ -67,6 +65,6 @@
         <script src="https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
         <script src="../js/settings.js"></script>
-        <script src="../js/signup.js"></script>
+        <script src="../js/login.js"></script>
     </body>
 </html>
