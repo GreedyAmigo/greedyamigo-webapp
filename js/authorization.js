@@ -100,7 +100,7 @@ let Auth0Wrapper = {
     },
 
     redirectIfAuthenticated: function() {
-        if (Auth0Wrapper.isAuthenticated) {
+        if (Auth0Wrapper.isAuthenticated()) {
             window.location.replace(AUTH_MAIN_PAGE);
         }
     }
