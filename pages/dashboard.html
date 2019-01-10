@@ -23,19 +23,31 @@
 
         <link href="https://fonts.googleapis.com/css?family=Sarabun|Work+Sans" rel="stylesheet">
         <link href="../style.css" rel="stylesheet">
-        <!-- <link href="../css/login_signup.css" rel="stylesheet"> -->
 
         <title>Greedy Amigo</title>
     </head>
     <body>
-        <!-- nav coming soon (position: fixed;) -->
-        <h1>dashboard</h1>
+        <nav class="navbar">
+            <div class="navbar_left">
+                <a href="dashboard.html">
+                    <object class="nav_item nav_greedy_amigo_logo" type="image/svg+xml" data="../img/logo.svg"></object>
+                </a>
+                <a class="nav_item nav_greedy_amigo_text" href="dashboard.html">Greedy Amigo</a>
+            </div>
+            <div class="navbar_right">
+                <a class="nav_item nav_right_item">
+                    Log out
+                </a>
+            </div>
+        </nav>
+
+        <main class="main">
+            <h1>dashboard</h1>
+        </main>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
         <script src="../js/settings.js"></script>
-        <script src="../js/authorization.js"></script>
-        <script src="../js/dashboard.js"></script>
     </body>
 </html>
