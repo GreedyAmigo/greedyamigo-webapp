@@ -1,62 +1,107 @@
-const AUTH0_CLIENT_ID='xL6qnP2LY5o8PxzctN7jMrqhBJcz8k7t';
-const AUTH0_DOMAIN='greedy-amigo.eu.auth0.com';
-const AUTH0_CONNECTION_NAME="Username-Password-Authentication";
+let Auth0Wrapper = {
+    jwt: undefined,
+    expiresAt: undefined,
+    webAuth: undefined,
 
-var webAuth = new auth0.WebAuth({
-    domain: AUTH0_DOMAIN,
-    clientID: AUTH0_CLIENT_ID
-});
+    init : function () {
+        webAuth = new auth0.WebAuth({
+            domain: AUTH0_DOMAIN,
+            clientID: AUTH0_CLIENT_ID,
+            responseType: "token"
+        });
 
-webAuth.signup({
-        connection: AUTH0_CONNECTION_NAME,
-        email: "manuel.fuchs49@gmail.com",
-        password: "asdfasdfasdf123123asA!"
-    }, function(err) {
-        if (err) {
-            alert("something went wrong: " + JSON.stringify(err));
-            return;
+        let url_parts = window.location.href.split("#");
+
+        if (url_parts.length === 2) {
+            let parameters = url_parts[1].split("&");
+            
+            if (parameters.length === 5) {
+                let access_token_param = parameters[0].split("=");
+
+                if (access_token_param[0] === "access_token"
+                    && access_token_param.length === 2) {
+
+                    jwt = access_token_param[1];
+                }
+            }
+        } else {
+            Auth0Wrapper.recoverPreviousState();
         }
+    },
 
-        alert("account created!");
-        return;
-});
+    isAuthenticated: function () {
+        //todo: validate with hash value from local storage
+        return false;
+    },
 
-// var signup = function(email, password) {
-//     let payload = {
-//         "client_id": AUTH0_CLIENT_ID,
-//         "email": email,
-//         "password": password,
-//         "connection": AUTH0_CONNECTION_NAME
-//      }
+    persistCurrentState: function () {
+        localStorage.setItem(
+            LOCAL_STORAGE_ACCESS_TOKEN_ID,
+            JSON.stringify(Auth0Wrapper.jwt));
+        //todo: save hash values
+        localStorage.setItem(
+            LOCAL_STORAGE_EXPIRES_AT_ID,
+            JSON.stringify(Auth0Wrapper.expiresAt));
+    },
 
-//     //get jwt from auth0
-//     $.ajax({
-//         "async": false,
-//         "crossDomain": true,
-//         "url": "https://" + AUTH0_DOMAIN + "/dbconnections/signup",
-//         "method": "POST",
-//         "headers": {
-//             "content-type": "application/json",
-//              "Access-Control-Allow-Origin": "greedy-amigo.eu.auth0.com"
-//         },
-//         "processData": false,
-//         "data": JSON.stringify(payload)//,
-//         // "error": function(xhr, _ajaxOptions) {
-//         //     alert(xhr.responseText);
-//         // },
-//         // "success": function(result, status, xhr) {
-//         //     alert(result);
-//         //     alert(status);
-//         // }
-//     }).done(function(response) {
-//         alert(response);
-//     });
+    recoverPreviousState: function () {
+        Auth0Wrapper.jwt = JSON.parse(localStorage.getItem(LOCAL_STORAGE_ACCESS_TOKEN_ID));
+        //todo: get hash value
+        Auth0Wrapper.expiresAt = JSON.parse(localStorage.getItem(LOCAL_STORAGE_EXPIRES_AT_ID));
+    },
 
-//     //persist on server
+    removeCurrentState: function() {
+        Auth0Wrapper.jwt = undefined;
+        // todo: set hash to undefined
+        Auth0Wrapper.expiresAt = undefined;
 
-// }
+        localStorage.removeItem(LOCAL_STORAGE_ACCESS_TOKEN_ID);
+        localStorage.removeItem('graphql_auth0_id_token')
+        localStorage.removeItem(LOCAL_STORAGE_EXPIRES_AT_ID);
+    },
+    
+    signup: async function (email, password) {
+        Auth0Wrapper.jwt = await webAuth.signup({
+            connection: AUTH0_CONNECTION_NAME,
+            email: email,
+            password: password/*,
+            redirectUri: AUTH_MAIN_PAGE*/
+        }, function(err) {
+            if (err) {
+                alert(err.description);
+            } else {
+                alert("persisting changes");
+                Auth0Wrapper.persistCurrentState();
+            }
+        });
+    },
 
-// signup("manuel.fuchs49@gmail.com", "fuchs");
+    login: async function (email, password) {
+        Auth0Wrapper.jwt = await webAuth.login({
+            realm: AUTH0_CONNECTION_NAME,
+            email: email,
+            password: password,
+            redirectUri: AUTH_MAIN_PAGE
+        });
+    },
+
+    logout: function () {
+        Auth0Wrapper.removeCurrentState();
+
+        webAuth.logout({
+            returnTo: UNAUTH_MAIN_PAGE
+        });
+    },
+
+    redirectIfUnauthenticated: function () {
+        if (!Auth0Wrapper.isAuthenticated()) {
+            window.location.replace(UNAUTH_MAIN_PAGE);
+        }
+    }
+}
+
+
+
 
 // export default class Auth {
 //     authenticated = this.isAuthenticated()
