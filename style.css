@@ -101,16 +101,16 @@ p {
 }
 
 .nav_greedy_amigo_logo {
-    width: 40px;
+    width: 33px;
 
-    padding: 10px 0px 0px 7px;
+    padding-top: 10px;
 }
 
 .nav_greedy_amigo_text {
     font-size: 1.5rem;
     font-family: 'Sarabun', Helvetica, Arial, sans-serif;
 
-    padding-top: 16px;
+    padding: 16px 0px 0px 7px;
 }
 
 .nav_right_item {
