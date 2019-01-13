@@ -28,3 +28,4 @@ dist/
 
 # Files #
 js/settings.js
+package-lock.json
