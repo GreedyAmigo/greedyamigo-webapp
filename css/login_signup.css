@@ -4,6 +4,8 @@
     border-radius: 10px;
     border-color: var(--brand_color_middle);
     border-style: solid;
+
+    padding: 3% 7% 5% 7%;
 }
 
 .input_element {
@@ -19,5 +21,28 @@
     background-color: var(--error_message_background_color);
 
     padding: 3px 3px 3px 3px;
-    margin: 6px 6px 6px 6px;
+}
+
+@media screen and (max-width: 499px) {
+    .main {
+        margin:  7% 2% 0% 2%;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .main {
+        margin:  7% 10% 0% 10%;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .main {
+        margin:  7% 17% 0% 17%;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .main {
+        margin:  7% 25% 0% 25%;
+    }
 }

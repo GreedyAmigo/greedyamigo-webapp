@@ -23,27 +23,66 @@
 
         <link href="https://fonts.googleapis.com/css?family=Sarabun|Work+Sans" rel="stylesheet">
         <link href="../style.css" rel="stylesheet">
+        <link href="../css/dashboard.css" rel="stylesheet">
 
         <title>Greedy Amigo</title>
     </head>
     <body>
-        <nav id="navbar" class="navbar">
-            <div class="navbar_left">
-                <a href="dashboard.html">
-                    <img class="nav_item nav_greedy_amigo_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
-                </a>
-                <a class="nav_item nav_greedy_amigo_text" href="dashboard.html">Greedy Amigo</a>
-            </div>
-            <div class="navbar_right">
-                <a class="nav_item nav_right_item" v-on:click="logOutUser" href="../index.html">
-                    Log out
-                </a>
-            </div>
-        </nav>
-
-        <main class="main">
-            <h1>dashboard</h1>
-        </main>
+        <div id="dashboard">
+            <nav class="navbar">
+                <div class="navbar_left">
+                    <a href="dashboard.html">
+                        <img class="nav_item nav_greedy_amigo_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
+                    </a>
+                    <a class="nav_item nav_greedy_amigo_text" href="dashboard.html">Greedy Amigo</a>
+                </div>
+                <div class="navbar_right">
+                    <a class="nav_item nav_right_item" v-on:click="logOutUser" href="../index.html">
+                        Log out
+                    </a>
+                </div>
+            </nav>
+    
+            <main id="main_element" class="main">
+                <h1>Lending overview</h1>
+    
+                <section class="lending_section" v-for="lending in lendings">
+                    <div class="single_lending">
+                        <div class="lending_item lending_date">
+                            <p class="lending_date_month">{{ lending.dueDate.month }}</p>
+                            <p class="lending_date_day">{{ lending.dueDate.day }}</p>
+                        </div>
+    
+                        <div class="lending_item lending_icons">
+                            <!-- <div class="lending_icon_container"> -->
+                                <p v-if="lending.emoji" class="lending_emoji">{{ lending.emoji }}</p>
+                                <p v-else class="lending_emoji">💵</p>
+                            <!-- </div> -->
+    
+                            <!-- <div class="lending_icon_container"> -->
+                                <img v-if="lending.cleared" class="lending_direction" src="../img/lent.svg" alt="lent ressource">
+                                <img v-else class="lending_direction" src="../img/borrowed.svg" alt="borrowed ressource">
+                            <!-- </div> -->
+                        </div>
+                        <div class="lending_item lending_title">
+                            <!-- {{ value }} -->
+                            <strong class="lending_item">
+                                {{ lending.description }}
+                            </strong>
+                        </div>
+                        <div class="lending_item lending_amount">
+                            <em v-if="lending.discriminator === 'moneyLending'">
+                                {{ lending.amount }} {{ lending.currency.symbol }}
+                            </em>
+                            <em v-else>
+                                {{ lending.thing.label }}
+                            </em>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+        
 
         <script src="../dist/dashboard.bundle.js"></script>
         <script src="../dist/dashboard.bundle.js.map"></script>

@@ -1,0 +1,52 @@
+.lending_section {
+}
+
+.single_lending {
+    height: 60px;
+
+    margin: 0px 0px 0px 0px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+
+    display: grid;
+    grid-template-columns: 10% 5% auto 17%;
+}
+
+.lending_date {
+    /* width: 100%;
+    height: 100%; */
+}
+
+.lending_date_month {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+
+    margin: 0px 0px 0px 0px;
+    padding: 10% 5% 3% 5%;
+}
+
+.lending_date_day {
+    font-size: 1.5rem;
+
+    /* margin: auto; */
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.lending_icons {
+    /* display: flex;
+    flex-direction: column;
+    justify-content: space-around; */
+}
+
+.lending_emoji {
+    height: 40%;
+    margin: 0px 0px 0px 0px;
+}
+
+.lending_direction {
+    height: 30%;
+
+    transform: rotate(180deg);
+}
