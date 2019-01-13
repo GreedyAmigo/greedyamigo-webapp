@@ -1,18 +1,12 @@
-import ApolloClient from 'apollo-boost'
-import Vue from 'vue'
-import VueApollo from 'vue-apollo'
-import gql from 'graphql-tag';
-import { APOLLO_URI } from '../js/settings.js'
+import Vue from "vue"
+import VueApollo from "vue-apollo"
+import gql from "graphql-tag";
+import { apolloProvider } from "./apollo.js"
+import { redirectIfAuthorized, saveJwt } from "./authentication"
 
-const apolloClient = new ApolloClient({
-    uri: APOLLO_URI
-});
+redirectIfAuthorized();
 
 Vue.use(VueApollo);
-
-const apolloProvider = new VueApollo({
-    defaultClient: apolloClient
-});
 
 let vueApplication = new Vue({
     el: "#form_signup",
@@ -42,11 +36,8 @@ let vueApplication = new Vue({
             }).then((data) => {
                 this.errorMessage = "";
 
-                const token = data.data.signup.token;
-                alert(token);
-
-                //todo: save token to localstorage
-                //todo: redirect user
+                saveJwt(data.data.signup.token);
+                redirectIfAuthorized();
             }).catch((error) => {
                 this.errorMessage = error.message;
                 console.error(error);

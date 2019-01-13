@@ -27,7 +27,7 @@
         <title>Greedy Amigo</title>
     </head>
     <body>
-        <nav class="navbar">
+        <nav id="navbar" class="navbar">
             <div class="navbar_left">
                 <a href="dashboard.html">
                     <img class="nav_item nav_greedy_amigo_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
@@ -35,7 +35,7 @@
                 <a class="nav_item nav_greedy_amigo_text" href="dashboard.html">Greedy Amigo</a>
             </div>
             <div class="navbar_right">
-                <a class="nav_item nav_right_item" href="../index.html">
+                <a class="nav_item nav_right_item" v-on:click="logOutUser" href="../index.html">
                     Log out
                 </a>
             </div>
@@ -45,8 +45,7 @@
             <h1>dashboard</h1>
         </main>
 
-        <script src="../node_modules/jquery/dist/jquery.min.js"></script>
-        <script src="../node_modules/vue/dist/vue.min.js"></script>"
-        <script src="../js/settings.js"></script>
+        <script src="../dist/dashboard.bundle.js"></script>
+        <script src="../dist/dashboard.bundle.js.map"></script>
     </body>
 </html>
