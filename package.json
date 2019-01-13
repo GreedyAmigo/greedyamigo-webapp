@@ -4,9 +4,9 @@
   "description": "greedy-amigo is about keeping track of your conferrals and/or loans from friends.",
   "main": "index.js",
   "scripts": {
-    "build": "webpack -d",
-    "build_development": "webpack --devtool sourcemap -d",
-    "ongoing_build_development": "webpack --devtool sourcemap -d --watch"
+    "build": "webpack -d --mode=production",
+    "build_development": "webpack --devtool sourcemap --mode=development -d",
+    "ongoing_build_development": "webpack --devtool sourcemap --mode=development -d --watch"
   },
   "repository": {
     "type": "git",
