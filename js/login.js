@@ -8,7 +8,7 @@ redirectIfAuthorized();
 
 Vue.use(VueApollo);
 
-let vueApplication = new Vue({
+let vueLoginForm = new Vue({
     el: "#form_login",
     apolloProvider,
     data: {
