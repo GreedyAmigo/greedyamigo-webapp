@@ -5,7 +5,10 @@ import gql from 'graphql-tag';
 import { APOLLO_URI } from '../js/settings.js'
 
 const apolloClient = new ApolloClient({
-    uri: APOLLO_URI
+    uri: APOLLO_URI,
+    headers: {
+        "Access-Control-Request-Headers": "graph.greedy-amigo.com"
+    }
 });
 
 Vue.use(VueApollo);
