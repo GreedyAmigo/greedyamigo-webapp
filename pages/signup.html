@@ -49,11 +49,12 @@
         <main class="main">
             <h1>Hi there!</h1>
 
-            <form id="form_signup" class="signup_section" method="POST">
-                <input type="email" id="signup_email" name="signup_email" class="input_element" placeholder="Email" required><br>
-                <input type="text" id="signup_firstname" name="signup_firstname" class="input_element" placeholder="Firstname" required><br>
-                <input type="text" id="signup_lastname" name="signup_lastname" class="input_element" placeholder="Lastname" required><br>
-                <input type="password" id="signup_password" name="signup_password" class="input_element" placeholder="Password" required><br>
+            <form id="form_signup" v-on:submit.prevent="signUpUser" class="signup_section">
+                <input type="email" v-model="email" id="signup_email" name="signup_email" class="input_element" placeholder="Email" required><br>
+                <input type="text" v-model="firstName" id="signup_firstname" name="signup_firstname" class="input_element" placeholder="Firstname" required><br>
+                <input type="text" v-model="lastName" id="signup_lastname" name="signup_lastname" class="input_element" placeholder="Lastname" required><br>
+                <input type="password" v-model="password" id="signup_password" name="signup_password" class="input_element" placeholder="Password" required><br>
+                <span v-if="errorMessage" class="error_message">{{ errorMessage }}</span><br>
                 <button type="submit">Sign up</button>
             </form>
 
@@ -63,8 +64,6 @@
             </p>
         </main>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="../js/settings.js"></script>
-        <script src="../js/signup.js"></script>
+        <script src="../dist/signup.bundle.js"></script>
     </body>
 </html>

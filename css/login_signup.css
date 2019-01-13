@@ -11,3 +11,13 @@
     border-color: var(--brand_color_middle);
     border-style: solid;
 }
+
+.error_message {
+    text-align: center;
+
+    color: var(--error_message_color);
+    background-color: var(--error_message_background_color);
+
+    padding: 3px 3px 3px 3px;
+    margin: 6px 6px 6px 6px;
+}

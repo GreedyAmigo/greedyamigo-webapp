@@ -13,6 +13,8 @@ body {
     --brand_color_end: #5a1882;
     --brand_color_middle: #692794;
     --selected_color: #FFFFFF;
+    --error_message_color: #D8000C;
+    --error_message_background_color: #FFBABA;
 
     font-family:  'Work Sans', Helvetica, Arial, sans-serif;
 
@@ -36,6 +38,13 @@ input, textarea {
     margin:  1% 1% 1% 1%;
     padding: 2% 2% 2% 2%;
     width: 100%;
+}
+
+input, textarea, span {
+    border-radius: 3.5px;
+    border-width: 0px;
+    margin:  1% 1% 1% 1%;
+    padding: 2% 2% 2% 2%;
 }
 
 input::placeholder, textarea::placeholder {
