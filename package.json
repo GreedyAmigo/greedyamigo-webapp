@@ -1,0 +1,48 @@
+{
+  "name": "greedyamigo-webapp",
+  "version": "1.0.0",
+  "description": "greedy-amigo is about keeping track of your conferrals and/or loans from friends.",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify js/login.js -o dist/login.bundle.js",
+    "watch": "watchify js/login.js -o dist/login.bundle.js -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GreedyAmigo/greedyamigo-webapp.git"
+  },
+  "author": "Manuel Fuchs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GreedyAmigo/greedyamigo-webapp/issues"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
+  },
+  "homepage": "https://github.com/GreedyAmigo/greedyamigo-webapp#readme",
+  "dependencies": {
+    "apollo-boost": "^0.1.23",
+    "browserify": "^16.2.3",
+    "graphql": "^14.0.2",
+    "jquery": "^3.3.1",
+    "reading-time": "^1.1.3",
+    "vue": "^2.5.22",
+    "vue-apollo": "^3.0.0-beta.27",
+    "watchify": "^3.11.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2015-loose": "^8.0.0",
+    "babelify": "^8.0.0"
+  }
+}
