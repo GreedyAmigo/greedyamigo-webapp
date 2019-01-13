@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import { apolloProvider } from "./apollo.js"
 import { redirectIfUnauthorized, removeJwt } from "./authentication"
 
-redirectIfUnauthorized();
+// redirectIfUnauthorized();
 
 Vue.use(VueApollo);
 
@@ -20,6 +20,10 @@ let vueApplication = new Vue({
                     day: 20,
                     month: "Feb",
                     year: 2019
+                },
+                other: {
+                    firstName: "Manuel",
+                    lastName: "Fuchs"
                 },
                 description: "Washing machine chash",
                 cleared: false,
@@ -42,6 +46,10 @@ let vueApplication = new Vue({
                     month: "Sep",
                     year: 2019
                 },
+                other: {
+                    firstName: "Thomas",
+                    lastName: "Maierixeidiek"
+                },
                 description: "Needed for a important thing",
                 cleared: true,
                 emoji: '👕',
@@ -54,6 +62,31 @@ let vueApplication = new Vue({
                 thing: {
                     id: 5,
                     label: "Washing machine"
+                }
+            },
+            {
+                discriminator: "moneyLending",
+                id: 0,
+                dueDate: {
+                    day: 29,
+                    month: "Mar",
+                    year: 2017
+                },
+                other: {
+                    firstName: "Simone",
+                    lastName: "Ammerixeixirixe"
+                },
+                description: "Food loan for tasty steak, eaten at OX at the Pluscity in Pasching, where we met with a really good friend of ours and the story goes on and on and on!",
+                cleared: false,
+                updatedAt: null,
+                createdAt: {
+                    day: 15,
+                    month: "Jan",
+                    year : 2015
+                },
+                amount: 76.5,
+                currency: {
+                    symbol: "€"
                 }
             }
         ]
