@@ -23,15 +23,6 @@ body {
     background: var(--background_color);
 }
 
-button {
-    color: var(--inverse_text_color);
-    background: linear-gradient(to bottom, var(--brand_color_begin), var(--brand_color_end));
-    border-radius: 3.5px;
-    border-width: 0px;
-    padding: 1.75% 4% 1.75% 4%;
-    margin: 1.75% 4% 1.75% 4%;
-}
-
 input, textarea {
     border-radius: 3.5px;
     border-width: 0px;
@@ -67,8 +58,17 @@ h3 {
     font-size: 1.2rem;
 }
 
-p {
+.p_default_style {
     color: var(--text_color);
+}
+
+.btn_default_style {
+    color: var(--inverse_text_color);
+    background: linear-gradient(to bottom, var(--brand_color_begin), var(--brand_color_end));
+    border-radius: 3.5px;
+    border-width: 0px;
+    padding: 1.75% 4% 1.75% 4%;
+    margin: 1.75% 4% 1.75% 4%;
 }
 
 .navbar {

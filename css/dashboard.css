@@ -72,3 +72,42 @@
 .lending_other {
     font-size: 0.85rem;
 }
+
+.add_lending_button {
+    position: fixed;
+    bottom: 2.5%;
+
+    --lending_button_sidelength: 45px;
+    width:  var(--lending_button_sidelength);
+    height: var(--lending_button_sidelength);
+
+    border-radius: 50%;
+
+    padding: 7.5px;
+}
+
+.add_lending_icon {
+    width: 100%;
+}
+
+.add_lending_button_placeholder {
+    height: 40px;
+}
+
+@media screen and (max-width: 499px) {
+    .add_lending_button {
+        left: 80%;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .add_lending_button {
+        left: 75%;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .add_lending_button {
+        left: 71.5%;
+    }
+}

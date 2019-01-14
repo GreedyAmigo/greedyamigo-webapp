@@ -55,9 +55,8 @@
                 <input type="text" v-model="lastName" id="signup_lastname" name="signup_lastname" class="input_element" placeholder="Lastname" required><br>
                 <input type="password" v-model="password" id="signup_password" name="signup_password" class="input_element" placeholder="Password" required><br>
                 <span v-if="errorMessage" class="error_message">{{ errorMessage }}</span><br>
-                <button type="submit">Sign up</button>
+                <button type="submit" class="btn_default_style">Sign up</button>
             </form>
-
 
             <div class="account_hint">
                 <strong>Already have an account?</strong><br>

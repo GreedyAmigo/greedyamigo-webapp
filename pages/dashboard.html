@@ -50,8 +50,8 @@
                     <li v-for="lending in lendings">
                         <div class="single_lending">
                             <div class="flexbox">
-                                <p class="lending_date_month">{{ lending.dueDate.month }}</p>
-                                <p class="lending_date_day">{{ lending.dueDate.day }}</p>
+                                <p class="p_default_style lending_date_month">{{ lending.dueDate.month }}</p>
+                                <p class="p_default_style lending_date_day">{{ lending.dueDate.day }}</p>
                             </div>
         
                             <div class="flexbox">
@@ -85,9 +85,16 @@
                         <hr v-if="lending !== lendings[lendings.length - 1]" class="lending_seperator">
                     </li>
                 </ul>
+
+                <div class="add_lending_button_placeholder">
+
+                </div>
+
+                <button class="btn_default_style add_lending_button">
+                    <img class="add_lending_icon" src="../img/add.svg" alt="add lending">
+                </button>
             </main>
         </div>
-        
 
         <script src="../dist/dashboard.bundle.js"></script>
         <script src="../dist/dashboard.bundle.js.map"></script>
