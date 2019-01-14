@@ -29,7 +29,7 @@
     </head>
     <body>
         <div id="dashboard">
-            <nav class="navbar">
+            <nav class="navbar" v-bind:class="{ blurr_item: addLendingDialogueVisible }">
                 <div class="navbar_left">
                     <a href="dashboard.html">
                         <img class="nav_item nav_greedy_amigo_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
@@ -43,7 +43,7 @@
                 </div>
             </nav>
     
-            <main id="main_element" class="main">
+            <main id="main_element" class="main" v-bind:class="{ blurr_item: addLendingDialogueVisible }">
                 <h1>Lending overview</h1>
     
                 <ul class="lending_section">
@@ -55,15 +55,11 @@
                             </div>
         
                             <div class="flexbox">
-                                <!-- <div class="lending_icon_container"> -->
-                                    <span v-if="lending.emoji" class="lending_emoji" >{{ lending.emoji }}</span>
-                                    <span v-else class="lending_emoji">💵</span>
-                                <!-- </div> -->
+                                <span v-if="lending.emoji" class="lending_emoji" >{{ lending.emoji }}</span>
+                                <span v-else class="lending_emoji">💵</span>
         
-                                <!-- <div class="lending_icon_container"> -->
-                                    <img v-if="lending.cleared" class="lending_direction" src="../img/lent.svg" alt="lent ressource">
-                                    <img v-else class="lending_direction" src="../img/borrowed.svg" alt="borrowed ressource">
-                                <!-- </div> -->
+                                <img v-if="lending.cleared" class="lending_direction" src="../img/lent.svg" alt="lent ressource">
+                                <img v-else class="lending_direction" src="../img/borrowed.svg" alt="borrowed ressource">
                             </div>
                             <div class="flexbox lending_text">
                                 <p class="lending_description">
@@ -88,14 +84,17 @@
                     </li>
                 </ul>
 
-                <div class="add_lending_button_placeholder">
-
-                </div>
-
-                <button class="btn_default_style add_lending_button">
+                <button class="btn_default_style add_lending_button" v-on:click="showAddLendingDialoge">
                     <img class="add_lending_icon" src="../img/add.svg" alt="add lending">
                 </button>
             </main>
+
+            <div v-if="addLendingDialogueVisible" class="lending_dialogue_background">
+                <div class="lending_dialogue">
+                    <h1>test</h1>
+                    <button class="btn_default_style" v-on:click="hideAddLendingDialoge">Unblur here!</button>
+                </div>
+            </div>
         </div>
 
         <script src="../dist/dashboard.bundle.js"></script>

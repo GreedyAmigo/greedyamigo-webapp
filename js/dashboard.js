@@ -12,6 +12,7 @@ let vueApplication = new Vue({
     el: "#dashboard",
     apolloProvider,
     data: {
+        addLendingDialogueVisible: false,
         lendings: [
             {
                 discriminator: "moneyLending",
@@ -274,6 +275,12 @@ let vueApplication = new Vue({
         logOutUser: function() {
             removeJwt();
             redirectIfUnauthorized();
+        },
+        showAddLendingDialoge: function() {
+            this.addLendingDialogueVisible = true;
+        },
+        hideAddLendingDialoge: function() {
+            this.addLendingDialogueVisible = false;
         }
         // logInUser: function() {
         //     this.$apollo.query({
