@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import { apolloProvider } from "./apollo.js"
 import { redirectIfUnauthorized, removeJwt } from "./authentication"
 
-// redirectIfUnauthorized();
+redirectIfUnauthorized();
 
 Vue.use(VueApollo);
 
