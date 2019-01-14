@@ -67,10 +67,15 @@
     overflow: hidden;
 
     max-height: 40px;
+    margin: 0px;
+    padding: 0px;
 }
 
 .lending_other {
     font-size: 0.85rem;
+    
+    margin: 0px;
+    padding: 0px;
 }
 
 .add_lending_button {

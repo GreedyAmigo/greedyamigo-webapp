@@ -66,12 +66,14 @@
                                 <!-- </div> -->
                             </div>
                             <div class="flexbox lending_text">
-                                <strong class="lending_description">
-                                    {{ lending.description }}
-                                </strong><br>                                
-                                <em class="lending_other">
-                                    with {{ lending.other.firstName }} {{ lending.other.lastName }}
-                                </em>
+                                <p class="lending_description">
+                                    {{ lending.description }}                       
+                                </p>
+                                <p class="lending_other">    
+                                    <em>
+                                        with {{ lending.other.firstName }} {{ lending.other.lastName }}
+                                    </em>
+                                </p>
                             </div>
                             <div class="flexbox">
                                 <em v-if="lending.discriminator === 'moneyLending'">
