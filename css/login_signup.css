@@ -1,7 +1,5 @@
 .main {
-    text-align: center;
-
-    color:      var(--text_color);
+    color: var(--text_color);
     border-width: 2px;
     border-radius: 10px;
     border-color: var(--brand_color_middle);
@@ -14,6 +12,19 @@
     border-width: 1px;
     border-color: var(--brand_color_middle);
     border-style: solid;
+}
+
+.error_message {
+    text-align: center;
+
+    color: var(--error_message_color);
+    background-color: var(--error_message_background_color);
+
+    padding: 3px 3px 3px 3px;
+}
+
+.account_hint {
+    margin-top: 30px;
 }
 
 @media screen and (max-width: 499px) {
