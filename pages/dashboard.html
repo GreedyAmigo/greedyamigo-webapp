@@ -48,26 +48,25 @@
     
                 <ul class="lending_section">
                     <li v-for="lending in lendings">
-                        <div class="single_lending">
+                        <div class="single_lending" v-bind:class="{ single_lending_cleared: lending.cleared }">
                             <div class="flexbox">
                                 <p class="p_default_style lending_date_month">{{ lending.dueDate.month }}</p>
                                 <p class="p_default_style lending_date_day">{{ lending.dueDate.day }}</p>
                             </div>
+                            
+                            <span v-if="lending.emoji" class="lending_emoji" >{{ lending.emoji }}</span>
+                            <span v-else class="lending_emoji">💵</span>
         
-                            <div class="flexbox">
-                                <span v-if="lending.emoji" class="lending_emoji" >{{ lending.emoji }}</span>
-                                <span v-else class="lending_emoji">💵</span>
-        
-                                <img v-if="lending.cleared" class="lending_direction" src="../img/lent.svg" alt="lent ressource">
-                                <img v-else class="lending_direction" src="../img/borrowed.svg" alt="borrowed ressource">
-                            </div>
+                            <img v-if="lending.lent" class="lending_direction lending_lent" src="../img/lent.svg" alt="lent ressource">
+                            <img v-else class="lending_direction lending_borrowed" src="../img/borrowed.svg" alt="borrowed ressource">
+
                             <div class="flexbox lending_text">
                                 <p class="lending_description">
                                     {{ lending.description }}                       
                                 </p>
                                 <p class="lending_other">    
                                     <em>
-                                        with {{ lending.other.firstName }} {{ lending.other.lastName }}
+                                        {{ lending.other.firstName }} {{ lending.other.lastName }}
                                     </em>
                                 </p>
                             </div>
@@ -79,6 +78,10 @@
                                     {{ lending.thing.label }}
                                 </em>
                             </div>
+                            <div class="flexbox">
+                                <img class="lending_edit_icon" src="../img/edit.svg" alt="lent ressource">
+                                <img class="lending_delete_icon" src="../img/delete.svg" alt="lent ressource">
+                            </div>
                         </div>
                         <hr v-if="lending !== lendings[lendings.length - 1]" class="lending_seperator">
                     </li>
@@ -89,11 +92,29 @@
                 </button>
             </main>
 
-            <div v-if="addLendingDialogueVisible" class="lending_dialogue_background">
-                <div class="lending_dialogue">
-                    <h1>test</h1>
-                    <button class="btn_default_style" v-on:click="hideAddLendingDialoge">Unblur here!</button>
-                </div>
+            <div v-if="lendingDialogue.addLendingDialogueVisible" class="lending_dialogue_background">
+                <form class="lending_dialogue" v-on:submit.prevent="saveLending" >
+                    <h2 class="popup_header">add new lending</h2>
+
+                    <div class="lending_dialogue_values">
+                        <input class="popup_lending_grid_item input_default_style popup_lending_description" placeholder="Description" required>
+
+                        <label id="duedatepicker_label" class="popup_lending_grid_item popup_lending_duedate_label">Due date</label>
+                        <datepicker class="popup_lending_grid_item popup_lending_duedate" v-model="newLending.dueDate" id="duedatepicker" name="duedatepicker"></datepicker>
+    
+                        <label id="create_new_friend_label" class="popup_lending_grid_item popup_lending_add_friend_label" for="create_new_friend_label">Add new friend</label>
+                        <input id="create_new_friend" type="checkbox" class="popup_lending_grid_item popup_lending_add_friend_checkbox" v-on:click="lendingDialogue.addNewFriend = !lendingDialogue.addNewFriend">
+    
+                        <input v-if="lendingDialogue.addNewFriend" class="popup_lending_grid_item input_default_style popup_lending_firstname" placeholder="Firstname">
+                        <input v-if="lendingDialogue.addNewFriend" class="popup_lending_grid_item input_default_style popup_lending_lastname" placeholder="Lastname">
+                        
+                    </div>
+
+                    <div class="btn_container">
+                        <button class="btn_default_style popup_lending_button" v-on:click="hideAddLendingDialoge">Cancel</button>
+                        <button type="submit" class="btn_default_style popup_lending_button">Save</button>
+                    </div>
+                </form>
             </div>
         </div>
 

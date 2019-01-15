@@ -3,6 +3,7 @@ import VueApollo from "vue-apollo"
 import gql from "graphql-tag";
 import { apolloProvider } from "./apollo.js"
 import { redirectIfUnauthorized, removeJwt } from "./authentication"
+import Datepicker from 'vuejs-datepicker';
 
 redirectIfUnauthorized();
 
@@ -11,10 +12,17 @@ Vue.use(VueApollo);
 let vueApplication = new Vue({
     el: "#dashboard",
     apolloProvider,
+    components: {
+        Datepicker
+    },
     data: {
-        addLendingDialogueVisible: false,
+        lendingDialogue: {
+            addLendingDialogueVisible: false,
+            addNewFriend: false,
+        },
         lendings: [
             {
+                lent: true,
                 discriminator: "moneyLending",
                 id: 0,
                 dueDate: {
@@ -40,6 +48,7 @@ let vueApplication = new Vue({
                 }
             },
             {
+                lent: false,
                 discriminator: "thingLending",
                 id: 0,
                 dueDate: {
@@ -66,6 +75,7 @@ let vueApplication = new Vue({
                 }
             },
             {
+                lent: false,
                 discriminator: "moneyLending",
                 id: 0,
                 dueDate: {
@@ -78,7 +88,7 @@ let vueApplication = new Vue({
                     lastName: "Ammerixeixirixe"
                 },
                 description: "Food loan for tasty steak, eaten at OX at the Pluscity in Pasching, where we met with a really good friend of ours and the story goes on and on and on!",
-                cleared: false,
+                cleared: true,
                 updatedAt: null,
                 createdAt: {
                     day: 15,
@@ -91,6 +101,7 @@ let vueApplication = new Vue({
                 }
             },
             {
+                lent: true,
                 discriminator: "thingLending",
                 id: 0,
                 dueDate: {
@@ -117,6 +128,7 @@ let vueApplication = new Vue({
                 }
             },
             {
+                lent: true,
                 discriminator: "moneyLending",
                 id: 0,
                 dueDate: {
@@ -142,6 +154,7 @@ let vueApplication = new Vue({
                 }
             },
             {
+                lent: true,
                 discriminator: "thingLending",
                 id: 0,
                 dueDate: {
@@ -168,6 +181,7 @@ let vueApplication = new Vue({
                 }
             },
             {
+                lent: true,
                 discriminator: "moneyLending",
                 id: 0,
                 dueDate: {
@@ -193,6 +207,7 @@ let vueApplication = new Vue({
                 }
             },
             {
+                lent: true,
                 discriminator: "thingLending",
                 id: 0,
                 dueDate: {
@@ -219,6 +234,7 @@ let vueApplication = new Vue({
                 }
             },
             {
+                lent: true,
                 discriminator: "moneyLending",
                 id: 0,
                 dueDate: {
@@ -244,6 +260,7 @@ let vueApplication = new Vue({
                 }
             },
             {
+                lent: true,
                 discriminator: "thingLending",
                 id: 0,
                 dueDate: {
@@ -269,7 +286,10 @@ let vueApplication = new Vue({
                     label: "Washing machine"
                 }
             }
-        ]
+        ],
+        newLending: {
+            dueDate: new Date()
+        }
     },
     methods: {
         logOutUser: function() {
@@ -277,10 +297,16 @@ let vueApplication = new Vue({
             redirectIfUnauthorized();
         },
         showAddLendingDialoge: function() {
-            this.addLendingDialogueVisible = true;
+            this.lendingDialogue.addLendingDialogueVisible = true;
         },
         hideAddLendingDialoge: function() {
-            this.addLendingDialogueVisible = false;
+            this.lendingDialogue.addLendingDialogueVisible = false;
+        },
+        saveLending: function() {
+            // save to gql server
+            // use fast ui response handler
+
+            this.hideAddLendingDialoge();
         }
         // logInUser: function() {
         //     this.$apollo.query({

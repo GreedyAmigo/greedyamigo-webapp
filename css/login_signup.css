@@ -1,17 +1,11 @@
 .main {
     color: var(--text_color);
-    border-width: 2px;
+    border-width: var(--container_border_radius);
     border-radius: 10px;
     border-color: var(--brand_color_middle);
     border-style: solid;
 
     padding: 3% 7% 5% 7%;
-}
-
-.input_element {
-    border-width: 1px;
-    border-color: var(--brand_color_middle);
-    border-style: solid;
 }
 
 .error_message {
