@@ -139,14 +139,14 @@
     }
 }
 
-/* ----------------------------------------------- */
-/* add lending dialogue styling                    */
-/* ----------------------------------------------- */
+/* ------------------------------------------------------------------ */
+/* add lending popup styling                                          */
+/* ------------------------------------------------------------------ */
 .blurr_item {
     filter: blur(0.175rem);
 }
 
-.lending_dialogue_background {
+.popup__background {
     position: fixed;
     top: 0;
     left: 0;
@@ -157,7 +157,7 @@
     background: var(--popup_background_color);
 }
 
-.lending_dialogue {
+.popup__container {
     filter: blur(rem);
     background: var(--popup_window_background_color);
     border-radius: var(--container_border_radius);
@@ -172,11 +172,11 @@
     grid-row-gap: 0.5em;
 }
 
-.popup_header {
+.popup__header {
     margin-top: 0px;
 }
 
-.popup_lending_grid_item {
+.popup__item {
     width: auto;
     max-height: 30px;
     align-self: center;
@@ -186,31 +186,31 @@
     padding: 7px;
 }
 
-.popup_lending_description {
+.popup__description {
     margin: 1px;
 
     grid-row: 1;
     grid-column: 1 / span 3;
 }
 
-.popup_lending_duedate_label {
+.popup__duedate_label {
     grid-row: 2;
     grid-column: 1;
 }
 
-.popup_lending_duedate {
+.popup__lending_duedate {
     align-self: center;
 
     grid-row: 2;
     grid-column: 2 / span 2;
 }
 
-.popup_is_borrowed_label {
+.popup__is_borrowed_label {
     grid-row: 3;
     grid-column: 1;
 }
 
-.popup_is_borrowed {
+.popup__is_borrowed {
     width: auto;
     margin-right: 10px;
     
@@ -221,12 +221,12 @@
     grid-column: 1;
 }
 
-.popup_lending_add_friend_label {
+.popup__add_friend_label {
     grid-row: 4;
     grid-column: 1;
 }
 
-.popup_lending_add_friend {
+.popup__add_friend {
     width: auto;
     margin-right: 10px;
     
@@ -237,41 +237,46 @@
     grid-column: 1;
 }
 
-.popup_lending_firstname {
+.popup__firstname {
     margin: 2.5px;
 
     grid-row: 4;
     grid-column: 2;
 }
 
-.popup_lending_lastname {
+.popup__lastname {
     margin: 1px;
 
     grid-row: 4;
     grid-column: 3;
 }
 
-.popup_friend_search {
+.popup__friend_search {
     grid-row: 4;
     grid-column: 2 / span 2;
 }
 
-.popup_lending_type_label {
+.popup__type_label {
     grid-row: 5;
     grid-column: 1;
 }
 
-.popup_lending_type {
+.popup__type {
     grid-row: 5;
     grid-column: 2 / span 2;
 }
 
-.popup_lending_add_thing_label {
+.popup__amount {
+    grid-row: 6;
+    grid-column: 2;
+}
+
+.popup__add_thing_label {
     grid-row: 6;
     grid-column: 1;
 }
 
-.popup_lending_add_thing {
+.popup__add_thing {
     width: auto;
     margin-right: 10px;
     
@@ -282,12 +287,7 @@
     grid-column: 1;
 }
 
-.popup_lending_amount {
-    grid-row: 6;
-    grid-column: 2;
-}
-
-.popup_lending_emoji {
+.popup__emoji {
     text-align: center;
 
     margin: 1px;
@@ -296,17 +296,17 @@
     grid-column: 3;
 }
 
-.popup_thing_select_label {
+.popup__thing_select_label {
     grid-row: 7;
     grid-column: 1;
 }
 
-.popup_new_thing {
+.popup__new_thing {
     grid-row: 6;
     grid-column: 2;
 }
 
-.popup_thing_select {
+.popup__thing_select {
     grid-row: 7;
     grid-column: 2 / span 2;
 }
@@ -316,12 +316,12 @@
     justify-content: space-evenly
 }
 
-.popup_lending_button {
+.popup__lending_button {
     width: 30%;
 }
 
 @media screen and (max-width: 499px) {
-    .lending_dialogue {
+    .popup__container {
         margin-top: 30%;
         margin-left: auto;
         margin-right: auto;
@@ -330,7 +330,7 @@
 }
 
 @media screen and (min-width: 500px) {
-    .lending_dialogue {
+    .popup__container {
         margin-top: 30%;
         margin-left: auto;
         margin-right: auto;
@@ -339,7 +339,7 @@
 }
 
 @media screen and (min-width: 600px) {
-    .lending_dialogue {
+    .popup__container {
         margin-top: 27.5%;
         margin-left: auto;
         margin-right: auto;
@@ -348,7 +348,7 @@
 }
 
 @media screen and (min-width: 800px) {
-    .lending_dialogue {
+    .popup__container {
         margin-top: 25%;
         margin-left: auto;
         margin-right: auto;

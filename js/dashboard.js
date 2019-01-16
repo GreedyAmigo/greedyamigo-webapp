@@ -56,6 +56,8 @@ let vueApplication = new Vue({
             // use fast ui response handler
 
             this.hideAddLendingDialoge();
+
+            this.fetchUserData();
         },
         getFriends: function() {
             let uniqueFriendArray = new Array();
@@ -85,7 +87,13 @@ let vueApplication = new Vue({
                             .filter(l => typeof l.thing !== "undefined")
                             .map(l => l.thing.label)));
         },
-        onPageLoad: function() {
+        displayMoneyLendingOptions: function() {
+            return this.newLending.discriminator === MoneyLendingDiscriminator;
+        },
+        displayThingLendingOptions: function() {
+            return this.newLending.discriminator === ThingLendingDiscriminator;
+        },
+        fetchUserData: function() {
             this.$apollo
                 .query({
                     query: gql`query {
@@ -136,7 +144,7 @@ let vueApplication = new Vue({
                             .concat(data.data.me.thingLendings);
 
                     this.user.lendings = processUserInfo(allUnprocessedLendings);
-                    
+
                     this.dataFetched = true;
                 }).catch((error) => {
                     this.userMessage = error.message;
@@ -145,6 +153,6 @@ let vueApplication = new Vue({
         }
     },
     beforeMount() {
-        this.onPageLoad();
+        this.fetchUserData();
     }
 });
