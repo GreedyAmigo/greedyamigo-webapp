@@ -29,7 +29,7 @@
     </head>
     <body>
         <div id="dashboard">
-            <nav class="navbar" v-bind:class="{ blurr_item: addLendingDialogueVisible }">
+            <nav class="navbar" v-bind:class="{ blurr_item: lendingDialogue.addLendingDialogueVisible }">
                 <div class="navbar_left">
                     <a href="dashboard.html">
                         <img class="nav_item nav_greedy_amigo_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
@@ -43,11 +43,11 @@
                 </div>
             </nav>
     
-            <main id="main_element" class="main" v-bind:class="{ blurr_item: addLendingDialogueVisible }">
-                <h1>Lending overview</h1>
+            <main id="main_element" class="main" v-bind:class="{ blurr_item: lendingDialogue.addLendingDialogueVisible }">
+                <h1>Hi {{ user.firstName }} {{ user.lastName }}</h1>
     
                 <ul class="lending_section">
-                    <li v-for="lending in lendings">
+                    <li v-for="lending in user.lendings">
                         <div class="single_lending" v-bind:class="{ single_lending_cleared: lending.cleared }">
                             <div class="flexbox">
                                 <p class="p_default_style lending_date_month" v-bind:class="{ single_lending_cleared: lending.cleared }">{{ lending.dueDate.month }}</p>
@@ -83,7 +83,7 @@
                                 <img class="lending_delete_icon" src="../img/delete.svg" alt="lent ressource">
                             </div>
                         </div>
-                        <hr v-if="lending !== lendings[lendings.length - 1]" class="lending_seperator">
+                        <hr v-if="lending !== user.lendings[user.lendings.length - 1]" class="lending_seperator">
                     </li>
                 </ul>
 
@@ -92,7 +92,7 @@
                 </button>
             </main>
 
-            <div v-if="addLendingDialogueVisible" class="lending_dialogue_background">
+            <div v-if="lendingDialogue.addLendingDialogueVisible" class="lending_dialogue_background">
                 <form class="lending_dialogue" v-on:submit.prevent="saveLending" >
                     <h2 class="popup_header">add new lending</h2>
 
@@ -115,6 +115,8 @@
                         <select class="popup_lending_grid_item popup_lending_type" v-model="newLending.discriminator">
                             <option v-for="lendingType in lendingTypes" :value="lendingType">{{ lendingType }}</option>
                         </select>
+
+                        
                     </div>
 
                     <div class="btn_container">
@@ -124,6 +126,8 @@
                 </form>
             </div>
         </div>
+
+        
 
         <script src="../dist/dashboard.bundle.js"></script>
         <script src="../dist/dashboard.bundle.js.map"></script>
