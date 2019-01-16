@@ -166,7 +166,6 @@
 }
 
 .lending_dialogue_values {
-
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 50px 25px 25px 25px 25px 25px;
@@ -179,6 +178,7 @@
 
 .popup_lending_grid_item {
     width: auto;
+    max-height: 30px;
     align-self: center;
 
     font-size: 0.7rem;
@@ -187,6 +187,8 @@
 }
 
 .popup_lending_description {
+    margin: 1px;
+
     grid-row: 1;
     grid-column: 1 / span 3;
 }
@@ -197,8 +199,10 @@
 }
 
 .popup_lending_duedate {
+    align-self: center;
+
     grid-row: 2;
-    grid-column: 2;
+    grid-column: 2 / span 2;
 }
 
 .popup_lending_add_friend_label {
@@ -210,6 +214,7 @@
     width: auto;
     margin-right: 10px;
     
+    align-self: center;
     justify-self: end;
 
     grid-row: 3;
@@ -217,13 +222,32 @@
 }
 
 .popup_lending_firstname {
+    margin: 2.5px;
+
     grid-row: 3;
     grid-column: 2;
 }
 
 .popup_lending_lastname {
+    margin: 1px;
+
     grid-row: 3;
     grid-column: 3;
+}
+
+.popup_friend_search {
+    grid-row: 3;
+    grid-column: 2 / span 2;
+}
+
+.popup_lending_type_label {
+    grid-row: 4;
+    grid-column: 1;
+}
+
+.popup_lending_type {
+    grid-row: 4;
+    grid-column: 2 / span 2;
 }
 
 .btn_container {
@@ -277,7 +301,7 @@
 
 @media screen and (min-width: 1000px) {
     .lending_dialogue {
-        margin-top: 20%;
+        margin-top: 15%;
         margin-left: auto;
         margin-right: auto;
         width: 58.35%;

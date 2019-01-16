@@ -50,8 +50,8 @@
                     <li v-for="lending in lendings">
                         <div class="single_lending" v-bind:class="{ single_lending_cleared: lending.cleared }">
                             <div class="flexbox">
-                                <p class="p_default_style lending_date_month">{{ lending.dueDate.month }}</p>
-                                <p class="p_default_style lending_date_day">{{ lending.dueDate.day }}</p>
+                                <p class="p_default_style lending_date_month" v-bind:class="{ single_lending_cleared: lending.cleared }">{{ lending.dueDate.month }}</p>
+                                <p class="p_default_style lending_date_day" v-bind:class="{ single_lending_cleared: lending.cleared }">{{ lending.dueDate.day }}</p>
                             </div>
                             
                             <span v-if="lending.emoji" class="lending_emoji" >{{ lending.emoji }}</span>
@@ -92,7 +92,7 @@
                 </button>
             </main>
 
-            <div v-if="lendingDialogue.addLendingDialogueVisible" class="lending_dialogue_background">
+            <div v-if="addLendingDialogueVisible" class="lending_dialogue_background">
                 <form class="lending_dialogue" v-on:submit.prevent="saveLending" >
                     <h2 class="popup_header">add new lending</h2>
 
@@ -107,7 +107,14 @@
     
                         <input v-if="lendingDialogue.addNewFriend" class="popup_lending_grid_item input_default_style popup_lending_firstname" placeholder="Firstname">
                         <input v-if="lendingDialogue.addNewFriend" class="popup_lending_grid_item input_default_style popup_lending_lastname" placeholder="Lastname">
-                        
+                        <select v-else class="popup_lending_grid_item popup_friend_search">
+                            <option v-for="friend in getFriends()" :value="friend">{{ friend }}</option>
+                        </select>
+
+                        <label id="lendingtype_label" class="popup_lending_grid_item popup_lending_type_label" for="lendingtype">Lending type</label>
+                        <select class="popup_lending_grid_item popup_lending_type" v-model="newLending.discriminator">
+                            <option v-for="lendingType in lendingTypes" :value="lendingType">{{ lendingType }}</option>
+                        </select>
                     </div>
 
                     <div class="btn_container">

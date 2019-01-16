@@ -3,7 +3,7 @@ import VueApollo from "vue-apollo"
 import gql from "graphql-tag";
 import { apolloProvider } from "./apollo.js"
 import { redirectIfUnauthorized, removeJwt } from "./authentication"
-import Datepicker from 'vuejs-datepicker';
+import Datepicker from "vuejs-datepicker";
 
 redirectIfUnauthorized();
 
@@ -16,8 +16,8 @@ let vueApplication = new Vue({
         Datepicker
     },
     data: {
+        addLendingDialogueVisible: false,
         lendingDialogue: {
-            addLendingDialogueVisible: false,
             addNewFriend: false,
         },
         lendings: [
@@ -287,8 +287,14 @@ let vueApplication = new Vue({
                 }
             }
         ],
+        lendingTypes: [
+            "Money lending",
+            "Thing lending"
+        ],
         newLending: {
-            dueDate: new Date()
+            dueDate: new Date(),
+            friend: null,
+            discriminator: "Money lending",
         }
     },
     methods: {
@@ -297,17 +303,35 @@ let vueApplication = new Vue({
             redirectIfUnauthorized();
         },
         showAddLendingDialoge: function() {
-            this.lendingDialogue.addLendingDialogueVisible = true;
+            this.addLendingDialogueVisible = true;
         },
         hideAddLendingDialoge: function() {
-            this.lendingDialogue.addLendingDialogueVisible = false;
+            this.addLendingDialogueVisible = false;
         },
         saveLending: function() {
             // save to gql server
             // use fast ui response handler
 
             this.hideAddLendingDialoge();
-        }
+        },
+        getFriends: function() {
+            let uniqueFriendArray = new Array();
+
+            this.lendings
+                .map(l => l.other.firstName + " " + l.other.lastName)
+                .forEach((o) => {
+                    let notInserted = 
+                        uniqueFriendArray.filter(
+                            f => f == o
+                        ).length === 0;
+
+                    if (notInserted) {
+                        uniqueFriendArray.push(o);
+                    }
+                })
+
+            return uniqueFriendArray;
+        },
         // logInUser: function() {
         //     this.$apollo.query({
         //         query:
