@@ -168,7 +168,7 @@
 .lending_dialogue_values {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 50px 25px 25px 25px 25px 25px;
+    grid-template-rows: 25px 25px 25px 25px 25px 25px 25px;
     grid-row-gap: 0.5em;
 }
 
@@ -205,8 +205,24 @@
     grid-column: 2 / span 2;
 }
 
-.popup_lending_add_friend_label {
+.popup_is_borrowed_label {
     grid-row: 3;
+    grid-column: 1;
+}
+
+.popup_is_borrowed {
+    width: auto;
+    margin-right: 10px;
+    
+    align-self: center;
+    justify-self: end;
+
+    grid-row: 3;
+    grid-column: 1;
+}
+
+.popup_lending_add_friend_label {
+    grid-row: 4;
     grid-column: 1;
 }
 
@@ -217,41 +233,41 @@
     align-self: center;
     justify-self: end;
 
-    grid-row: 3;
+    grid-row: 4;
     grid-column: 1;
 }
 
 .popup_lending_firstname {
     margin: 2.5px;
 
-    grid-row: 3;
+    grid-row: 4;
     grid-column: 2;
 }
 
 .popup_lending_lastname {
     margin: 1px;
 
-    grid-row: 3;
+    grid-row: 4;
     grid-column: 3;
 }
 
 .popup_friend_search {
-    grid-row: 3;
+    grid-row: 4;
     grid-column: 2 / span 2;
 }
 
 .popup_lending_type_label {
-    grid-row: 4;
+    grid-row: 5;
     grid-column: 1;
 }
 
 .popup_lending_type {
-    grid-row: 4;
+    grid-row: 5;
     grid-column: 2 / span 2;
 }
 
 .popup_lending_add_thing_label {
-    grid-row: 5;
+    grid-row: 6;
     grid-column: 1;
 }
 
@@ -262,12 +278,12 @@
     align-self: center;
     justify-self: end;
 
-    grid-row: 5;
+    grid-row: 6;
     grid-column: 1;
 }
 
 .popup_lending_amount {
-    grid-row: 5;
+    grid-row: 6;
     grid-column: 2;
 }
 
@@ -276,22 +292,22 @@
 
     margin: 1px;
 
-    grid-row: 5;
+    grid-row: 6;
     grid-column: 3;
 }
 
 .popup_thing_select_label {
-    grid-row: 6;
+    grid-row: 7;
     grid-column: 1;
 }
 
 .popup_new_thing {
-    grid-row: 5;
+    grid-row: 6;
     grid-column: 2;
 }
 
 .popup_thing_select {
-    grid-row: 6;
+    grid-row: 7;
     grid-column: 2 / span 2;
 }
 
@@ -310,7 +326,6 @@
         margin-left: auto;
         margin-right: auto;
         width: 82.5%;
-        /* height: 40%; */
     }
 }
 
@@ -320,7 +335,6 @@
         margin-left: auto;
         margin-right: auto;
         width: 75%;
-        /* height: 35%; */
     }
 }
 
@@ -330,7 +344,6 @@
         margin-left: auto;
         margin-right: auto;
         width: 70%;
-        /* height: 35%; */
     }
 }
 
@@ -340,7 +353,6 @@
         margin-left: auto;
         margin-right: auto;
         width: 65%;
-        /* height: 40%; */
     }
 }
 
@@ -349,7 +361,6 @@
         margin-top: 15%;
         margin-left: auto;
         margin-right: auto;
-        width: 58.35%;
-        /* height: 40%; */
+        width: 42.5%;
     }
 }
