@@ -44,8 +44,9 @@
             </nav>
     
             <main id="main_element" class="main" v-bind:class="{ blurr_item: lendingDialogue.addLendingDialogueVisible }">
-                <h1>Hi {{ user.firstName }} {{ user.lastName }}</h1>
-    
+                <h1 v-if="dataFetched">Hi {{ user.firstName }} {{ user.lastName }}</h1>
+                <h2 v-else>{{ userMessage }}</h2>
+
                 <ul class="lending_section">
                     <li v-for="lending in user.lendings">
                         <div class="single_lending" v-bind:class="{ single_lending_cleared: lending.cleared }">
@@ -101,10 +102,10 @@
                         <input class="popup_lending_grid_item input_default_style popup_lending_description" placeholder="Description" required>
 
                         <label id="duedatepicker_label" class="popup_lending_grid_item popup_lending_duedate_label">Due date</label>
-                        <datepicker class="popup_lending_grid_item popup_lending_duedate" v-model="newLending.dueDate" id="duedatepicker" name="duedatepicker"></datepicker>
+                        <datepicker class="popup_lending_duedate" v-model="newLending.dueDate" id="duedatepicker" name="duedatepicker"></datepicker>
     
-                        <label id="create_new_friend_label" class="popup_lending_grid_item popup_lending_add_friend_label" for="create_new_friend_label">Add new friend</label>
-                        <input id="create_new_friend" type="checkbox" class="popup_lending_grid_item popup_lending_add_friend_checkbox" v-on:click="lendingDialogue.addNewFriend = !lendingDialogue.addNewFriend">
+                        <label class="popup_lending_grid_item popup_lending_add_friend_label" for="create_new_friend_label">Add new friend</label>
+                        <input id="create_new_friend" type="checkbox" class="popup_lending_grid_item popup_lending_add_friend" v-on:click="lendingDialogue.addNewFriend = !lendingDialogue.addNewFriend">
     
                         <input v-if="lendingDialogue.addNewFriend" class="popup_lending_grid_item input_default_style popup_lending_firstname" placeholder="Firstname">
                         <input v-if="lendingDialogue.addNewFriend" class="popup_lending_grid_item input_default_style popup_lending_lastname" placeholder="Lastname">
@@ -117,7 +118,19 @@
                             <option v-for="lendingType in lendingTypes" :value="lendingType">{{ lendingType }}</option>
                         </select>
 
+                        <input v-if="newLending.discriminator === 'moneyLending'" class="popup_lending_grid_item input_default_style popup_lending_amount" type="number" placeholder="Amount">
+
+                        <label v-if="newLending.discriminator === 'thingLending'" class="popup_lending_grid_item popup_lending_add_thing_label" for="create_new_thing">Add new thing</label>
+                        <input v-if="newLending.discriminator === 'thingLending'" id="create_new_thing" type="checkbox" class="popup_lending_grid_item popup_lending_add_thing" v-on:click="lendingDialogue.addNewThing = !lendingDialogue.addNewThing">
                         
+                        <input v-if="newLending.discriminator === 'thingLending' && lendingDialogue.addNewThing === true" class="popup_lending_grid_item input_default_style popup_new_thing" placeholder="Thing that's borrowed">
+
+                        <input v-if="newLending.discriminator === 'thingLending'" class="popup_lending_grid_item input_default_style popup_lending_emoji" placeholder="Emoji">
+                        
+                        <label v-if="newLending.discriminator === 'thingLending' && lendingDialogue.addNewThing === false" class="popup_lending_grid_item popup_thing_select_label" for="thingSelector">Thing</label>
+                        <select v-if="newLending.discriminator === 'thingLending' && lendingDialogue.addNewThing === false" id="thingSelector" class="popup_lending_grid_item popup_thing_select">
+                            <option v-for="thing in getThings()" :value="thing">{{ thing }}</option>
+                        </select>
                     </div>
 
                     <div class="btn_container">
@@ -127,8 +140,6 @@
                 </form>
             </div>
         </div>
-
-        
 
         <script src="../dist/dashboard.bundle.js"></script>
         <script src="../dist/dashboard.bundle.js.map"></script>

@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import Datepicker from "vuejs-datepicker";
 import { apolloProvider } from "./apollo.js"
 import { redirectIfUnauthorized, removeJwt } from "./authentication"
-import { processUserInfo } from "./data_processing"
+import { processUserInfo, MoneyLendingDiscriminator, ThingLendingDiscriminator } from "./data_processing"
 
 redirectIfUnauthorized();
 
@@ -20,20 +20,23 @@ let vueApplication = new Vue({
         lendingDialogue: {
             addNewFriend: false,
             addLendingDialogueVisible: false,
+            addNewThing: false
         },
+        dataFetched: false,
+        userMessage: "be patient, we just need to fetch your data",
         user: {
             firstName: ", just loading",
             lastName: "data from server",
             lendings: [],
         },
         lendingTypes: [
-            "Money lending",
-            "Thing lending"
+            ThingLendingDiscriminator,
+            MoneyLendingDiscriminator
         ],
         newLending: {
             dueDate: new Date(),
             friend: null,
-            discriminator: "Money lending",
+            discriminator: MoneyLendingDiscriminator,
         }
     },
     methods: {
@@ -58,7 +61,7 @@ let vueApplication = new Vue({
 
             this.user
                 .lendings
-                .map(l => l.other.firstName + " " + l.other.lastName)
+                .map(l => l.participant.firstName + " " + l.participant.lastName)
                 .forEach((o) => {
                     let notInserted = 
                         uniqueFriendArray
@@ -72,6 +75,14 @@ let vueApplication = new Vue({
                 })
 
             return uniqueFriendArray;
+        },
+        getThings: function() {
+            return Array.from(
+                    new Set(
+                        this.user
+                            .lendings
+                            .filter(l => typeof l.thing !== "undefined")
+                            .map(l => l.thing.label)));
         },
         onPageLoad: function() {
             this.$apollo
@@ -124,8 +135,10 @@ let vueApplication = new Vue({
                             .concat(data.data.me.thingLendings);
 
                     this.user.lendings = processUserInfo(allUnprocessedLendings);
+                    
+                    this.dataFetched = true;
                 }).catch((error) => {
-                    this.errorMessage = error.message;
+                    this.userMessage = error.message;
                     console.error(error);
                 });
         }

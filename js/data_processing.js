@@ -1,3 +1,6 @@
+export const MoneyLendingDiscriminator = "moneyLending";
+export const ThingLendingDiscriminator = "thingLending";
+
 function compareDateObjects(date1, date2) {
     if ((date1.year  <  date2.year)
      || (date1.year === date2.year && date1.month  <  date2.month)
@@ -16,11 +19,10 @@ function compareDateObjects(date1, date2) {
 }
 
 export function processUserInfo(serverLendings) {
+    let serverLendingsArr = Array.from(serverLendings);
     let processedLendings = new Array();
 
-    for (let i = 0; i < serverLendings.length; i++) {
-        let lending = serverLendings[i];
-
+    serverLendingsArr.forEach(lending => {
         let associable = false;
         let discriminatorValue;
 
@@ -28,13 +30,13 @@ export function processUserInfo(serverLendings) {
             associable = true;
 
             //l is moneyLending
-            discriminatorValue = "moneyLending";
+            discriminatorValue = MoneyLendingDiscriminator;
         } else if ((typeof lending.thing !== "undefined")
                 && (typeof lending.emoji !== "undefined")) {
             associable = true;
 
             //l is thinglending
-            discriminatorValue = "thingLending";
+            discriminatorValue = ThingLendingDiscriminator;
         }
 
         if (associable) {
@@ -57,7 +59,7 @@ export function processUserInfo(serverLendings) {
 
             processedLendings.push(lending);
         }
-    }
+    });
 
     processedLendings.sort((l1, l2) => compareDateObjects(l2.dueDate, l1.dueDate));
 

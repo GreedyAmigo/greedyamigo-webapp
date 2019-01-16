@@ -162,7 +162,7 @@
     background: var(--popup_window_background_color);
     border-radius: var(--container_border_radius);
 
-    padding: 30px;
+    padding: 20px 30px 20px 30px;
 }
 
 .lending_dialogue_values {
@@ -210,7 +210,7 @@
     grid-column: 1;
 }
 
-.popup_lending_add_friend_checkbox {
+.popup_lending_add_friend {
     width: auto;
     margin-right: 10px;
     
@@ -247,6 +247,51 @@
 
 .popup_lending_type {
     grid-row: 4;
+    grid-column: 2 / span 2;
+}
+
+.popup_lending_add_thing_label {
+    grid-row: 5;
+    grid-column: 1;
+}
+
+.popup_lending_add_thing {
+    width: auto;
+    margin-right: 10px;
+    
+    align-self: center;
+    justify-self: end;
+
+    grid-row: 5;
+    grid-column: 1;
+}
+
+.popup_lending_amount {
+    grid-row: 5;
+    grid-column: 2;
+}
+
+.popup_lending_emoji {
+    text-align: center;
+
+    margin: 1px;
+
+    grid-row: 5;
+    grid-column: 3;
+}
+
+.popup_thing_select_label {
+    grid-row: 6;
+    grid-column: 1;
+}
+
+.popup_new_thing {
+    grid-row: 5;
+    grid-column: 2;
+}
+
+.popup_thing_select {
+    grid-row: 6;
     grid-column: 2 / span 2;
 }
 
