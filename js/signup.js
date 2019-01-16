@@ -1,6 +1,7 @@
 import Vue from "vue"
 import VueApollo from "vue-apollo"
-import { apolloProvider, signUpUserMutation } from "./apollo.js"
+import gql from "graphql-tag";
+import { apolloProvider } from "./apollo.js"
 import { redirectIfAuthorized, saveJwt } from "./authentication"
 
 redirectIfAuthorized();
@@ -20,7 +21,12 @@ let vueSignUpForm = new Vue({
     methods: {
         signUpUser: function() {
             this.$apollo.mutate({
-                mutation: signUpUserMutation,
+                mutation:
+                    gql`mutation ($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
+                        signup(email: $email, password: $password, firstName: $firstName, lastName: $lastName) {
+                            token
+                        }
+                    }`,
                 variables: {
                     email:     this.email,
                     firstName: this.firstName,

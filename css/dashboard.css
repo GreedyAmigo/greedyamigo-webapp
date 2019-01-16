@@ -35,7 +35,7 @@
     border-width: 0.5px;
 }
 
-.lending_date_month {
+.lending_date_text {
     font-size: 0.7rem;
     text-transform: uppercase;
 
@@ -43,7 +43,7 @@
     padding: 0px;
 }
 
-.lending_date_day {
+.lending_date_number {
     font-size: 1.5rem;
 
     margin: 0px;
@@ -80,7 +80,7 @@
     padding: 0px;
 }
 
-.lending_other {
+.lending_participant {
     font-size: 0.85rem;
     overflow: hidden;
     

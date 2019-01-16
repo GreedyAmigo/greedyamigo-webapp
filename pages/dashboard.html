@@ -50,23 +50,24 @@
                     <li v-for="lending in user.lendings">
                         <div class="single_lending" v-bind:class="{ single_lending_cleared: lending.cleared }">
                             <div class="flexbox">
-                                <p class="p_default_style lending_date_month" v-bind:class="{ single_lending_cleared: lending.cleared }">{{ lending.dueDate.month }}</p>
-                                <p class="p_default_style lending_date_day" v-bind:class="{ single_lending_cleared: lending.cleared }">{{ lending.dueDate.day }}</p>
+                                <p class="p_default_style lending_date_text" v-bind:class="{ single_lending_cleared: lending.cleared }">{{ lending.dueDate.monthName }}</p>
+                                <p class="p_default_style lending_date_number" v-bind:class="{ single_lending_cleared: lending.cleared }">{{ lending.dueDate.day }}</p>
+                                <p class="p_default_style lending_date_text" v-bind:class="{ single_lending_cleared: lending.cleared }">{{ lending.dueDate.year }}</p>
                             </div>
                             
                             <span v-if="lending.emoji" class="lending_emoji" >{{ lending.emoji }}</span>
                             <span v-else class="lending_emoji">💵</span>
         
-                            <img v-if="lending.lent" class="lending_direction lending_lent" src="../img/lent.svg" alt="lent ressource">
-                            <img v-else class="lending_direction lending_borrowed" src="../img/borrowed.svg" alt="borrowed ressource">
+                            <img v-if="lending.isBorrowed" class="lending_direction lending_borrowed" src="../img/borrowed.svg" alt="borrowed ressource">
+                            <img v-else class="lending_direction lending_lent" src="../img/lent.svg" alt="lent ressource">
 
                             <div class="flexbox lending_text">
                                 <p class="lending_description">
                                     {{ lending.description }}                       
                                 </p>
-                                <p class="lending_other">    
+                                <p class="lending_participant">    
                                     <em>
-                                        {{ lending.other.firstName }} {{ lending.other.lastName }}
+                                        {{ lending.participant.firstName }} {{ lending.participant.lastName }}
                                     </em>
                                 </p>
                             </div>
