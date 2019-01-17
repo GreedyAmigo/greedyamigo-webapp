@@ -2,9 +2,22 @@ import Vue from "vue"
 import VueApollo from "vue-apollo"
 import gql from "graphql-tag";
 import Datepicker from "vuejs-datepicker";
-import { apolloProvider } from "./apollo.js"
-import { redirectIfUnauthorized, removeJwt } from "./authentication"
-import { processUserInfo, MoneyLendingDiscriminator, ThingLendingDiscriminator } from "./data_processing"
+import {
+    clearApolloClientCache,
+    apolloProvider
+} from "./apollo.js"
+
+import {
+    redirectIfUnauthorized,
+    removeJwt
+} from "./authentication"
+
+import {
+    processUserInfo,
+    MoneyLendingDiscriminator,
+    ThingLendingDiscriminator,
+    processNewLending
+} from "./data_processing"
 
 redirectIfUnauthorized();
 
@@ -66,6 +79,7 @@ let vueApplication = new Vue({
 
             this.hideAddLendingDialoge();
 
+            clearApolloClientCache();
             this.fetchUserData();
         },
         getCurrencyString: function(currency) {
