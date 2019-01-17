@@ -16,5 +16,13 @@ A lending can be about money or a thing.
 
 Initially, I wanted to add a npm package that enables local development hosting out of the box without apache2 or third-party webservers, but out ot time pressure and simplicity I did not do this.
 
+## used libraries
+* [apollo-boost](https://www.npmjs.com/package/apollo-boost)
+* [graphql](https://www.npmjs.com/package/graphql)
+* [vue](https://www.npmjs.com/package/vue)
+* [vue-apollo](https://www.npmjs.com/package/vue-apollo)
+* [vuejs-datepicker](https://www.npmjs.com/package/vuejs-datepicker)
+* and obviosly all their dependies which I am not going to list here (more info in package-lock.json file).
+
 ## additionally
 If you want to see the application in action, you should visit [greedy-amigo.com](https://www.greedy-amigo.com)
