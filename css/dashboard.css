@@ -177,9 +177,7 @@
 }
 
 .popup__item {
-    width: 95%;
-    max-height: 30px;
-    justify-self: center;
+    width: 100%;
     align-self: center;
     
     font-size: 0.7rem;

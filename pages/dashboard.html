@@ -99,7 +99,7 @@
                     <h2 class="popup__header">add new lending</h2>
 
                     <div class="popup__value_container">
-                        <input class="popup__item input__default popup__description" placeholder="Description" required>
+                        <input class="popup__item input__default popup__description" placeholder="Description" v-model="newLending.description" required>
 
                         <label class="popup__item popup__duedate_label">Due date</label>
                         <datepicker class="popup__lending_duedate" v-model="newLending.dueDate" id="duedatepicker" name="duedatepicker"></datepicker>
@@ -121,7 +121,7 @@
                             <option v-for="lendingType in lendingTypes" :value="lendingType">{{ lendingType }}</option>
                         </select>
 
-                        <input v-if="isMoneyLending(newLending)" class="popup__item input__default popup__amount" type="number" placeholder="Amount" required>
+                        <input v-if="isMoneyLending(newLending)" class="popup__item input__default popup__amount" type="number" step="0.01" placeholder="Amount" v-model="newLending.amount" required>
 
                         <label v-if="isMoneyLending(newLending)" class="popup__item popup__currency_select_label" for="currencySelect">Currency</label>
                         <select v-if="isMoneyLending(newLending)" id="currencySelect" class="popup__item popup__currency_select" v-model="newLending.currencyString" required>
@@ -129,7 +129,7 @@
                         </select>
 
                         <label v-if="isThingLending(newLending)" class="popup__item popup__add_thing_label" for="create_new_thing">New thing?</label>
-                        <input v-if="isThingLending(newLending)" id="create_new_thing" type="checkbox" class="popup__item popup__add_thing" v-model="newLending.addNewThing">
+                        <input v-if="isThingLending(newLending)" id="create_new_thing" type="checkbox" class="popup__item popup__add_thing" v-model="lendingDialogue.addNewThing">
                         
                         <input v-if="isNewThingLending(newLending)" class="popup__item input__default popup__new_thing" placeholder="Thing" v-model="newLending.newThingStr" required>
 
