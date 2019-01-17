@@ -4,8 +4,8 @@ import gql from "graphql-tag";
 import Datepicker from "vuejs-datepicker";
 
 import {
-    clearApolloClientCache,
-    apolloProvider
+    apolloProvider,
+    clearApolloClientCache
 } from "./apollo"
 
 import {
@@ -32,6 +32,9 @@ import {
     handleGraphQlException
 } from "./data_processing"
 
+const POPUP_ADD_MODE = "add";
+const POPUP_EDIT_MODE = "edit";
+
 redirectIfUnauthorized();
 
 Vue.use(VueApollo);
@@ -39,7 +42,9 @@ Vue.use(VueApollo);
 const initialDataSet = {
     popup: {
         addNewFriend: false,
-        addpopupVisible: false,
+        visible: false,
+        mode: "",
+        editLending: undefined,
         addNewThing: false,
         errorStore: []
     },
@@ -87,13 +92,22 @@ let vueApplication = new Vue({
         },
         logOutUser: function() {
             removeJwt();
+            clearApolloClientCache();
             redirectIfUnauthorized();
         },
-        showAddLendingDialoge: function() {
-            this.popup.addpopupVisible = true;
+        showAddPopup: function() {
+            this.popup.mode = POPUP_ADD_MODE;
+            this.popup.visible = true;
         },
-        hideAddLendingDialoge: function() {
-            this.popup.addpopupVisible = false;
+        showEditPopup: function(lending) {
+            this.popup.mode = POPUP_EDIT_MODE;
+            this.popup.editLending = lending;
+            this.popup.visible = true;
+        },
+        hidePopup: function() {
+            this.popup.mode = "";
+            this.popup.editLending = undefined;
+            this.popup.visible = false;
         },
         isNotLastLendingEntry: function(lending) {
             return lending !== this.user.lendings[this.user.lendings.length - 1];
@@ -168,49 +182,58 @@ let vueApplication = new Vue({
                     });
             }
 
-            let mutationPromise;
-
+            let graphQlMutation;
+            let graphQlVariables;
+            
             if (this.isThingLending(this.newLending)) {
-                mutationPromise = this.$apollo
-                    .mutate({
-                        mutation: gql`${createThingLendingMutation}`,
-                        variables: {
-                            dueDate: getFormattedDateString(this.newLending.dueDate),
-                            description: this.newLending.description,
-                            participantId: participantId,
-                            isBorrowed: this.newLending.isBorrowed,
-                            emoji: this.newLending.emoji,
-                            thingId: thingId
-                        }
-                    }).catch((error) => {
-                        handleGraphQlException(error, this.popup.errorStore);
-                    });
+                if (this.popup.mode === POPUP_ADD_MODE) {
+                    graphQlMutation = createThingLendingMutation;
+                } else if (this.popup.mode === POPUP_EDIT_MODE) {
+                    graphQlMutation = undefined;
+                }
+
+                graphQlVariables = {
+                    dueDate: getFormattedDateString(this.newLending.dueDate),
+                    description: this.newLending.description,
+                    participantId: participantId,
+                    isBorrowed: this.newLending.isBorrowed,
+                    emoji: this.newLending.emoji,
+                    thingId: thingId
+                };
             } else {
+                if (this.popup.mode === POPUP_ADD_MODE) {
+                    graphQlMutation = createMoneyLendingMutation;
+                } else if (this.popup.mode === POPUP_EDIT_MODE) {
+                    graphQlMutation = undefined;
+                }
+
                 let currencyId =
                     this.currencies
-                        .filter(currency => {
-                            return getCurrencyDisplayValue(currency) === this.newLending.currencyString
-                        })[0]
-                        .id;
+                    .filter(currency => {
+                        return getCurrencyDisplayValue(currency) === this.newLending.currencyString
+                    })[0]
+                    .id;
 
-                mutationPromise = this.$apollo
-                    .mutate({
-                        mutation: gql`${createMoneyLendingMutation}`,
-                        variables: {
-                            dueDate: getFormattedDateString(this.newLending.dueDate),
-                            description: this.newLending.description,
-                            participantId: participantId,
-                            isBorrowed: this.newLending.isBorrowed,
-                            amount: parseInt(this.newLending.amount),
-                            currencyId: currencyId
-                        }
-                    }).catch((error) => {
-                        handleGraphQlException(error, this.popup.errorStore);
-                    });
+                graphQlVariables = {
+                    dueDate: getFormattedDateString(this.newLending.dueDate),
+                    description: this.newLending.description,
+                    participantId: participantId,
+                    isBorrowed: this.newLending.isBorrowed,
+                    amount: parseInt(this.newLending.amount),
+                    currencyId: currencyId
+                };
             }
 
-            this.hideAddLendingDialoge();
-
+            let mutationPromise = this.$apollo
+                .mutate({
+                    mutation: gql`${graphQlMutation}`,
+                    variables: graphQlVariables
+                }).catch((error) => {
+                    handleGraphQlException(error, this.popup.errorStore);
+                });;
+            
+            this.hidePopup();
+            
             this.resetVueData();
 
             await mutationPromise;

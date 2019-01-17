@@ -29,7 +29,7 @@
     </head>
     <body>
         <div id="dashboard">
-            <nav class="nav__style" v-bind:class="{ item__blurr: popup.addpopupVisible }">
+            <nav class="nav__style" v-bind:class="{ item__blurr: popup.visible }">
                 <div class="nav__left">
                     <a href="dashboard.html">
                         <img class="nav__item nav__brand_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
@@ -43,7 +43,7 @@
                 </div>
             </nav>
     
-            <main class="main__container" v-bind:class="{ item__blurr: popup.addpopupVisible }">
+            <main class="main__container" v-bind:class="{ item__blurr: popup.visible }">
                 <h1 v-if="dataFetched">Hi {{ user.firstName }} {{ user.lastName }}</h1>
                 <h2 v-else>{{ userMessage }}</h2>
 
@@ -93,12 +93,12 @@
                     </li>
                 </ul>
 
-                <button class="button__default button__add" v-on:click="showAddLendingDialoge">
+                <button class="button__default button__add" v-on:click="showAddPopup">
                     <img class="button__add_icon" src="../img/add.svg" alt="add lending">
                 </button>
             </main>
 
-            <div v-if="popup.addpopupVisible" class="popup__background">
+            <div v-if="popup.visible" class="popup__background">
                 <form class="popup__container" v-on:submit.prevent="saveLending" >
                     <h2 class="popup__header">add new lending</h2>
 
@@ -137,7 +137,7 @@
                         
                         <input v-if="isNewThingLending(newLending)" class="popup__item input__default popup__new_thing" placeholder="Thing" v-model="newLending.newThingStr" required>
 
-                        <input v-if="isThingLending(newLending)" class="popup__item input__default popup__emoji" placeholder="Emoji" maxlength="1" v-model="newLending.emoji" required>
+                        <input v-if="isThingLending(newLending)" class="popup__item input__default popup__emoji" placeholder="Emoji" maxlength="2" v-model="newLending.emoji" required>
                         
                         <label v-if="isOldThingLending(newLending)" class="popup__item popup__thing_select_label" for="thingSelector">Thing</label>
                         <select v-if="isOldThingLending(newLending)" id="thingSelector" class="popup__item popup__thing_select" v-model="newLending.thingString" required>
@@ -150,7 +150,7 @@
                     </ul>
 
                     <div class="popup__button_container">
-                        <button type="button" class="button__default popup__lending_button" v-on:click="hideAddLendingDialoge">Cancel</button>
+                        <button type="button" class="button__default popup__lending_button" v-on:click="hidePopup">Cancel</button>
                         <button type="submit" class="button__default popup__lending_button">Save</button>
                     </div>
                 </form>
