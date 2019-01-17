@@ -1,10 +1,11 @@
-.lending_section {
+.ul__lendings {
+    margin-bottom: 50px;
     padding-top: 10px;
     padding-left: 0px;
     list-style-type: none;
 }
 
-.single_lending {
+.lending__style {
     height: 60px;
 
     margin: 0px 0px 0px 0px;
@@ -15,22 +16,26 @@
     /* end debug settings */
 
     display: grid;
-    grid-template-columns: 10% 5% auto 17%;
+    grid-template-columns: 10% 7.5% 5% auto 17% 5%;
 }
 
-.flexbox {
+.lending__style_cleared {
+    color: #9e9e9e;
+}
+
+.lending__elem_container {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
 }
 
-.lending_seperator {
+.lending__seperator {
     border-style: solid;
     border-color: black;
     border-width: 0.5px;
 }
 
-.lending_date_month {
+.lending__date_text {
     font-size: 0.7rem;
     text-transform: uppercase;
 
@@ -38,42 +43,60 @@
     padding: 0px;
 }
 
-.lending_date_day {
+.lending__date_number {
     font-size: 1.5rem;
 
     margin: 0px;
     padding: 0px;
 }
 
-.lending_emoji {
-    font-size: 1rem;
+.lending__emoji {
+    font-size: 2rem;
     text-align: center;
 
+    margin: auto;
+    padding-top: 10px;
+}
+
+.lending__direction {
+    height: 30%;
+    
+    margin: auto;
+}
+
+.lending__lent {
+    transform: rotate(90deg);
+}
+
+.lending__borrowed {
+    transform: rotate(-90deg);
+}
+
+.lending__description {
+    overflow: hidden;
+
+    max-height: 40px;
     margin: 0px;
     padding: 0px;
 }
 
-.lending_direction {
-    height: 30%;
-
-    transform: rotate(180deg);
-}
-
-.lending_text {
-    padding: 0px 10% 0px 10%;
-}
-
-.lending_description {
-    overflow: hidden;
-
-    max-height: 40px;
-}
-
-.lending_other {
+.lending__friend {
     font-size: 0.85rem;
+    overflow: hidden;
+    
+    margin: 0px;
+    padding: 0px;
 }
 
-.add_lending_button {
+.lending__edit {
+    height: 20%;
+}
+
+.lending__delete {
+    height: 25%;
+}
+
+.button__add {
     position: fixed;
     bottom: 2.5%;
 
@@ -83,31 +106,270 @@
 
     border-radius: 50%;
 
-    padding: 7.5px;
+    padding: 10px;
 }
 
-.add_lending_icon {
+.button__add_icon {
     width: 100%;
 }
 
-.add_lending_button_placeholder {
-    height: 40px;
-}
-
 @media screen and (max-width: 499px) {
-    .add_lending_button {
+    .button__add {
         left: 80%;
+    }
+
+    .lending_text {
+        padding: 0px 2.5% 0px 2.5%;
     }
 }
 
 @media screen and (min-width: 500px) {
-    .add_lending_button {
+    .button__add {
         left: 75%;
+    }
+
+    .lending_text {
+        padding: 0px 7.5% 0px 7.5%;
     }
 }
 
 @media screen and (min-width: 1000px) {
-    .add_lending_button {
+    .button__add {
         left: 71.5%;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* add lending popup styling                                          */
+/* ------------------------------------------------------------------ */
+.item__blurr {
+    filter: blur(0.175rem);
+}
+
+.popup__background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 99;
+
+    background: var(--popup_background_color);
+}
+
+.popup__container {
+    filter: blur(rem);
+    background: var(--popup_window_background_color);
+    border-radius: var(--container_border_radius);
+
+    padding: 20px 30px 20px 30px;
+}
+
+.popup__value_container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 25px 25px 25px 25px 25px 25px 25px;
+    grid-row-gap: 0.5em;
+}
+
+.popup__header {
+    margin-top: 0px;
+}
+
+.popup__item {
+    width: 100%;
+    align-self: center;
+    
+    font-size: 0.7rem;
+    margin: 2px;
+    padding: 7px;
+}
+
+.popup__description {
+    margin: 1px;
+
+    grid-row: 1;
+    grid-column: 1 / span 3;
+}
+
+.popup__duedate_label {
+    grid-row: 2;
+    grid-column: 1;
+}
+
+.popup__lending_duedate {
+    align-self: center;
+
+    grid-row: 2;
+    grid-column: 2 / span 2;
+}
+
+.popup__is_borrowed_label {
+    grid-row: 3;
+    grid-column: 1;
+}
+
+.popup__is_borrowed {
+    width: auto;
+    margin-right: 10px;
+    
+    align-self: center;
+    justify-self: end;
+
+    grid-row: 3;
+    grid-column: 1;
+}
+
+.popup__add_friend_label {
+    grid-row: 4;
+    grid-column: 1;
+}
+
+.popup__add_friend {
+    width: auto;
+    margin-right: 10px;
+    
+    align-self: center;
+    justify-self: end;
+
+    grid-row: 4;
+    grid-column: 1;
+}
+
+.popup__firstname {
+    margin: 2.5px;
+
+    grid-row: 4;
+    grid-column: 2;
+}
+
+.popup__lastname {
+    margin: 1px;
+
+    grid-row: 4;
+    grid-column: 3;
+}
+
+.popup__friend_search {
+    grid-row: 4;
+    grid-column: 2 / span 2;
+}
+
+.popup__type_label {
+    grid-row: 5;
+    grid-column: 1;
+}
+
+.popup__type {
+    grid-row: 5;
+    grid-column: 2 / span 2;
+}
+
+.popup__amount {
+    grid-row: 6;
+    grid-column: 2;
+}
+
+.popup__currency_select_label {
+    grid-row: 7;
+    grid-column: 1;
+}
+
+.popup__currency_select {
+    grid-row: 7;
+    grid-column: 2 / span 2;
+} 
+
+.popup__add_thing_label {
+    grid-row: 6;
+    grid-column: 1;
+}
+
+.popup__add_thing {
+    width: auto;
+    margin-right: 10px;
+    
+    align-self: center;
+    justify-self: end;
+
+    grid-row: 6;
+    grid-column: 1;
+}
+
+.popup__emoji {
+    text-align: center;
+
+    margin: 1px;
+
+    grid-row: 6;
+    grid-column: 3;
+}
+
+.popup__thing_select_label {
+    grid-row: 7;
+    grid-column: 1;
+}
+
+.popup__new_thing {
+    grid-row: 6;
+    grid-column: 2;
+}
+
+.popup__thing_select {
+    grid-row: 7;
+    grid-column: 2 / span 2;
+}
+
+.popup__button_container {
+    display: flex;
+    justify-content: space-evenly
+}
+
+.popup__lending_button {
+    width: 30%;
+}
+
+@media screen and (max-width: 499px) {
+    .popup__container {
+        margin-top: 30%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 82.5%;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .popup__container {
+        margin-top: 30%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 75%;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .popup__container {
+        margin-top: 27.5%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 70%;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .popup__container {
+        margin-top: 25%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 65%;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .popup__container {
+        margin-top: 15%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 45%;
     }
 }

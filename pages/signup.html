@@ -29,36 +29,40 @@
         <title>Greedy Amigo - Log In</title>
     </head>
     <body>
-        <nav class="navbar">
-            <div class="navbar_left">
+        <nav class="nav__style">
+            <div class="nav__left">
                 <a href="../index.html">
-                    <img class="nav_item nav_greedy_amigo_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
+                    <img class="nav__item nav__brand_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
                 </a>
-                <a class="nav_item nav_greedy_amigo_text" href="../index.html">Greedy Amigo</a>
+                <a class="nav__item nav__brand_text" href="../index.html">Greedy Amigo</a>
             </div>
-            <div class="navbar_right">
-                <a class="nav_item nav_right_item" href="login.html">
+            <div class="nav__right">
+                <a class="nav__item nav__menu_item" href="login.html">
                     Log in
                 </a>
-                <a class="nav_item nav_right_item nav_item_selected" href="signup.html">
+                <a class="nav__item nav__menu_item nav__item_selected" href="signup.html">
                     Sign up
                 </a>
             </div>
         </nav>
 
-        <main class="main">
+        <main class="main__container">
             <h1>Hi there!</h1>
 
-            <form id="form_signup" v-on:submit.prevent="signUpUser" class="signup_section">
-                <input type="email" v-model="email" id="signup_email" name="signup_email" class="input_element" placeholder="Email" required><br>
-                <input type="text" v-model="firstName" id="signup_firstname" name="signup_firstname" class="input_element" placeholder="Firstname" required><br>
-                <input type="text" v-model="lastName" id="signup_lastname" name="signup_lastname" class="input_element" placeholder="Lastname" required><br>
-                <input type="password" v-model="password" id="signup_password" name="signup_password" class="input_element" placeholder="Password" required><br>
-                <span v-if="errorMessage" class="error_message">{{ errorMessage }}</span><br>
-                <button type="submit" class="btn_default_style">Sign up</button>
+            <form id="form__signup" v-on:submit.prevent="signUpUser">
+                <input type="email" v-model="email" name="signup_email" class="input__default" placeholder="Email" required><br>
+                <input type="text" v-model="firstName" name="signup_firstname" class="input__default" placeholder="Firstname" required><br>
+                <input type="text" v-model="lastName" name="signup_lastname" class="input__default" placeholder="Lastname" required><br>
+                <input type="password" v-model="password" name="signup_password" class="input__default" placeholder="Password" required><br>
+                
+                <ul class="errorlist__default" v-if="errorStore.length > 0">
+                    <li v-for="error in errorStore" :value="error" class="errorlist__entry">{{ error }}</li>
+                </ul>
+
+                <button type="submit" class="button__default">Sign up</button>
             </form>
 
-            <div class="account_hint">
+            <div class="message__account_hint">
                 <strong>Already have an account?</strong><br>
                 <a href="../index.html">
                     <em>Log in here</em>

@@ -1,32 +1,42 @@
 import Vue from "vue"
 import VueApollo from "vue-apollo"
 import gql from "graphql-tag";
-import { apolloProvider } from "./apollo.js"
-import { redirectIfAuthorized, saveJwt } from "./authentication"
+
+import {
+     apolloProvider
+} from "./apollo"
+
+import {
+    signUpMutation
+} from "./graphql"
+
+import {
+    redirectIfAuthorized,
+    saveJwt
+} from "./authentication"
+
+import {
+    handleGraphQlException
+} from "./data_processing"
 
 redirectIfAuthorized();
 
 Vue.use(VueApollo);
 
 let vueSignUpForm = new Vue({
-    el: "#form_signup",
+    el: "#form__signup",
     apolloProvider,
     data: {
         email: "",
         firstName: "",
         lastName: "",
         password: "",
-        errorMessage: ""
+        errorStore: []
     },
     methods: {
         signUpUser: function() {
             this.$apollo.mutate({
-                mutation:
-                    gql`mutation ($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
-                        signup(email: $email, password: $password, firstName: $firstName, lastName: $lastName) {
-                            token
-                        }
-                    }`,
+                mutation: gql`${signUpMutation}`,
                 variables: {
                     email:     this.email,
                     firstName: this.firstName,
@@ -34,13 +44,12 @@ let vueSignUpForm = new Vue({
                     password:  this.password
                 }
             }).then((data) => {
-                this.errorMessage = "";
+                this.errorStore = [];
 
                 saveJwt(data.data.signup.token);
                 redirectIfAuthorized();
             }).catch((error) => {
-                this.errorMessage = error.message;
-                console.error(error);
+                handleGraphQlException(error, this.errorStore);
             });
         }
     }

@@ -15,6 +15,10 @@ body {
     --selected_color: #FFFFFF;
     --error_message_color: #D8000C;
     --error_message_background_color: #FFBABA;
+    --popup_background_color: rgba(0, 0, 0, 0.2);
+    --popup_window_background_color: #FFFFFF;
+    --container_border_radius: 2.5px;
+    --border_radius: 3.5px;
 
     font-family:  'Work Sans', Helvetica, Arial, sans-serif;
 
@@ -24,10 +28,6 @@ body {
 }
 
 input, textarea {
-    border-radius: 3.5px;
-    border-width: 0px;
-    margin:  1% 1% 1% 1%;
-    padding: 2% 2% 2% 2%;
     width: 100%;
 }
 
@@ -58,11 +58,17 @@ h3 {
     font-size: 1.2rem;
 }
 
-.p_default_style {
+.p__default {
     color: var(--text_color);
 }
 
-.btn_default_style {
+.input__default {
+    border-width: 1px;
+    border-color: var(--brand_color_middle);
+    border-style: solid;
+}
+
+.button__default {
     color: var(--inverse_text_color);
     background: linear-gradient(to bottom, var(--brand_color_begin), var(--brand_color_end));
     border-radius: 3.5px;
@@ -71,7 +77,22 @@ h3 {
     margin: 1.75% 4% 1.75% 4%;
 }
 
-.navbar {
+.errorlist__default {
+    text-align: center;
+    list-style: none;
+    border-radius: 3.5px;
+
+    color: var(--text_color);
+    background: var(--error_message_background_color);
+
+    padding: 3px;
+}
+
+.errorlist__entry {
+    padding: 2px;
+}
+
+.nav__style {
     height: 60px;
     background: linear-gradient(to right, var(--brand_color_begin), var(--brand_color_end));
 
@@ -81,19 +102,19 @@ h3 {
     justify-content: space-between;
 }
 
-.navbar_left {
+.nav__left {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
 }
 
-.navbar_right {
+.nav__right {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
 }
 
-.nav_item {
+.nav__item {
     font-size: 1rem;
     text-decoration: none;
     color: var(--inverse_text_color);
@@ -103,78 +124,78 @@ h3 {
     padding-top: 7px;
 }
 
-.nav_item_selected {
+.nav__item_selected {
     color: var(--text_color);
     background: var(--selected_color);
     border-radius: 5px 5px 0px 0px;
 }
 
-.nav_greedy_amigo_logo {
+.nav__brand_logo {
     width: 33px;
 
     padding-top: 10px;
 }
 
-.nav_greedy_amigo_text {
+.nav__brand_text {
     font-size: 1.5rem;
     font-family: 'Sarabun', Helvetica, Arial, sans-serif;
 
     padding: 16px 0px 0px 7px;
 }
 
-.nav_right_item {
+.nav__menu_item {
     font-size: 1.1rem;
     
     margin: 23px 7px 0px 7px;
     padding: 10px 7px 0px 7px;
 }
 
-.main {
+.main__container {
     text-align: center;
 
     padding: 0% 3% 5% 3%;
 }
 
 @media screen and (max-width: 499px) {
-    .navbar {
+    .nav__style {
         padding-left: 1%;
         padding-right: 1%;
     }
 
-    .main {
+    .main__container {
         margin: 5% 1% 0% 1%;
     }
 }
 
 @media screen and (min-width: 500px) {
-    .navbar {
+    .nav__style {
         padding-left: 5%;
         padding-right: 5%;
     }
 
-    .main {
+    .main__container {
         margin: 5% 7% 0% 7%;
     }
 }
 
 @media screen and (min-width: 600px) {
-    .navbar {
+    .nav__style {
         padding-left: 8.5%;
         padding-right: 8.5%;
     }
 
-    .main {
+    .main__container {
         margin: 5% 10% 0% 10%;
     }
 }
 
 @media screen and (min-width: 1000px) {
-    .navbar {
+    .nav__style {
         padding-left: 12.5%;
         padding-right: 12.5%;
     }
 
-    .main {
+    .main__container {
         margin: 5% 15% 0% 15%;
     }
 }
