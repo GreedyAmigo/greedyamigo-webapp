@@ -4,7 +4,13 @@ import gql from "graphql-tag";
 import Datepicker from "vuejs-datepicker";
 import {
     clearApolloClientCache,
-    apolloProvider
+    apolloProvider,
+    currenciesQuery,
+    meQuery,
+    createMoneyLendingMutation,
+    createThingLendingMutation,
+    createThingMutation,
+    createFriendMutation
 } from "./apollo.js"
 
 import {
@@ -25,84 +31,52 @@ redirectIfUnauthorized();
 
 Vue.use(VueApollo);
 
+const initialDataSet = {
+    lendingDialogue: {
+        addNewFriend: false,
+        addLendingDialogueVisible: false,
+        addNewThing: false
+    },
+    dataFetched: false,
+    userMessage: "be patient, we just need to fetch your data",
+    user: {
+        firstName: ", just loading",
+        lastName: "data from server",
+        lendings: [],
+        friends: [],
+        things: []
+    },
+    lendingTypes: [
+        ThingLendingDiscriminator,
+        MoneyLendingDiscriminator
+    ],
+    newLending: {
+        amount: 0,
+        description: "",
+        dueDate: new Date(),
+        isBorrowed: false,
+        discriminator: MoneyLendingDiscriminator,
+        firstName: "",
+        lastName: "",
+        friendString: "",
+        currencyString: "",
+        thingString: "",
+        newThingStr: "",
+        emoji: ""
+    },
+    currencies: []
+}
+
 let vueApplication = new Vue({
     el: "#dashboard",
     apolloProvider,
     components: {
         Datepicker
     },
-    data: {
-        lendingDialogue: {
-            addNewFriend: false,
-            addLendingDialogueVisible: false,
-            addNewThing: false
-        },
-        dataFetched: false,
-        userMessage: "be patient, we just need to fetch your data",
-        user: {
-            firstName: ", just loading",
-            lastName: "data from server",
-            lendings: [],
-            friends: [],
-            things: []
-        },
-        lendingTypes: [
-            ThingLendingDiscriminator,
-            MoneyLendingDiscriminator
-        ],
-        newLending: {
-            amount: 0,
-            description: "",
-            dueDate: new Date(),
-            isBorrowed: false,
-            discriminator: MoneyLendingDiscriminator,
-            firstName: "",
-            lastName: "",
-            friendString: "",
-            currencyString: "",
-            thingString: "",
-            newThingStr: "",
-            emoji: ""
-        },
-        currencies: []
-    },
+    data: initialDataSet,
     methods: {
         resetVueData: function() {
-            this.data = {
-                lendingDialogue: {
-                    addNewFriend: false,
-                    addLendingDialogueVisible: false,
-                    addNewThing: false
-                },
-                dataFetched: false,
-                userMessage: "be patient, we just need to fetch your data",
-                user: {
-                    firstName: ", just loading",
-                    lastName: "data from server",
-                    lendings: [],
-                    friends: [],
-                    things: []
-                },
-                lendingTypes: [
-                    ThingLendingDiscriminator,
-                    MoneyLendingDiscriminator
-                ],
-                newLending: {
-                    amount: 0,
-                    description: "",
-                    dueDate: new Date(),
-                    isBorrowed: false,
-                    discriminator: MoneyLendingDiscriminator,
-                    firstName: "",
-                    lastName: "",
-                    friendString: "",
-                    currencyString: "",
-                    thingString: "",
-                    newThingStr: "",
-                    emoji: ""
-                },
-                currencies: []
-            };
+            this.$data = initialDataSet;
         },
         logOutUser: function() {
             removeJwt();
@@ -140,12 +114,7 @@ let vueApplication = new Vue({
             } else {
                 await this.$apollo
                     .mutate({
-                        mutation:
-                            gql`mutation ($firstName: String!, $lastName: String!) {
-                                createAnonymousUser(firstName: $firstName,lastName: $lastName) {
-                                    id
-                                }
-                            }`,
+                        mutation: gql`${createFriendMutation}`,
                         variables: {
                             firstName: this.newLending.firstName,
                             lastName: this.newLending.lastName
@@ -181,12 +150,7 @@ let vueApplication = new Vue({
             } else if (this.isThingLending(this.newLending)) {
                 await this.$apollo
                     .mutate({
-                        mutation:
-                            gql`mutation ($label: String!) {
-                                createThing(label: $label) {
-                                    id
-                                }
-                            }`,
+                        mutation: gql`${createThingMutation}`,
                         variables: {
                             label: this.newLending.newThingStr
                         }
@@ -198,28 +162,12 @@ let vueApplication = new Vue({
                     });
             }
 
+            let mutationPromise;
+
             if (this.isThingLending(this.newLending)) {
-                this.$apollo
+                mutationPromise = this.$apollo
                     .mutate({
-                        mutation:
-                            gql`mutation (
-                                    $dueDate: DateTime,
-                                    $description: String!,
-                                    $participantId: ID!,
-                                    $isBorrowed: Boolean!,
-                                    $emoji: String!,
-                                    $thingId: ID!) {
-                                createThingLending(
-                                  dueDate: $dueDate
-                                  description: $description
-                                  participantId: $participantId
-                                  isBorrowed: $isBorrowed
-                                  emoji: $emoji
-                                  thingId: $thingId
-                                ) {
-                                  id
-                                }
-                              }`,
+                        mutation: gql`${createThingLendingMutation}`,
                         variables: {
                             dueDate: getFormattedDateString(this.newLending.dueDate),
                             description: this.newLending.description,
@@ -240,27 +188,9 @@ let vueApplication = new Vue({
                         })[0]
                         .id;
 
-                this.$apollo
+                mutationPromise = this.$apollo
                     .mutate({
-                        mutation:
-                            gql`mutation (
-                                    $dueDate: DateTime,
-                                    $description: String!,
-                                    $participantId: ID!,
-                                    $isBorrowed: Boolean!,
-                                    $amount: Float!,
-                                    $currencyId: ID!) {
-                                createMoneyLending(
-                                  dueDate: $dueDate
-                                  description: $description
-                                  participantId: $participantId
-                                  isBorrowed: $isBorrowed
-                                  amount: $amount
-                                  currencyId: $currencyId
-                                ) {
-                                  id
-                                }
-                              }`,
+                        mutation: gql`${createMoneyLendingMutation}`,
                         variables: {
                             dueDate: getFormattedDateString(this.newLending.dueDate),
                             description: this.newLending.description,
@@ -278,6 +208,8 @@ let vueApplication = new Vue({
             this.hideAddLendingDialoge();
 
             this.resetVueData();
+
+            await mutationPromise;
 
             clearApolloClientCache();
             this.fetchUserData();
@@ -317,57 +249,7 @@ let vueApplication = new Vue({
         fetchUserData: function() {
             this.$apollo
                 .query({
-                    query:
-                        gql`query {
-                            me {
-                                id,
-                                firstName,
-                                lastName,
-                                moneyLendings {
-                                    id,
-                                    amount,
-                                    currency {
-                                        id,
-                                        symbol
-                                    },
-                                    participant {
-                                        id,
-                                        firstName,
-                                        lastName
-                                    },
-                                    dueDate,
-                                    description,
-                                    cleared,
-                                    isBorrowed
-                                },
-                                thingLendings {
-                                    id,
-                                    emoji,
-                                    participant {
-                                        id,
-                                        firstName,
-                                        lastName
-                                    },
-                                    dueDate,
-                                    description,
-                                    cleared,
-                                    isBorrowed,
-                                    thing {
-                                        id,
-                                        label
-                                    }
-                                },
-                                things{
-                                    id,
-                                    label
-                                },
-                                anonymousUsers{
-                                    id,
-                                    firstName,
-                                    lastName
-                                }
-                            }
-                        }`
+                    query: gql`${meQuery}`
                 }).then((data) => {
                     this.errorMessage = "";
                     this.user.firstName = data.data.me.firstName;
@@ -389,15 +271,7 @@ let vueApplication = new Vue({
             
             this.$apollo
                 .query({
-                    query:
-                        gql`query{
-                            currencies{
-                              id,
-                              symbol,
-                              name,
-                              abbreviation
-                            }
-                          }`
+                    query: gql`${currenciesQuery}`
                 }).then((data) => {
                     this.currencies = data.data.currencies;
                 }).catch((error) => {
