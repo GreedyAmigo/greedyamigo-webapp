@@ -1,5 +1,5 @@
-export const MoneyLendingDiscriminator = "moneyLending";
-export const ThingLendingDiscriminator = "thingLending";
+export const MoneyLendingDiscriminator = "money lending";
+export const ThingLendingDiscriminator = "thing lending";
 
 function compareDateObjects(date1, date2) {
     if ((date1.year  <  date2.year)

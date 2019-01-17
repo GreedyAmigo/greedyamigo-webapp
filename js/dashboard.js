@@ -38,7 +38,8 @@ let vueApplication = new Vue({
             isBorrowed: false,
             friend: null,
             discriminator: MoneyLendingDiscriminator,
-        }
+        },
+        currencies: []
     },
     methods: {
         logOutUser: function() {
@@ -50,6 +51,9 @@ let vueApplication = new Vue({
         },
         hideAddLendingDialoge: function() {
             this.lendingDialogue.addLendingDialogueVisible = false;
+        },
+        isNotLastLendingEntry: function(lending) {
+            return lending !== this.user.lendings[this.user.lendings.length - 1];
         },
         saveLending: function() {
             // save to gql server
@@ -87,53 +91,60 @@ let vueApplication = new Vue({
                             .filter(l => typeof l.thing !== "undefined")
                             .map(l => l.thing.label)));
         },
-        displayMoneyLendingOptions: function() {
-            return this.newLending.discriminator === MoneyLendingDiscriminator;
+        isMoneyLending: function(lending) {
+            return lending.discriminator === MoneyLendingDiscriminator;
         },
-        displayThingLendingOptions: function() {
-            return this.newLending.discriminator === ThingLendingDiscriminator;
+        isThingLending: function(lending) {
+            return lending.discriminator === ThingLendingDiscriminator;
+        },
+        getMoneyLendingEmoji: function() {
+            return '💵';
         },
         fetchUserData: function() {
             this.$apollo
                 .query({
-                    query: gql`query {
-                        me {
-                            id,
-                            firstName,
-                            lastName,
-                            moneyLendings {
+                    query:
+                        gql`query {
+                            me {
                                 id,
-                                amount,
-                                currency {
-                                    symbol
-                                },
-                                participant {
-                                    firstName,
-                                    lastName
-                                },
-                                dueDate,
-                                description,
-                                cleared,
-                                isBorrowed
-                            },
-                            thingLendings {
-                                id,
-                                emoji,
-                                participant {
-                                    firstName,
-                                    lastName
-                                },
-                                dueDate,
-                                description,
-                                cleared,
-                                isBorrowed,
-                                thing {
+                                firstName,
+                                lastName,
+                                moneyLendings {
                                     id,
-                                    label
+                                    amount,
+                                    currency {
+                                        id,
+                                        symbol
+                                    },
+                                    participant {
+                                        id,
+                                        firstName,
+                                        lastName
+                                    },
+                                    dueDate,
+                                    description,
+                                    cleared,
+                                    isBorrowed
+                                },
+                                thingLendings {
+                                    id,
+                                    emoji,
+                                    participant {
+                                        id,
+                                        firstName,
+                                        lastName
+                                    },
+                                    dueDate,
+                                    description,
+                                    cleared,
+                                    isBorrowed,
+                                    thing {
+                                        id,
+                                        label
+                                    }
                                 }
                             }
-                        }
-                    }`
+                        }`
                 }).then((data) => {
                     this.errorMessage = "";
                     this.user.firstName = data.data.me.firstName;

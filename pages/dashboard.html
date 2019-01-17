@@ -57,7 +57,7 @@
                             </div>
                             
                             <span v-if="lending.emoji" class="lending_emoji" >{{ lending.emoji }}</span>
-                            <span v-else class="lending_emoji">💵</span>
+                            <span v-else class="lending_emoji">{{ getMoneyLendingEmoji() }}</span>
         
                             <img v-if="lending.isBorrowed" class="lending_direction lending_borrowed" src="../img/borrowed.svg" alt="borrowed ressource">
                             <img v-else class="lending_direction lending_lent" src="../img/lent.svg" alt="lent ressource">
@@ -73,7 +73,7 @@
                                 </p>
                             </div>
                             <div class="flexbox">
-                                <em v-if="lending.discriminator === 'moneyLending'">
+                                <em v-if="isMoneyLending(lending)">
                                     {{ lending.amount }} {{ lending.currency.symbol }}
                                 </em>
                                 <em v-else>
@@ -85,7 +85,7 @@
                                 <img class="lending_delete_icon" src="../img/delete.svg" alt="lent ressource">
                             </div>
                         </div>
-                        <hr v-if="lending !== user.lendings[user.lendings.length - 1]" class="lending_seperator">
+                        <hr v-if="isNotLastLendingEntry(lending)" class="lending_seperator">
                     </li>
                 </ul>
 
@@ -121,17 +121,17 @@
                             <option v-for="lendingType in lendingTypes" :value="lendingType">{{ lendingType }}</option>
                         </select>
 
-                        <input v-if="displayMoneyLendingOptions()" class="popup__item input_default_style popup__amount" type="number" placeholder="Amount">
+                        <input v-if="isMoneyLending(newLending)" class="popup__item input_default_style popup__amount" type="number" placeholder="Amount">
 
-                        <label v-if="displayThingLendingOptions()" class="popup__item popup__add_thing_label" for="create_new_thing">Add new thing</label>
-                        <input v-if="displayThingLendingOptions()" id="create_new_thing" type="checkbox" class="popup__item popup__add_thing" v-model="lendingDialogue.addNewThing">
+                        <label v-if="isThingLending(newLending)" class="popup__item popup__add_thing_label" for="create_new_thing">Add new thing</label>
+                        <input v-if="isThingLending(newLending)" id="create_new_thing" type="checkbox" class="popup__item popup__add_thing" v-model="lendingDialogue.addNewThing">
                         
-                        <input v-if="displayThingLendingOptions() && lendingDialogue.addNewThing === true" class="popup__item input_default_style popup__new_thing" placeholder="Thing">
+                        <input v-if="isThingLending(newLending) && lendingDialogue.addNewThing === true" class="popup__item input_default_style popup__new_thing" placeholder="Thing">
 
-                        <input v-if="displayThingLendingOptions()" class="popup__item input_default_style popup__emoji" placeholder="Emoji">
+                        <input v-if="isThingLending(newLending)" class="popup__item input_default_style popup__emoji" placeholder="Emoji">
                         
-                        <label v-if="displayThingLendingOptions() && lendingDialogue.addNewThing === false" class="popup__item popup__thing_select_label" for="thingSelector">Thing</label>
-                        <select v-if="displayThingLendingOptions() && lendingDialogue.addNewThing === false" id="thingSelector" class="popup__item popup__thing_select">
+                        <label v-if="isThingLending(newLending) && lendingDialogue.addNewThing === false" class="popup__item popup__thing_select_label" for="thingSelector">Thing</label>
+                        <select v-if="isThingLending(newLending) && lendingDialogue.addNewThing === false" id="thingSelector" class="popup__item popup__thing_select">
                             <option v-for="thing in getThings()" :value="thing">{{ thing }}</option>
                         </select>
                     </div>
