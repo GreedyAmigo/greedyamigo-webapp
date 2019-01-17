@@ -133,7 +133,7 @@
                         
                         <input v-if="isNewThingLending(newLending)" class="popup__item input__default popup__new_thing" placeholder="Thing" v-model="newLending.newThingStr" required>
 
-                        <input v-if="isThingLending(newLending)" class="popup__item input__default popup__emoji" placeholder="Emoji" v-model="newLending.emoji" required>
+                        <input v-if="isThingLending(newLending)" class="popup__item input__default popup__emoji" placeholder="Emoji" maxlength="1" v-model="newLending.emoji" required>
                         
                         <label v-if="isOldThingLending(newLending)" class="popup__item popup__thing_select_label" for="thingSelector">Thing</label>
                         <select v-if="isOldThingLending(newLending)" id="thingSelector" class="popup__item popup__thing_select" v-model="newLending.thingString" required>
@@ -142,7 +142,7 @@
                     </div>
 
                     <div class="popup__button_container">
-                        <button class="button__default popup__lending_button" v-on:click="hideAddLendingDialoge">Cancel</button>
+                        <button type="button" class="button__default popup__lending_button" v-on:click="hideAddLendingDialoge">Cancel</button>
                         <button type="submit" class="button__default popup__lending_button">Save</button>
                     </div>
                 </form>
