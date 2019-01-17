@@ -29,7 +29,9 @@ import {
     getFriendDisplayName,
     getCurrencyDisplayValue,
     getFormattedDateString,
-    handleGraphQlException
+    handleGraphQlException,
+    generateDeepCopy,
+    copyContents
 } from "./data_processing"
 
 const POPUP_ADD_MODE = "add";
@@ -49,10 +51,9 @@ const initialDataSet = {
         errorStore: []
     },
     dataFetched: false,
-    userMessage: "be patient, we just need to fetch your data",
     user: {
-        firstName: ", just loading",
-        lastName: "data from server",
+        firstName: "",
+        lastName: "",
         lendings: [],
         friends: [],
         things: []
@@ -61,7 +62,7 @@ const initialDataSet = {
         ThingLendingDiscriminator,
         MoneyLendingDiscriminator
     ],
-    newLending: {
+    popupLending: {
         amount: 0,
         description: "",
         dueDate: new Date(),
@@ -85,10 +86,10 @@ let vueApplication = new Vue({
     components: {
         Datepicker
     },
-    data: initialDataSet,
+    data: generateDeepCopy(initialDataSet),
     methods: {
         resetVueData: function() {
-            this.$data = initialDataSet;
+            this.$data = copyContents(initialDataSet, this);
         },
         logOutUser: function() {
             removeJwt();
@@ -118,74 +119,98 @@ let vueApplication = new Vue({
             let participantId;
 
             let newFriend = {};
-            newFriend["firstName"] = this.newLending.firstName;
-            newFriend["lastName"]  = this.newLending.lastName;
+            newFriend["firstName"] = this.popupLending.firstName;
+            newFriend["lastName"]  = this.popupLending.lastName;
 
-            let matchingFriends =
-                this.user
-                    .friends
-                    .filter((friend) => {
-                        return getFriendDisplayName(newFriend) === getFriendDisplayName(friend)
-                    });
+            if (this.popup.addNewFriend) {
+                let matchingFriends =
+                    this.user
+                        .friends
+                        .filter((friend) => {
+                            return getFriendDisplayName(newFriend) === getFriendDisplayName(friend)
+                        });
 
-            if (matchingFriends.length > 0 && this.popup.addNewFriend) {
-                this.popup.errorStore.push("Friend already existing.");
-                return;
-            } else if (matchingFriends.length > 0 && !this.popup.addNewFriend) {
-                participantId = matchingFriends[0].id;
+                if (matchingFriends.length > 0) {
+                    this.popup.errorStore.push("Friend already existing.");
+                    return;
+                } else {
+                    await this.$apollo
+                        .mutate({
+                            mutation: gql`${createFriendMutation}`,
+                            variables: {
+                                firstName: this.popupLending.firstName,
+                                lastName: this.popupLending.lastName
+                            }
+                        }).then((data) => {
+                            participantId = data.data.createAnonymousUser.id;
+                        }).catch((error) => {
+                            handleGraphQlException(error, this.popup.errorStore);
+                        });
+                }
             } else {
-                await this.$apollo
-                    .mutate({
-                        mutation: gql`${createFriendMutation}`,
-                        variables: {
-                            firstName: this.newLending.firstName,
-                            lastName: this.newLending.lastName
-                        }
-                    }).then((data) => {
-                        participantId = data.data.createAnonymousUser.id;
-                    }).catch((error) => {
-                        handleGraphQlException(error, this.popup.errorStore);
-                    });
+                let matchingFriends =
+                    this.user
+                        .friends
+                        .filter((friend) => {
+                            return this.popupLending.friendString === getFriendDisplayName(friend)
+                        });
+
+                if (matchingFriends.length > 0) {
+                    participantId = matchingFriends[0].id;
+                } else {
+                    this.popup.errorStore.push("Selected friend not existing.");
+                    return;
+                }
             }
 
             let thingId;
 
-            let matchingThings =
-                this.user
-                    .things
-                    .filter((thing) => {
-                        return this.newLending.newThingStr === thing.label
-                    });
+            if (this.isThingLending(this.popupLending)) {
+                if (this.popup.addNewThing) {
+                    let matchingThings =
+                        this.user
+                            .things
+                            .filter((thing) => {
+                                return this.popupLending.newThingStr === thing.label
+                            });
+                    
+                    if (matchingThings.length > 0) {
+                        this.popup.errorStore.push("Thing already existing.");
+                        return;
+                    } else {
+                        await this.$apollo
+                            .mutate({
+                                mutation: gql`${createThingMutation}`,
+                                variables: {
+                                    label: this.popupLending.newThingStr
+                                }
+                            }).then((data) => {
+                                thingId = data.data.createThing.id;
+                            }).catch((error) => {
+                                handleGraphQlException(error, this.popup.errorStore);
+                            });
+                    }
+                } else {
+                    let matchingThings =
+                        this.user
+                            .things
+                            .filter((thing) => {
+                                return this.popupLending.thingString === thing.label
+                            });
 
-            if (matchingThings.length > 0
-                && this.isThingLending(this.newLending)
-                && this.popup.addNewThing) {
-
-                this.popup.errorStore.push("Thing already existing");
-                return;
-            } else if (matchingThings.length > 0
-                    && this.isThingLending(this.newLending)
-                    && !this.popup.addNewThing) {
-
-                thingId = matchingThings[0].id;
-            } else if (this.isThingLending(this.newLending)) {
-                await this.$apollo
-                    .mutate({
-                        mutation: gql`${createThingMutation}`,
-                        variables: {
-                            label: this.newLending.newThingStr
-                        }
-                    }).then((data) => {
-                        thingId = data.data.createThing.id;
-                    }).catch((error) => {
-                        handleGraphQlException(error, this.popup.errorStore);
-                    });
+                    if (matchingThings.length > 0) {
+                        thingId = matchingThings[0].id;
+                    } else {
+                        this.popup.errorStore.push("Selected thing not existing.");
+                        return;
+                    }
+                }
             }
 
             let graphQlMutation;
             let graphQlVariables;
             
-            if (this.isThingLending(this.newLending)) {
+            if (this.isThingLending(this.popupLending)) {
                 if (this.popup.mode === POPUP_ADD_MODE) {
                     graphQlMutation = createThingLendingMutation;
                 } else if (this.popup.mode === POPUP_EDIT_MODE) {
@@ -193,11 +218,11 @@ let vueApplication = new Vue({
                 }
 
                 graphQlVariables = {
-                    dueDate: getFormattedDateString(this.newLending.dueDate),
-                    description: this.newLending.description,
+                    dueDate: getFormattedDateString(this.popupLending.dueDate),
+                    description: this.popupLending.description,
                     participantId: participantId,
-                    isBorrowed: this.newLending.isBorrowed,
-                    emoji: this.newLending.emoji,
+                    isBorrowed: this.popupLending.isBorrowed,
+                    emoji: this.popupLending.emoji,
                     thingId: thingId
                 };
             } else {
@@ -210,16 +235,16 @@ let vueApplication = new Vue({
                 let currencyId =
                     this.currencies
                     .filter(currency => {
-                        return getCurrencyDisplayValue(currency) === this.newLending.currencyString
+                        return getCurrencyDisplayValue(currency) === this.popupLending.currencyString
                     })[0]
                     .id;
 
                 graphQlVariables = {
-                    dueDate: getFormattedDateString(this.newLending.dueDate),
-                    description: this.newLending.description,
+                    dueDate: getFormattedDateString(this.popupLending.dueDate),
+                    description: this.popupLending.description,
                     participantId: participantId,
-                    isBorrowed: this.newLending.isBorrowed,
-                    amount: parseInt(this.newLending.amount),
+                    isBorrowed: this.popupLending.isBorrowed,
+                    amount: parseInt(this.popupLending.amount),
                     currencyId: currencyId
                 };
             }
@@ -233,12 +258,12 @@ let vueApplication = new Vue({
                 });;
             
             this.hidePopup();
-            
-            this.resetVueData();
 
             await mutationPromise;
-
+            
+            this.resetVueData();
             clearApolloClientCache();
+
             this.fetchUserData();
         },
         getCurrencyString: function(currency) {

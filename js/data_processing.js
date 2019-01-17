@@ -90,7 +90,12 @@ const monthMap = {
 }
 
 export function getFormattedDateString(date) {
-    let dateParts = date.toString().split(" ");
+    let seperator =
+        (date.toString().includes("-"))
+        ? "-"
+        : " ";
+
+    let dateParts = date.toString().split(seperator);
 
     let month = monthMap[dateParts[1]];
 
@@ -110,4 +115,14 @@ export function handleExceptionList(errorList, errorStore) {
 export function handleGraphQlException(errorContainer, errorStore) {
     handleExceptionList(errorContainer.graphQLErrors, errorStore);
     handleExceptionList(errorContainer.networkError, errorStore);
+}
+
+export function generateDeepCopy(object) {
+    return JSON.parse(JSON.stringify(object));
+}
+
+export function copyContents(source, target) {
+    for (let key in source) {
+        target[key] = generateDeepCopy(source[key]);
+    }
 }
