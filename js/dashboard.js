@@ -6,7 +6,7 @@ import Datepicker from "vuejs-datepicker";
 import {
     clearApolloClientCache,
     apolloProvider
-} from "./apollo.js"
+} from "./apollo"
 
 import {
     currenciesQuery,
@@ -15,7 +15,7 @@ import {
     createThingLendingMutation,
     createThingMutation,
     createFriendMutation
-} from "./graphql.js"
+} from "./graphql"
 
 import {
     redirectIfUnauthorized,

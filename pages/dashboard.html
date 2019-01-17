@@ -48,7 +48,7 @@
                 <h2 v-else>{{ userMessage }}</h2>
 
                 <ul class="errorlist__default" v-if="errorStore.length > 0">
-                    <li v-for="error in errorStore" :value="error">{{ error }}</li>
+                    <li v-for="error in errorStore" :value="error" class="errorlist__entry">{{ error }}</li>
                 </ul>
 
                 <ul class="ul__lendings">
@@ -146,7 +146,7 @@
                     </div>
 
                     <ul class="errorlist__default" v-if="popup.errorStore.length > 0">
-                        <li v-for="error in popup.errorStore" :value="error">{{ error }}</li>
+                        <li v-for="error in popup.errorStore" :value="error" class="errorlist__entry">{{ error }}</li>
                     </ul>
 
                     <div class="popup__button_container">

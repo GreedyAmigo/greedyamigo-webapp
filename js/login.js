@@ -1,8 +1,22 @@
 import Vue from "vue"
 import VueApollo from "vue-apollo"
 import gql from "graphql-tag";
-import { apolloProvider } from "./apollo.js"
-import { redirectIfAuthorized, saveJwt} from "./authentication"
+import { 
+    apolloProvider 
+} from "./apollo"
+
+import {
+    redirectIfAuthorized,
+    saveJwt
+} from "./authentication"
+
+import {
+    logInQuery
+} from "./graphql"
+
+import {
+    handleGraphQlException
+} from "./data_processing"
 
 redirectIfAuthorized();
 
@@ -14,30 +28,26 @@ let vueLoginForm = new Vue({
     data: {
         email: "",
         password: "",
-        errorMessage: ""
+        errorMessage: "",
+        errorStore: []
     },
     methods: {
         logInUser: function() {
             this.$apollo.query({
-                query:
-                    gql`query ($email: String!, $password: String!) {
-                        login(email: $email, password: $password) {
-                            token,
-                
-                        }
-                    }`,
+                query: gql`${logInQuery}`,
                 variables: {
                     email:    this.email,
                     password: this.password
                 }
             }).then((data) => {
-                this.errorMessage = "";
+                this.errorStore = [];
 
                 saveJwt(data.data.login.token);
                 redirectIfAuthorized();
             }).catch((error) => {
-                this.errorMessage = error.message;
-                console.error(error);
+                this.errorStore = [];
+
+                handleGraphQlException(error, this.errorStore);
             });
         }
     }

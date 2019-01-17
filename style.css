@@ -88,6 +88,10 @@ h3 {
     padding: 3px;
 }
 
+.errorlist__entry {
+    padding: 2px;
+}
+
 .nav__style {
     height: 60px;
     background: linear-gradient(to right, var(--brand_color_begin), var(--brand_color_end));

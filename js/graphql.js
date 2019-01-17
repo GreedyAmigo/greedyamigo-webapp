@@ -115,3 +115,18 @@ export const createFriendMutation =
         id
         }
     }`;
+
+export const signUpMutation =
+    `mutation ($email: String!, $password: String!, $firstName: String!, $lastName: String!) {
+        signup(email: $email, password: $password, firstName: $firstName, lastName: $lastName) {
+            token
+        }
+    }`;
+
+export const logInQuery =
+    `query ($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+            token,
+
+        }
+    }`;
