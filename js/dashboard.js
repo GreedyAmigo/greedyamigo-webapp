@@ -84,35 +84,19 @@ let vueApplication = new Vue({
             this.fetchUserData();
         },
         getCurrencyString: function(currency) {
-            return currency.abbreviation + " (" + currency.symbol + ")";
+            return getCurrencyDisplayValue(currency);
         },
         getFriends: function() {
-            let uniqueFriendArray = new Array();
-
-            this.user
-                .lendings
-                .map(l => l.participant.firstName + " " + l.participant.lastName)
-                .forEach((o) => {
-                    let notInserted = 
-                        uniqueFriendArray
-                            .filter(
-                                f => f == o
-                            ).length === 0;
-
-                    if (notInserted) {
-                        uniqueFriendArray.push(o);
-                    }
-                })
-
-            return uniqueFriendArray;
+            return this.user
+                        .friends
+                        .map((friend) => getFriendDisplayName(friend, friend))
+                        .sort();
         },
         getThings: function() {
-            return Array.from(
-                    new Set(
-                        this.user
-                            .lendings
-                            .filter(l => typeof l.thing !== "undefined")
-                            .map(l => l.thing.label)));
+            return this.user
+                        .things
+                        .map((thing) => thing.label)
+                        .sort();
         },
         isMoneyLending: function(lending) {
             return lending.discriminator === MoneyLendingDiscriminator;
@@ -180,6 +164,8 @@ let vueApplication = new Vue({
                     this.errorMessage = "";
                     this.user.firstName = data.data.me.firstName;
                     this.user.lastName = data.data.me.lastName;
+                    this.user.things = data.data.me.things;
+                    this.user.friends = data.data.me.anonymousUsers;
 
                     let allUnprocessedLendings = 
                         data.data.me.moneyLendings

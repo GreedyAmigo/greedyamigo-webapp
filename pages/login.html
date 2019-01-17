@@ -29,34 +29,34 @@
         <title>Greedy Amigo - Log In</title>
     </head>
     <body>
-        <nav class="navbar">
-            <div class="navbar_left">
+        <nav class="nav__style">
+            <div class="nav__left">
                 <a href="../index.html">
-                    <img class="nav_item nav_greedy_amigo_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
+                    <img class="nav__item nav__brand_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
                 </a>
-                <a class="nav_item nav_greedy_amigo_text" href="../index.html">Greedy Amigo</a>
+                <a class="nav__item nav__brand_text" href="../index.html">Greedy Amigo</a>
             </div>
-            <div class="navbar_right">
-                <a class="nav_item nav_right_item nav_item_selected" href="login.html">
+            <div class="nav__right">
+                <a class="nav__item nav__menu_item nav__item_selected" href="login.html">
                     Log in
                 </a>
-                <a class="nav_item nav_right_item" href="signup.html">
+                <a class="nav__item nav__menu_item" href="signup.html">
                     Sign up
                 </a>
             </div>
         </nav>
 
-        <main class="main">
+        <main class="main__container">
             <h1>Welcome back!</h1>
 
-            <form id="form_login" v-on:submit.prevent="logInUser" class="aligned_item login_section">
-                <input type="email" v-model="email" id="login_email" name="login_email" class="input_default_style input_element" placeholder="Email" required><br>
-                <input type="password" v-model="password" id="login_password" name="login_password" class="input_default_style input_element" placeholder="Password" required><br>
-                <span v-if="errorMessage" class="error_message">{{ errorMessage }}</span><br>
-                <button type="submit" class="btn_default_style">Log in</button>
+            <form id="form__login" v-on:submit.prevent="logInUser">
+                <input type="email" v-model="email" name="login_email" class="input__default input_element" placeholder="Email" required><br>
+                <input type="password" v-model="password" name="login_password" class="input__default input_element" placeholder="Password" required><br>
+                <span v-if="errorMessage" class="form__error">{{ errorMessage }}</span><br>
+                <button type="submit" class="button__default">Log in</button>
             </form>
 
-            <div class="account_hint">
+            <div class="message__account_hint">
                 <strong>Don't have an account?</strong><br>
                 <a href="pages/signup.html">
                     <em>Sign up here</em>

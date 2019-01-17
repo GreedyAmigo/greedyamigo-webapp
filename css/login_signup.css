@@ -1,4 +1,4 @@
-.main {
+.main__container {
     color: var(--text_color);
     border-width: var(--container_border_radius);
     border-radius: 10px;
@@ -8,7 +8,7 @@
     padding: 3% 7% 5% 7%;
 }
 
-.error_message {
+.form__error {
     text-align: center;
 
     color: var(--error_message_color);
@@ -17,30 +17,30 @@
     padding: 3px 3px 3px 3px;
 }
 
-.account_hint {
+.message__account_hint {
     margin-top: 30px;
 }
 
 @media screen and (max-width: 499px) {
-    .main {
+    .main__container {
         margin:  7% 2% 0% 2%;
     }
 }
 
 @media screen and (min-width: 500px) {
-    .main {
+    .main__container {
         margin:  7% 10% 0% 10%;
     }
 }
 
 @media screen and (min-width: 600px) {
-    .main {
+    .main__container {
         margin:  7% 17% 0% 17%;
     }
 }
 
 @media screen and (min-width: 1000px) {
-    .main {
+    .main__container {
         margin:  7% 25% 0% 25%;
     }
 }

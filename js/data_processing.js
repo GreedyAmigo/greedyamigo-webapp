@@ -66,6 +66,10 @@ export function processUserInfo(serverLendings) {
     return processedLendings;
 };
 
-export function processNewLending(rawLending, lendingOpts) {
-    return {};
+export function getFriendDisplayName(friend) {
+    return friend.firstName + " " + friend.lastName;
+}
+
+export function getCurrencyDisplayValue(currency) {
+    return currency.abbreviation + " (" + currency.symbol + ")";
 }

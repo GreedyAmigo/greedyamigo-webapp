@@ -9,7 +9,7 @@ redirectIfAuthorized();
 Vue.use(VueApollo);
 
 let vueLoginForm = new Vue({
-    el: "#form_login",
+    el: "#form__login",
     apolloProvider,
     data: {
         email: "",
