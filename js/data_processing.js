@@ -65,3 +65,7 @@ export function processUserInfo(serverLendings) {
 
     return processedLendings;
 };
+
+export function processNewLending(rawLending, lendingOpts) {
+    return {};
+}

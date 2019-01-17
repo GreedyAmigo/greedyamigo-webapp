@@ -55,7 +55,9 @@ let vueApplication = new Vue({
             lastName: "",
             friendString: "",
             currencyString: "",
-            thingString: ""
+            thingString: "",
+            newThingStr: "",
+            emoji: ""
         },
         currencies: []
     },
@@ -74,8 +76,7 @@ let vueApplication = new Vue({
             return lending !== this.user.lendings[this.user.lendings.length - 1];
         },
         saveLending: function() {
-            // save to gql server
-            // use fast ui response handler
+            let processedLending = processNewLending(this.newLending, this.lendingDialogue);
 
             this.hideAddLendingDialoge();
 
