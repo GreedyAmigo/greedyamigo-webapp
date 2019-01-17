@@ -34,9 +34,9 @@ let vueApplication = new Vue({
             MoneyLendingDiscriminator
         ],
         newLending: {
+            description: "",
             dueDate: new Date(),
             isBorrowed: false,
-            friend: null,
             discriminator: MoneyLendingDiscriminator,
             firstName: "",
             lastName: "",
