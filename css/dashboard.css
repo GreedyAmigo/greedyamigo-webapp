@@ -357,7 +357,7 @@
 }
 
 @media screen and (min-width: 1000px) {
-    .lending_dialogue {
+    .popup__container {
         margin-top: 15%;
         margin-left: auto;
         margin-right: auto;
