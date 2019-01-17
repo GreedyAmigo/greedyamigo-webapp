@@ -4,9 +4,6 @@
 Greedy Amigo lets you keep track of your lendings and loans from friends.
 A lending can be about money or a thing.
 
-## additionally
-If you want to see the application in action, you should visit [greedy-amigo.com](https://www.greedy-amigo.com)
-
 ## set up instructions
 1. download repository from [github](https://github.com/GreedyAmigo/greedyamigo-webapp)
 2. open command-line and navigate to the project root folder
@@ -18,3 +15,6 @@ If you want to see the application in action, you should visit [greedy-amigo.com
     * [Apache2 installation instructions for Windows](https://httpd.apache.org/docs/2.4/platform/windows.html)
 
 Initially, I wanted to add a npm package that enables local development hosting out of the box without apache2 or third-party webservers, but out ot time pressure and simplicity I did not do this.
+
+## additionally
+If you want to see the application in action, you should visit [greedy-amigo.com](https://www.greedy-amigo.com)
