@@ -96,3 +96,18 @@ export function getFormattedDateString(date) {
 
     return dateParts[3] + "-" + month + "-" + dateParts[2];
 }
+
+export function handleExceptionList(errorList, errorStore) {
+    if (errorList) {
+        for (let i = 0; i < errorList.length; i++) {
+            if (!errorStore.includes(errorList[i].message)) {
+                errorStore.push(errorList[i].message);
+            }
+        }
+    }
+}
+
+export function handleGraphQlException(errorContainer, errorStore) {
+    handleExceptionList(errorContainer.graphQLErrors, errorStore);
+    handleExceptionList(errorContainer.networkError, errorStore);
+}

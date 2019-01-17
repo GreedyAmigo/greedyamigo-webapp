@@ -2,16 +2,20 @@ import Vue from "vue"
 import VueApollo from "vue-apollo"
 import gql from "graphql-tag";
 import Datepicker from "vuejs-datepicker";
+
 import {
     clearApolloClientCache,
-    apolloProvider,
+    apolloProvider
+} from "./apollo.js"
+
+import {
     currenciesQuery,
     meQuery,
     createMoneyLendingMutation,
     createThingLendingMutation,
     createThingMutation,
     createFriendMutation
-} from "./apollo.js"
+} from "./graphql.js"
 
 import {
     redirectIfUnauthorized,
@@ -24,7 +28,8 @@ import {
     ThingLendingDiscriminator,
     getFriendDisplayName,
     getCurrencyDisplayValue,
-    getFormattedDateString
+    getFormattedDateString,
+    handleGraphQlException
 } from "./data_processing"
 
 redirectIfUnauthorized();
@@ -32,10 +37,11 @@ redirectIfUnauthorized();
 Vue.use(VueApollo);
 
 const initialDataSet = {
-    lendingDialogue: {
+    popup: {
         addNewFriend: false,
-        addLendingDialogueVisible: false,
-        addNewThing: false
+        addpopupVisible: false,
+        addNewThing: false,
+        errorStore: []
     },
     dataFetched: false,
     userMessage: "be patient, we just need to fetch your data",
@@ -64,7 +70,8 @@ const initialDataSet = {
         newThingStr: "",
         emoji: ""
     },
-    currencies: []
+    currencies: [],
+    errorStore: []
 }
 
 let vueApplication = new Vue({
@@ -83,33 +90,34 @@ let vueApplication = new Vue({
             redirectIfUnauthorized();
         },
         showAddLendingDialoge: function() {
-            this.lendingDialogue.addLendingDialogueVisible = true;
+            this.popup.addpopupVisible = true;
         },
         hideAddLendingDialoge: function() {
-            this.lendingDialogue.addLendingDialogueVisible = false;
+            this.popup.addpopupVisible = false;
         },
         isNotLastLendingEntry: function(lending) {
             return lending !== this.user.lendings[this.user.lendings.length - 1];
         },
         saveLending: async function() {
+            this.popup.errorStore = [];
+
             let participantId;
 
-            let newNameObj = {
-                firstName: this.newLending.firstName,
-                lastName: this.newLending.lastName
-            }
+            let newFriend = {};
+            newFriend["firstName"] = this.newLending.firstName;
+            newFriend["lastName"]  = this.newLending.lastName;
 
             let matchingFriends =
                 this.user
                     .friends
                     .filter((friend) => {
-                        return this.newLending.friendString === getFriendDisplayName(friend)
+                        return getFriendDisplayName(newFriend) === getFriendDisplayName(friend)
                     });
 
-            if (matchingFriends.length > 0 && this.lendingDialogue.addNewFriend) {
-                alert("friend with this name already existing");
+            if (matchingFriends.length > 0 && this.popup.addNewFriend) {
+                this.popup.errorStore.push("Friend already existing.");
                 return;
-            } else if (matchingFriends.length > 0 && !this.lendingDialogue.addNewFriend) {
+            } else if (matchingFriends.length > 0 && !this.popup.addNewFriend) {
                 participantId = matchingFriends[0].id;
             } else {
                 await this.$apollo
@@ -122,8 +130,7 @@ let vueApplication = new Vue({
                     }).then((data) => {
                         participantId = data.data.createAnonymousUser.id;
                     }).catch((error) => {
-                        alert(JSON.stringify(error));
-                        console.error(error);
+                        handleGraphQlException(error, this.popup.errorStore);
                     });
             }
 
@@ -133,18 +140,18 @@ let vueApplication = new Vue({
                 this.user
                     .things
                     .filter((thing) => {
-                        return this.newLending.thingString === thing.label
+                        return this.newLending.newThingStr === thing.label
                     });
 
             if (matchingThings.length > 0
                 && this.isThingLending(this.newLending)
-                && this.lendingDialogue.addNewThing) {
+                && this.popup.addNewThing) {
 
-                alert("thing with this label already existing!");
+                this.popup.errorStore.push("Thing already existing");
                 return;
             } else if (matchingThings.length > 0
                     && this.isThingLending(this.newLending)
-                    && !this.lendingDialogue.addNewThing) {
+                    && !this.popup.addNewThing) {
 
                 thingId = matchingThings[0].id;
             } else if (this.isThingLending(this.newLending)) {
@@ -157,8 +164,7 @@ let vueApplication = new Vue({
                     }).then((data) => {
                         thingId = data.data.createThing.id;
                     }).catch((error) => {
-                        alert(JSON.stringify(error));
-                        console.error(error);
+                        handleGraphQlException(error, this.popup.errorStore);
                     });
             }
 
@@ -177,8 +183,7 @@ let vueApplication = new Vue({
                             thingId: thingId
                         }
                     }).catch((error) => {
-                        alert(JSON.stringify(error));
-                        console.error(error);
+                        handleGraphQlException(error, this.popup.errorStore);
                     });
             } else {
                 let currencyId =
@@ -200,8 +205,7 @@ let vueApplication = new Vue({
                             currencyId: currencyId
                         }
                     }).catch((error) => {
-                        alert(JSON.stringify(error));
-                        console.error(error);
+                        handleGraphQlException(error, this.popup.errorStore);
                     });
             }
 
@@ -237,11 +241,11 @@ let vueApplication = new Vue({
         },
         isNewThingLending: function(lending) {
             return this.isThingLending(lending)
-                && this.lendingDialogue.addNewThing === true;
+                && this.popup.addNewThing === true;
         },
         isOldThingLending: function(lending) {
             return this.isThingLending(lending)
-                && this.lendingDialogue.addNewThing === false;
+                && this.popup.addNewThing === false;
         },
         getMoneyLendingEmoji: function() {
             return '💵';
@@ -251,7 +255,6 @@ let vueApplication = new Vue({
                 .query({
                     query: gql`${meQuery}`
                 }).then((data) => {
-                    this.errorMessage = "";
                     this.user.firstName = data.data.me.firstName;
                     this.user.lastName = data.data.me.lastName;
                     this.user.things = data.data.me.things;
@@ -265,8 +268,7 @@ let vueApplication = new Vue({
 
                     this.dataFetched = true;
                 }).catch((error) => {
-                    this.userMessage = error.message;
-                    console.error("me: " + error);
+                    handleGraphQlException(error, this.errorStore);
                 });
             
             this.$apollo
@@ -275,7 +277,7 @@ let vueApplication = new Vue({
                 }).then((data) => {
                     this.currencies = data.data.currencies;
                 }).catch((error) => {
-                    console.error("currencies: " + JSON.stringify(error));
+                    handleGraphQlException(error, this.errorStore);
                 });
         }
     },

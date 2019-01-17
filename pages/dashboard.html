@@ -29,7 +29,7 @@
     </head>
     <body>
         <div id="dashboard">
-            <nav class="nav__style" v-bind:class="{ item__blurr: lendingDialogue.addLendingDialogueVisible }">
+            <nav class="nav__style" v-bind:class="{ item__blurr: popup.addpopupVisible }">
                 <div class="nav__left">
                     <a href="dashboard.html">
                         <img class="nav__item nav__brand_logo" src="../img/logo.svg" alt="greedy amigo logo"></object>
@@ -43,9 +43,13 @@
                 </div>
             </nav>
     
-            <main class="main__container" v-bind:class="{ item__blurr: lendingDialogue.addLendingDialogueVisible }">
+            <main class="main__container" v-bind:class="{ item__blurr: popup.addpopupVisible }">
                 <h1 v-if="dataFetched">Hi {{ user.firstName }} {{ user.lastName }}</h1>
                 <h2 v-else>{{ userMessage }}</h2>
+
+                <ul class="errorlist__default" v-if="errorStore.length > 0">
+                    <li v-for="error in errorStore" :value="error">{{ error }}</li>
+                </ul>
 
                 <ul class="ul__lendings">
                     <li v-for="lending in user.lendings">
@@ -94,7 +98,7 @@
                 </button>
             </main>
 
-            <div v-if="lendingDialogue.addLendingDialogueVisible" class="popup__background">
+            <div v-if="popup.addpopupVisible" class="popup__background">
                 <form class="popup__container" v-on:submit.prevent="saveLending" >
                     <h2 class="popup__header">add new lending</h2>
 
@@ -108,10 +112,10 @@
                         <input id="popup__is_borrowed" type="checkbox" class="popup__item popup__is_borrowed" v-model="newLending.isBorrowed">
 
                         <label class="popup__item popup__add_friend_label" for="create_new_friend_label">New friend?</label>
-                        <input id="create_new_friend" type="checkbox" class="popup__item popup__add_friend" v-model="lendingDialogue.addNewFriend">
+                        <input id="create_new_friend" type="checkbox" class="popup__item popup__add_friend" v-model="popup.addNewFriend">
     
-                        <input v-if="lendingDialogue.addNewFriend" class="popup__item input__default popup__firstname" placeholder="Firstname" v-model="newLending.firstName" required>
-                        <input v-if="lendingDialogue.addNewFriend" class="popup__item input__default popup__lastname" placeholder="Lastname" v-model="newLending.lastName" required>
+                        <input v-if="popup.addNewFriend" class="popup__item input__default popup__firstname" placeholder="Firstname" v-model="newLending.firstName" required>
+                        <input v-if="popup.addNewFriend" class="popup__item input__default popup__lastname" placeholder="Lastname" v-model="newLending.lastName" required>
                         <select v-else class="popup__item popup__select popup__friend_search" v-model="newLending.friendString" required>
                             <option v-for="friend in getFriends()" :value="friend">{{ friend }}</option>
                         </select>
@@ -129,7 +133,7 @@
                         </select>
 
                         <label v-if="isThingLending(newLending)" class="popup__item popup__add_thing_label" for="create_new_thing">New thing?</label>
-                        <input v-if="isThingLending(newLending)" id="create_new_thing" type="checkbox" class="popup__item popup__add_thing" v-model="lendingDialogue.addNewThing">
+                        <input v-if="isThingLending(newLending)" id="create_new_thing" type="checkbox" class="popup__item popup__add_thing" v-model="popup.addNewThing">
                         
                         <input v-if="isNewThingLending(newLending)" class="popup__item input__default popup__new_thing" placeholder="Thing" v-model="newLending.newThingStr" required>
 
@@ -140,6 +144,10 @@
                             <option v-for="thing in getThings()" :value="thing">{{ thing }}</option>
                         </select>
                     </div>
+
+                    <ul class="errorlist__default" v-if="popup.errorStore.length > 0">
+                        <li v-for="error in popup.errorStore" :value="error">{{ error }}</li>
+                    </ul>
 
                     <div class="popup__button_container">
                         <button type="button" class="button__default popup__lending_button" v-on:click="hideAddLendingDialoge">Cancel</button>
