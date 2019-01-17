@@ -104,34 +104,39 @@
                         <label class="popup__item popup__duedate_label">Due date</label>
                         <datepicker class="popup__lending_duedate" v-model="newLending.dueDate" id="duedatepicker" name="duedatepicker"></datepicker>
 
-                        <label class="popup__item popup__is_borrowed_label" for="popup__is_borrowed">Is borrowed</label>
+                        <label class="popup__item popup__is_borrowed_label" for="popup__is_borrowed">Borrowed?</label>
                         <input id="popup__is_borrowed" type="checkbox" class="popup__item popup__is_borrowed" v-model="newLending.isBorrowed">
 
-                        <label class="popup__item popup__add_friend_label" for="create_new_friend_label">Add new friend</label>
+                        <label class="popup__item popup__add_friend_label" for="create_new_friend_label">New friend?</label>
                         <input id="create_new_friend" type="checkbox" class="popup__item popup__add_friend" v-model="lendingDialogue.addNewFriend">
     
                         <input v-if="lendingDialogue.addNewFriend" class="popup__item input_default_style popup__firstname" placeholder="Firstname">
                         <input v-if="lendingDialogue.addNewFriend" class="popup__item input_default_style popup__lastname" placeholder="Lastname">
-                        <select v-else class="popup__item popup__friend_search">
+                        <select v-else class="popup__item popup__select popup__friend_search" v-model="newLending.friendString">
                             <option v-for="friend in getFriends()" :value="friend">{{ friend }}</option>
                         </select>
 
-                        <label class="popup__item popup__type_label" for="lendingtype">Lending type</label>
-                        <select class="popup__item popup__type" v-model="newLending.discriminator">
+                        <label class="popup__item popup__type_label" for="lendingType">Lending type</label>
+                        <select class="popup__item popup__type" id="lendingType" v-model="newLending.discriminator">
                             <option v-for="lendingType in lendingTypes" :value="lendingType">{{ lendingType }}</option>
                         </select>
 
                         <input v-if="isMoneyLending(newLending)" class="popup__item input_default_style popup__amount" type="number" placeholder="Amount">
 
-                        <label v-if="isThingLending(newLending)" class="popup__item popup__add_thing_label" for="create_new_thing">Add new thing</label>
+                        <label v-if="isMoneyLending(newLending)" class="popup__item popup__currency_select_label" for="currencySelect">Currency</label>
+                        <select v-if="isMoneyLending(newLending)" id="currencySelect" class="popup__item popup__currency_select" v-model="newLending.currencyString">
+                            <option v-for="currency in currencies" :value="getCurrencyString(currency)">{{ getCurrencyString(currency) }}</option>
+                        </select>
+
+                        <label v-if="isThingLending(newLending)" class="popup__item popup__add_thing_label" for="create_new_thing">New thing?</label>
                         <input v-if="isThingLending(newLending)" id="create_new_thing" type="checkbox" class="popup__item popup__add_thing" v-model="lendingDialogue.addNewThing">
                         
-                        <input v-if="isThingLending(newLending) && lendingDialogue.addNewThing === true" class="popup__item input_default_style popup__new_thing" placeholder="Thing">
+                        <input v-if="isNewThingLending(newLending)" class="popup__item input_default_style popup__new_thing" placeholder="Thing">
 
                         <input v-if="isThingLending(newLending)" class="popup__item input_default_style popup__emoji" placeholder="Emoji">
                         
-                        <label v-if="isThingLending(newLending) && lendingDialogue.addNewThing === false" class="popup__item popup__thing_select_label" for="thingSelector">Thing</label>
-                        <select v-if="isThingLending(newLending) && lendingDialogue.addNewThing === false" id="thingSelector" class="popup__item popup__thing_select">
+                        <label v-if="isOldThingLending(newLending)" class="popup__item popup__thing_select_label" for="thingSelector">Thing</label>
+                        <select v-if="isOldThingLending(newLending)" id="thingSelector" class="popup__item popup__thing_select" v-model="newLending.thingString">
                             <option v-for="thing in getThings()" :value="thing">{{ thing }}</option>
                         </select>
                     </div>

@@ -38,6 +38,11 @@ let vueApplication = new Vue({
             isBorrowed: false,
             friend: null,
             discriminator: MoneyLendingDiscriminator,
+            firstName: "",
+            lastName: "",
+            friendString: "",
+            currencyString: "",
+            thingString: ""
         },
         currencies: []
     },
@@ -62,6 +67,9 @@ let vueApplication = new Vue({
             this.hideAddLendingDialoge();
 
             this.fetchUserData();
+        },
+        getCurrencyString: function(currency) {
+            return currency.abbreviation + " (" + currency.symbol + ")";
         },
         getFriends: function() {
             let uniqueFriendArray = new Array();
@@ -96,6 +104,14 @@ let vueApplication = new Vue({
         },
         isThingLending: function(lending) {
             return lending.discriminator === ThingLendingDiscriminator;
+        },
+        isNewThingLending: function(lending) {
+            return this.isThingLending(lending)
+                && this.lendingDialogue.addNewThing === true;
+        },
+        isOldThingLending: function(lending) {
+            return this.isThingLending(lending)
+                && this.lendingDialogue.addNewThing === false;
         },
         getMoneyLendingEmoji: function() {
             return '💵';
@@ -160,6 +176,23 @@ let vueApplication = new Vue({
                 }).catch((error) => {
                     this.userMessage = error.message;
                     console.error(error);
+                });
+            
+            this.$apollo
+                .query({
+                    query:
+                        gql`query{
+                            currencies{
+                              id,
+                              symbol,
+                              name,
+                              abbreviation
+                            }
+                          }`
+                }).then((data) => {
+                    this.currencies = data.data.currencies;
+                }).catch((error) => {
+                    console.error(JSON.stringify(error));
                 });
         }
     },

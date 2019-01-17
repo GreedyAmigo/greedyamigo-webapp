@@ -271,6 +271,16 @@
     grid-column: 2;
 }
 
+.popup__currency_select_label {
+    grid-row: 7;
+    grid-column: 1;
+}
+
+.popup__currency_select {
+    grid-row: 7;
+    grid-column: 2 / span 2;
+} 
+
 .popup__add_thing_label {
     grid-row: 6;
     grid-column: 1;
@@ -361,6 +371,6 @@
         margin-top: 15%;
         margin-left: auto;
         margin-right: auto;
-        width: 42.5%;
+        width: 45%;
     }
 }
