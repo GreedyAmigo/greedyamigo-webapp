@@ -46,7 +46,6 @@
 }
 
 .lending__emoji {
-    font-size: 2rem;
     text-align: center;
 
     margin: auto;
@@ -83,6 +82,10 @@
     padding: 0px;
 }
 
+.lending__item {
+    overflow: hidden;
+}
+
 .lending__edit {
     height: 20%;
 }
@@ -113,8 +116,12 @@
         left: 80%;
     }
 
-    .lending_text {
+    .lending__text {
         padding: 0px 2.5% 0px 2.5%;
+    }
+
+    .lending__emoji {
+        font-size: 1.5rem;
     }
 }
 
@@ -123,8 +130,12 @@
         left: 75%;
     }
 
-    .lending_text {
+    .lending__text {
         padding: 0px 7.5% 0px 7.5%;
+    }
+
+    .lending__emoji {
+        font-size: 2rem;
     }
 }
 
