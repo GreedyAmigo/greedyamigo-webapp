@@ -6,7 +6,8 @@
     "scripts": {
         "build": "webpack --devtool sourcemap --mode=production -d",
         "build_development": "webpack --devtool sourcemap --mode=development -d",
-        "ongoing_build_development": "webpack --devtool sourcemap --mode=development -d --watch"
+        "ongoing_build_development": "webpack --devtool sourcemap --mode=development -d --watch",
+        "start:dev": "webpack-dev-server --mode=development"
     },
     "repository": {
         "type": "git",
@@ -27,6 +28,7 @@
     },
     "devDependencies": {
         "webpack": "^4.28.4",
-        "webpack-cli": "^3.2.1"
+        "webpack-cli": "^3.2.1",
+        "webpack-dev-server": "^3.1.14"
     }
 }

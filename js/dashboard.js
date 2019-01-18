@@ -3,39 +3,33 @@ import VueApollo from "vue-apollo"
 import gql from "graphql-tag";
 import Datepicker from "vuejs-datepicker";
 
-import {
-    apolloProvider,
-    clearApolloClientCache
-} from "./apollo"
+import {apolloProvider, clearApolloClientCache} from "./apollo"
 
 import {
-    currenciesQuery,
-    meQuery,
+    createFriendMutation,
     createMoneyLendingMutation,
     createThingLendingMutation,
     createThingMutation,
-    createFriendMutation,
-    updateMoneyLendingMutation,
-    updateThingLendingMutation,
+    currenciesQuery,
     deleteMoneyLendingMutation,
-    deleteThingLendingMutation
+    deleteThingLendingMutation,
+    meQuery,
+    updateMoneyLendingMutation,
+    updateThingLendingMutation
 } from "./graphql"
 
-import {
-    redirectIfUnauthorized,
-    removeJwt
-} from "./authentication"
+import {redirectIfUnauthorized, removeJwt} from "./authentication"
 
 import {
-    processUserInfo,
-    MoneyLendingDiscriminator,
-    ThingLendingDiscriminator,
-    getFriendDisplayName,
+    deepCopyTo,
+    generateDeepCopy,
     getCurrencyDisplayValue,
     getFormattedDateString,
+    getFriendDisplayName,
     handleGraphQlException,
-    generateDeepCopy,
-    deepCopyTo
+    MoneyLendingDiscriminator,
+    processUserInfo,
+    ThingLendingDiscriminator
 } from "./data_processing"
 
 const POPUP_ADD_MODE = "add";
@@ -83,7 +77,7 @@ const initialDataSet = {
     },
     currencies: [],
     errorStore: []
-}
+};
 
 let vueApplication = new Vue({
     el: "#dashboard",
@@ -93,39 +87,39 @@ let vueApplication = new Vue({
     },
     data: generateDeepCopy(initialDataSet),
     methods: {
-        resetVueData: function() {
+        resetVueData: function () {
             this.$data = deepCopyTo(initialDataSet, this);
         },
-        logOutUser: function() {
+        logOutUser: function () {
             removeJwt();
             clearApolloClientCache();
             redirectIfUnauthorized();
         },
-        resetPopUpValues: function() {
+        resetPopUpValues: function () {
             deepCopyTo(initialDataSet.popup, this.popup);
             deepCopyTo(initialDataSet.popupModel, this.popupModel);
         },
-        showAddPopup: function() {
+        showAddPopup: function () {
             this.resetPopUpValues();
 
             this.popup.mode = POPUP_ADD_MODE;
             this.popup.visible = true;
         },
-        setPopupModel: function(lending) {
+        setPopupModel: function (lending) {
             this.resetPopUpValues();
 
             this.popupModel.cleared = lending.cleared;
             this.popupModel.description = lending.description;
-            
+
             this.popupModel.dueDate =
                 new Date(lending.dueDate.year, lending.dueDate.month, lending.dueDate.day);
-            
+
             this.popupModel.id = lending.id;
             this.popupModel.isBorrowed = lending.isBorrowed;
             this.popupModel.friendString = getFriendDisplayName(lending.participant);
 
             this.popupModel.discriminator = lending.discriminator;
-            
+
             if (this.popupModel.discriminator === MoneyLendingDiscriminator) {
                 this.popupModel.amount = lending.amount;
                 this.popupModel.currencyString = getCurrencyDisplayValue(lending.currency);
@@ -134,35 +128,35 @@ let vueApplication = new Vue({
                 this.popupModel.thingString = lending.thing.label;
             }
         },
-        showEditPopup: function(lending) {
+        showEditPopup: function (lending) {
             this.setPopupModel(lending);
 
             this.popup.mode = POPUP_EDIT_MODE;
             this.popup.visible = true;
         },
-        showDeletePopup: function(lending) {
+        showDeletePopup: function (lending) {
             this.setPopupModel(lending);
 
             this.popup.mode = POPUP_DELETE_MODE;
             this.popup.visible = true;
         },
-        popupInAddMode: function() {
+        popupInAddMode: function () {
             return this.popup.mode === POPUP_ADD_MODE;
         },
-        popupInEditMode: function() {
+        popupInEditMode: function () {
             return this.popup.mode === POPUP_EDIT_MODE;
         },
-        popupInDeleteMode: function() {
+        popupInDeleteMode: function () {
             return this.popup.mode === POPUP_DELETE_MODE;
         },
-        hidePopup: function() {
+        hidePopup: function () {
             this.popup.mode = "";
             this.popup.visible = false;
         },
-        isNotLastLendingEntry: function(lending) {
+        isNotLastLendingEntry: function (lending) {
             return lending !== this.user.lendings[this.user.lendings.length - 1];
         },
-        submitPopup: async function() {
+        submitPopup: async function () {
             this.popup.errorStore = [];
 
             let participantId;
@@ -198,7 +192,7 @@ let vueApplication = new Vue({
                             handleGraphQlException(error, this.popup.errorStore);
                         });
                 }
-            } else if(!this.popupInDeleteMode()) {
+            } else if (!this.popupInDeleteMode()) {
                 let matchingFriends =
                     this.user
                         .friends
@@ -217,7 +211,7 @@ let vueApplication = new Vue({
             let thingId;
 
             if (this.isThingLending(this.popupModel)
-            && !this.popupInDeleteMode()) {
+                && !this.popupInDeleteMode()) {
                 if (this.popup.addNewThing) {
                     let matchingThings =
                         this.user
@@ -225,7 +219,7 @@ let vueApplication = new Vue({
                             .filter((thing) => {
                                 return this.popupModel.newThingStr === thing.label
                             });
-                    
+
                     if (matchingThings.length > 0) {
                         this.popup.errorStore.push("Thing already existing.");
                         return;
@@ -242,7 +236,7 @@ let vueApplication = new Vue({
                                 handleGraphQlException(error, this.popup.errorStore);
                             });
                     }
-                } else if(!this.popupInDeleteMode()) {
+                } else if (!this.popupInDeleteMode()) {
                     let matchingThings =
                         this.user
                             .things
@@ -259,13 +253,9 @@ let vueApplication = new Vue({
                 }
             }
 
-            // real thingid: "cjr1em22901ej08334yi6u8vp"
-
-            // "cjr1em22901ej08334yi6u8vp"
-
             let graphQlMutation;
             let graphQlVariables;
-            
+
             if (this.isThingLending(this.popupModel)) {
                 graphQlVariables = {
                     dueDate: getFormattedDateString(this.popupModel.dueDate),
@@ -290,10 +280,10 @@ let vueApplication = new Vue({
             } else {
                 let currencyId =
                     this.currencies
-                    .filter(currency => {
-                        return getCurrencyDisplayValue(currency) === this.popupModel.currencyString
-                    })[0]
-                    .id;
+                        .filter(currency => {
+                            return getCurrencyDisplayValue(currency) === this.popupModel.currencyString
+                        })[0]
+                        .id;
 
                 graphQlVariables = {
                     dueDate: getFormattedDateString(this.popupModel.dueDate),
@@ -329,8 +319,8 @@ let vueApplication = new Vue({
                 }).catch((error) => {
                     handleGraphQlException(error, this.popup.errorStore);
                 });
-                
-            if (this.popup.errorStore.length == 0) {
+
+            if (this.popup.errorStore.length === 0) {
                 this.hidePopup();
 
                 this.resetVueData();
@@ -339,67 +329,67 @@ let vueApplication = new Vue({
                 this.fetchUserData();
             }
         },
-        getCurrencyString: function(currency) {
+        getCurrencyString: function (currency) {
             return getCurrencyDisplayValue(currency);
         },
-        getFriends: function() {
+        getFriends: function () {
             return this.user
-                        .friends
-                        .map((friend) => getFriendDisplayName(friend, friend))
-                        .sort();
+                .friends
+                .map((friend) => getFriendDisplayName(friend, friend))
+                .sort();
         },
-        getThings: function() {
+        getThings: function () {
             return this.user
-                        .things
-                        .map((thing) => thing.label)
-                        .sort();
+                .things
+                .map((thing) => thing.label)
+                .sort();
         },
-        isMoneyLending: function(lending) {
+        isMoneyLending: function (lending) {
             return lending.discriminator === MoneyLendingDiscriminator;
         },
-        isThingLending: function(lending) {
+        isThingLending: function (lending) {
             return lending.discriminator === ThingLendingDiscriminator;
         },
-        isNewThingLending: function(lending) {
+        isNewThingLending: function (lending) {
             return this.isThingLending(lending)
                 && this.popup.addNewThing === true;
         },
-        isOldThingLending: function(lending) {
+        isOldThingLending: function (lending) {
             return this.isThingLending(lending)
                 && this.popup.addNewThing === false;
         },
-        getMoneyLendingEmoji: function() {
+        getMoneyLendingEmoji: function () {
             return '💵';
         },
-        fetchUserData: function() {
+        fetchUserData: function () {
             this.$apollo
                 .query({
                     query: gql`${meQuery}`
                 }).then((data) => {
-                    this.user.firstName = data.data.me.firstName;
-                    this.user.lastName = data.data.me.lastName;
-                    this.user.things = data.data.me.things;
-                    this.user.friends = data.data.me.anonymousUsers;
+                this.user.firstName = data.data.me.firstName;
+                this.user.lastName = data.data.me.lastName;
+                this.user.things = data.data.me.things;
+                this.user.friends = data.data.me.anonymousUsers;
 
-                    let allUnprocessedLendings = 
-                        data.data.me.moneyLendings
-                            .concat(data.data.me.thingLendings);
+                let allUnprocessedLendings =
+                    data.data.me.moneyLendings
+                        .concat(data.data.me.thingLendings);
 
-                    this.user.lendings = processUserInfo(allUnprocessedLendings);
+                this.user.lendings = processUserInfo(allUnprocessedLendings);
 
-                    this.dataFetched = true;
-                }).catch((error) => {
-                    handleGraphQlException(error, this.errorStore);
-                });
-            
+                this.dataFetched = true;
+            }).catch((error) => {
+                handleGraphQlException(error, this.errorStore);
+            });
+
             this.$apollo
                 .query({
                     query: gql`${currenciesQuery}`
                 }).then((data) => {
-                    this.currencies = data.data.currencies;
-                }).catch((error) => {
-                    handleGraphQlException(error, this.errorStore);
-                });
+                this.currencies = data.data.currencies;
+            }).catch((error) => {
+                handleGraphQlException(error, this.errorStore);
+            });
         }
     },
     beforeMount() {

@@ -54,7 +54,7 @@
 
 .lending__direction {
     height: 30%;
-    
+
     margin: auto;
 }
 
@@ -77,7 +77,7 @@
 .lending__friend {
     font-size: 0.85rem;
     overflow: hidden;
-    
+
     margin: 0px;
     padding: 0px;
 }
@@ -99,7 +99,7 @@
     bottom: 2.5%;
 
     --lending_button_sidelength: 45px;
-    width:  var(--lending_button_sidelength);
+    width: var(--lending_button_sidelength);
     height: var(--lending_button_sidelength);
 
     border-radius: 50%;
@@ -185,7 +185,7 @@
 .popup__item {
     width: 100%;
     align-self: center;
-    
+
     font-size: 0.7rem;
     margin: 2px;
     padding: 7px;
@@ -194,7 +194,7 @@
 .popup__checkbox {
     width: auto;
     margin-right: 10px;
-    
+
     align-self: center;
     justify-self: end;
 }
@@ -280,7 +280,7 @@
 .popup__currency_select {
     grid-row: 7;
     grid-column: 2 / span 2;
-} 
+}
 
 .popup__add_thing_label {
     grid-row: 6;
