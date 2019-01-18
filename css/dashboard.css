@@ -10,11 +10,6 @@
 
     margin: 0px 0px 0px 0px;
 
-    /* debug settings */
-    /* border-style: dashed;
-    border-width: 1px; */
-    /* end debug settings */
-
     display: grid;
     grid-template-columns: 10% 7.5% 5% auto 17% 5%;
 }
