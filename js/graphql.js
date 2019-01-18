@@ -197,3 +197,25 @@ export const updateThingLendingMutation =
             id
         }
     }`;
+
+export const deleteMoneyLendingMutation =
+    `mutation(
+        $moneyLendingId: ID!
+    ) {
+        deleteMoneyLending(
+            moneyLendingId: $moneyLendingId
+        ) {
+            id
+        }
+    }`;
+
+export const deleteThingLendingMutation =
+    `mutation(
+        $thingLendingId: ID!
+    ) {
+        deleteThingLending(
+            thingLendingId: $thingLendingId
+        ) {
+            id
+        }
+    }`;

@@ -16,7 +16,9 @@ import {
     createThingMutation,
     createFriendMutation,
     updateMoneyLendingMutation,
-    updateThingLendingMutation
+    updateThingLendingMutation,
+    deleteMoneyLendingMutation,
+    deleteThingLendingMutation
 } from "./graphql"
 
 import {
@@ -38,20 +40,13 @@ import {
 
 const POPUP_ADD_MODE = "add";
 const POPUP_EDIT_MODE = "edit";
+const POPUP_DELETE_MODE = "delete";
 
 redirectIfUnauthorized();
 
 Vue.use(VueApollo);
 
 const initialDataSet = {
-    popup: {
-        addNewFriend: false,
-        visible: false,
-        mode: "",
-        editLending: undefined,
-        addNewThing: false,
-        errorStore: []
-    },
     dataFetched: false,
     user: {
         firstName: "",
@@ -64,7 +59,15 @@ const initialDataSet = {
         ThingLendingDiscriminator,
         MoneyLendingDiscriminator
     ],
-    popupLending: {
+    popup: {
+        addNewFriend: false,
+        visible: false,
+        mode: "",
+        editLending: undefined,
+        addNewThing: false,
+        errorStore: []
+    },
+    popupModel: {
         amount: 0,
         description: "",
         dueDate: new Date(),
@@ -100,7 +103,7 @@ let vueApplication = new Vue({
         },
         resetPopUpValues: function() {
             deepCopyTo(initialDataSet.popup, this.popup);
-            deepCopyTo(initialDataSet.popupLending, this.popupLending);
+            deepCopyTo(initialDataSet.popupModel, this.popupModel);
         },
         showAddPopup: function() {
             this.resetPopUpValues();
@@ -108,54 +111,69 @@ let vueApplication = new Vue({
             this.popup.mode = POPUP_ADD_MODE;
             this.popup.visible = true;
         },
-        showEditPopup: function(lending) {
+        setPopupModel: function(lending) {
             this.resetPopUpValues();
 
-            this.popupLending.cleared = lending.cleared;
-            this.popupLending.description = lending.description;
+            this.popupModel.cleared = lending.cleared;
+            this.popupModel.description = lending.description;
             
-            this.popupLending.dueDate =
+            this.popupModel.dueDate =
                 new Date(lending.dueDate.year, lending.dueDate.month, lending.dueDate.day);
             
-            this.popupLending.id = lending.id;
-            this.popupLending.isBorrowed = lending.isBorrowed;
-            this.popupLending.friendString = getFriendDisplayName(lending.participant);
+            this.popupModel.id = lending.id;
+            this.popupModel.isBorrowed = lending.isBorrowed;
+            this.popupModel.friendString = getFriendDisplayName(lending.participant);
 
-            this.popupLending.discriminator = lending.discriminator;
+            this.popupModel.discriminator = lending.discriminator;
             
-            if (this.popupLending.discriminator === MoneyLendingDiscriminator) {
-                this.popupLending.amount = lending.amount;
-                this.popupLending.currencyString = getCurrencyDisplayValue(lending.currency);
+            if (this.popupModel.discriminator === MoneyLendingDiscriminator) {
+                this.popupModel.amount = lending.amount;
+                this.popupModel.currencyString = getCurrencyDisplayValue(lending.currency);
             } else {
-                this.popupLending.emoji = lending.emoji;
-                this.popupLending.thingString = lending.thing.label;
+                this.popupModel.emoji = lending.emoji;
+                this.popupModel.thingString = lending.thing.label;
             }
+        },
+        showEditPopup: function(lending) {
+            this.setPopupModel(lending);
 
             this.popup.mode = POPUP_EDIT_MODE;
-            this.popup.editLending = lending;
             this.popup.visible = true;
         },
-        popUpInEditMode: function() {
+        showDeletePopup: function(lending) {
+            this.setPopupModel(lending);
+
+            this.popup.mode = POPUP_DELETE_MODE;
+            this.popup.visible = true;
+        },
+        popupInAddMode: function() {
+            return this.popup.mode === POPUP_ADD_MODE;
+        },
+        popupInEditMode: function() {
             return this.popup.mode === POPUP_EDIT_MODE;
+        },
+        popupInDeleteMode: function() {
+            return this.popup.mode === POPUP_DELETE_MODE;
         },
         hidePopup: function() {
             this.popup.mode = "";
-            this.popup.editLending = undefined;
             this.popup.visible = false;
         },
         isNotLastLendingEntry: function(lending) {
             return lending !== this.user.lendings[this.user.lendings.length - 1];
         },
-        saveLending: async function() {
+        submitPopup: async function() {
             this.popup.errorStore = [];
 
             let participantId;
 
-            let newFriend = {};
-            newFriend["firstName"] = this.popupLending.firstName;
-            newFriend["lastName"]  = this.popupLending.lastName;
+            let newFriend = {
+                firstName: this.popupModel.firstName,
+                lastName: this.popupModel.lastName
+            };
 
-            if (this.popup.addNewFriend) {
+            if (this.popup.addNewFriend
+                && !this.popupInDeleteMode()) {
                 let matchingFriends =
                     this.user
                         .friends
@@ -171,8 +189,8 @@ let vueApplication = new Vue({
                         .mutate({
                             mutation: gql`${createFriendMutation}`,
                             variables: {
-                                firstName: this.popupLending.firstName,
-                                lastName: this.popupLending.lastName
+                                firstName: this.popupModel.firstName,
+                                lastName: this.popupModel.lastName
                             }
                         }).then((data) => {
                             participantId = data.data.createAnonymousUser.id;
@@ -180,12 +198,12 @@ let vueApplication = new Vue({
                             handleGraphQlException(error, this.popup.errorStore);
                         });
                 }
-            } else {
+            } else if(!this.popupInDeleteMode()) {
                 let matchingFriends =
                     this.user
                         .friends
                         .filter((friend) => {
-                            return this.popupLending.friendString === getFriendDisplayName(friend)
+                            return this.popupModel.friendString === getFriendDisplayName(friend)
                         });
 
                 if (matchingFriends.length > 0) {
@@ -198,13 +216,14 @@ let vueApplication = new Vue({
 
             let thingId;
 
-            if (this.isThingLending(this.popupLending)) {
+            if (this.isThingLending(this.popupModel)
+            && !this.popupInDeleteMode()) {
                 if (this.popup.addNewThing) {
                     let matchingThings =
                         this.user
                             .things
                             .filter((thing) => {
-                                return this.popupLending.newThingStr === thing.label
+                                return this.popupModel.newThingStr === thing.label
                             });
                     
                     if (matchingThings.length > 0) {
@@ -215,7 +234,7 @@ let vueApplication = new Vue({
                             .mutate({
                                 mutation: gql`${createThingMutation}`,
                                 variables: {
-                                    label: this.popupLending.newThingStr
+                                    label: this.popupModel.newThingStr
                                 }
                             }).then((data) => {
                                 thingId = data.data.createThing.id;
@@ -223,12 +242,12 @@ let vueApplication = new Vue({
                                 handleGraphQlException(error, this.popup.errorStore);
                             });
                     }
-                } else {
+                } else if(!this.popupInDeleteMode()) {
                     let matchingThings =
                         this.user
                             .things
                             .filter((thing) => {
-                                return this.popupLending.thingString === thing.label
+                                return this.popupModel.thingString === thing.label
                             });
 
                     if (matchingThings.length > 0) {
@@ -240,69 +259,84 @@ let vueApplication = new Vue({
                 }
             }
 
+            // real thingid: "cjr1em22901ej08334yi6u8vp"
+            // 
+
             let graphQlMutation;
             let graphQlVariables;
             
-            if (this.isThingLending(this.popupLending)) {
-                if (this.popup.mode === POPUP_ADD_MODE) {
-                    graphQlMutation = createThingLendingMutation;
-                } else if (this.popup.mode === POPUP_EDIT_MODE) {
-                    graphQlMutation = updateThingLendingMutation;
-                }
-
+            if (this.isThingLending(this.popupModel)) {
                 graphQlVariables = {
-                    dueDate: getFormattedDateString(this.popupLending.dueDate),
-                    description: this.popupLending.description,
+                    dueDate: getFormattedDateString(this.popupModel.dueDate),
+                    description: this.popupModel.description,
                     participantId: participantId,
-                    isBorrowed: this.popupLending.isBorrowed,
-                    emoji: this.popupLending.emoji,
+                    isBorrowed: this.popupModel.isBorrowed,
+                    emoji: this.popupModel.emoji,
                     thingId: thingId
                 };
-            } else {
-                if (this.popup.mode === POPUP_ADD_MODE) {
-                    graphQlMutation = createMoneyLendingMutation;
-                } else if (this.popup.mode === POPUP_EDIT_MODE) {
-                    graphQlMutation = updateMoneyLendingMutation;
-                }
 
+                if (this.popupInAddMode()) {
+                    graphQlMutation = createThingLendingMutation;
+                } else if (this.popupInEditMode()) {
+                    graphQlMutation = updateThingLendingMutation;
+                } else if (this.popupInDeleteMode()) {
+                    graphQlMutation = deleteThingLendingMutation;
+
+                    graphQlVariables = {
+                        "thingLendingId": this.popupModel.id
+                    };
+                }
+            } else {
                 let currencyId =
                     this.currencies
                     .filter(currency => {
-                        return getCurrencyDisplayValue(currency) === this.popupLending.currencyString
+                        return getCurrencyDisplayValue(currency) === this.popupModel.currencyString
                     })[0]
                     .id;
 
                 graphQlVariables = {
-                    dueDate: getFormattedDateString(this.popupLending.dueDate),
-                    description: this.popupLending.description,
+                    dueDate: getFormattedDateString(this.popupModel.dueDate),
+                    description: this.popupModel.description,
                     participantId: participantId,
-                    isBorrowed: this.popupLending.isBorrowed,
-                    amount: parseInt(this.popupLending.amount),
+                    isBorrowed: this.popupModel.isBorrowed,
+                    amount: parseInt(this.popupModel.amount),
                     currencyId: currencyId
                 };
+
+                if (this.popupInAddMode()) {
+                    graphQlMutation = createMoneyLendingMutation;
+                } else if (this.popupInEditMode()) {
+                    graphQlMutation = updateMoneyLendingMutation;
+                } else if (this.popupInDeleteMode()) {
+                    graphQlMutation = deleteMoneyLendingMutation;
+
+                    graphQlVariables = {
+                        "moneyLendingId": this.popupModel.id
+                    };
+                }
             }
 
             if (this.popup.mode === POPUP_EDIT_MODE) {
-                graphQlVariables["id"] = this.popupLending.id;
-                graphQlVariables["cleared"] = this.popupLending.cleared;
+                graphQlVariables["id"] = this.popupModel.id;
+                graphQlVariables["cleared"] = this.popupModel.cleared;
             }
 
-            let mutationPromise = this.$apollo
+            await this.$apollo
                 .mutate({
                     mutation: gql`${graphQlMutation}`,
                     variables: graphQlVariables
                 }).catch((error) => {
                     handleGraphQlException(error, this.popup.errorStore);
-                });;
-            
-            this.hidePopup();
+                });
+                
+            if (this.popup.errorStore.length == 0) {
+                this.hidePopup();
 
-            await mutationPromise;
-            
-            this.resetVueData();
-            clearApolloClientCache();
+                this.resetVueData();
+                clearApolloClientCache();
 
-            this.fetchUserData();
+                this.fetchUserData();
+            }
         },
         getCurrencyString: function(currency) {
             return getCurrencyDisplayValue(currency);

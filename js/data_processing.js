@@ -90,16 +90,17 @@ const monthMap = {
 }
 
 export function getFormattedDateString(date) {
-    let seperator =
-        (date.toString().includes("-"))
-        ? "-"
-        : " ";
+    if (date.toString().includes(" ")) {
+        let seperator = " ";
 
-    let dateParts = date.toString().split(seperator);
+        let dateParts = date.toString().split(seperator);
+    
+        let month = monthMap[dateParts[1]];
 
-    let month = monthMap[dateParts[1]];
-
-    return dateParts[3] + "-" + month + "-" + dateParts[2];
+        return dateParts[3] + "-" + month + "-" + dateParts[2];
+    } else {
+        return date.substr(0, 10);
+    }
 }
 
 export function handleExceptionList(errorList, errorStore) {
