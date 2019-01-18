@@ -260,7 +260,8 @@ let vueApplication = new Vue({
             }
 
             // real thingid: "cjr1em22901ej08334yi6u8vp"
-            // 
+
+            // "cjr1em22901ej08334yi6u8vp"
 
             let graphQlMutation;
             let graphQlVariables;

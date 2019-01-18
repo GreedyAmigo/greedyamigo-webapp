@@ -66,7 +66,7 @@
                             <img v-if="lending.isBorrowed" class="lending__direction lending__borrowed" src="../img/borrowed.svg" alt="borrowed ressource">
                             <img v-else class="lending__direction lending__lent" src="../img/lent.svg" alt="lent ressource">
 
-                            <div class="lending__elem_container lending_text" v-bind:class="{ lending__style_cleared: lending.cleared }">
+                            <div class="lending__elem_container lending__text" v-bind:class="{ lending__style_cleared: lending.cleared }">
                                 <p class="lending__description">
                                     {{ lending.description }}                       
                                 </p>
@@ -76,7 +76,7 @@
                                     </em>
                                 </p>
                             </div>
-                            <div class="lending__elem_container" v-bind:class="{ lending__style_cleared: lending.cleared }">
+                            <div class="lending__elem_container lending__item" v-bind:class="{ lending__style_cleared: lending.cleared }">
                                 <em v-if="isMoneyLending(lending)">
                                     {{ lending.amount }} {{ lending.currency.symbol }}
                                 </em>
