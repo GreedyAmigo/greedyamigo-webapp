@@ -100,7 +100,8 @@
 
             <div v-if="popup.visible" class="popup__background">
                 <form class="popup__container" v-on:submit.prevent="saveLending" >
-                    <h2 class="popup__header">add new lending</h2>
+                    <h2 v-if="popUpInEditMode()" class="popup__header">edit lending</h2>
+                    <h2 v-else class="popup__header">add new lending</h2>
 
                     <div class="popup__value_container">
                         <input class="popup__item input__default popup__description" placeholder="Description" v-model="popupLending.description" required>
@@ -109,10 +110,10 @@
                         <datepicker class="popup__lending_duedate" v-model="popupLending.dueDate" id="duedatepicker" name="duedatepicker"></datepicker>
 
                         <label class="popup__item popup__is_borrowed_label" for="popup__is_borrowed">Borrowed?</label>
-                        <input id="popup__is_borrowed" type="checkbox" class="popup__item popup__is_borrowed" v-model="popupLending.isBorrowed">
+                        <input id="popup__is_borrowed" type="checkbox" class="popup__item popup__checkbox popup__is_borrowed" v-model="popupLending.isBorrowed">
 
                         <label class="popup__item popup__add_friend_label" for="create_new_friend_label">New friend?</label>
-                        <input id="create_new_friend" type="checkbox" class="popup__item popup__add_friend" v-model="popup.addNewFriend">
+                        <input id="create_new_friend" type="checkbox" class="popup__item popup__checkbox popup__add_friend" v-model="popup.addNewFriend">
     
                         <input v-if="popup.addNewFriend" class="popup__item input__default popup__firstname" placeholder="Firstname" v-model="popupLending.firstName" required>
                         <input v-if="popup.addNewFriend" class="popup__item input__default popup__lastname" placeholder="Lastname" v-model="popupLending.lastName" required>
@@ -133,7 +134,7 @@
                         </select>
 
                         <label v-if="isThingLending(popupLending)" class="popup__item popup__add_thing_label" for="create_new_thing">New thing?</label>
-                        <input v-if="isThingLending(popupLending)" id="create_new_thing" type="checkbox" class="popup__item popup__add_thing" v-model="popup.addNewThing">
+                        <input v-if="isThingLending(popupLending)" id="create_new_thing" type="checkbox" class="popup__item popup__checkbox popup__add_thing" v-model="popup.addNewThing">
                         
                         <input v-if="isNewThingLending(popupLending)" class="popup__item input__default popup__new_thing" placeholder="Thing" v-model="popupLending.newThingStr" required>
 
@@ -143,6 +144,9 @@
                         <select v-if="isOldThingLending(popupLending)" id="thingSelector" class="popup__item popup__thing_select" v-model="popupLending.thingString" required>
                             <option v-for="thing in getThings()" :value="thing">{{ thing }}</option>
                         </select>
+
+                        <label v-if="popUpInEditMode" class="popup__item popup__cleared_label" for="popup__cleared">Cleared?</label>
+                        <input v-if="popUpInEditMode" class="popup__item popup__checkbox popup__cleared" id="popup__cleared" type="checkbox" v-model="popupLending.cleared">
                     </div>
 
                     <ul class="errorlist__default" v-if="popup.errorStore.length > 0">

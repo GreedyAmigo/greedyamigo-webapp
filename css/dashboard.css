@@ -168,7 +168,7 @@
 .popup__value_container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 25px 25px 25px 25px 25px 25px 25px;
+    grid-template-rows: 25px 25px 25px 25px 25px 25px 25px 25px;
     grid-row-gap: 0.5em;
 }
 
@@ -183,6 +183,14 @@
     font-size: 0.7rem;
     margin: 2px;
     padding: 7px;
+}
+
+.popup__checkbox {
+    width: auto;
+    margin-right: 10px;
+    
+    align-self: center;
+    justify-self: end;
 }
 
 .popup__description {
@@ -210,12 +218,6 @@
 }
 
 .popup__is_borrowed {
-    width: auto;
-    margin-right: 10px;
-    
-    align-self: center;
-    justify-self: end;
-
     grid-row: 3;
     grid-column: 1;
 }
@@ -226,12 +228,6 @@
 }
 
 .popup__add_friend {
-    width: auto;
-    margin-right: 10px;
-    
-    align-self: center;
-    justify-self: end;
-
     grid-row: 4;
     grid-column: 1;
 }
@@ -286,12 +282,6 @@
 }
 
 .popup__add_thing {
-    width: auto;
-    margin-right: 10px;
-    
-    align-self: center;
-    justify-self: end;
-
     grid-row: 6;
     grid-column: 1;
 }
@@ -318,6 +308,16 @@
 .popup__thing_select {
     grid-row: 7;
     grid-column: 2 / span 2;
+}
+
+.popup__cleared_label {
+    grid-row: 8;
+    grid-column: 1;
+}
+
+.popup__cleared {
+    grid-row: 8;
+    grid-column: 1;
 }
 
 .popup__button_container {

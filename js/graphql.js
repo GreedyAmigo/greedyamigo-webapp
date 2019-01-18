@@ -1,10 +1,10 @@
 export const currenciesQuery = 
     `query{
         currencies{
-        id,
-        symbol,
-        name,
-        abbreviation
+            id,
+            symbol,
+            name,
+            abbreviation
         }
     }`;
 
@@ -19,7 +19,9 @@ export const meQuery =
                 amount,
                 currency {
                     id,
-                    symbol
+                    symbol,
+                    name,
+                    abbreviation
                 },
                 participant {
                     id,

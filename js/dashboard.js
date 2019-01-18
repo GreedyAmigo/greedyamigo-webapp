@@ -31,7 +31,7 @@ import {
     getFormattedDateString,
     handleGraphQlException,
     generateDeepCopy,
-    copyContents
+    deepCopyTo
 } from "./data_processing"
 
 const POPUP_ADD_MODE = "add";
@@ -89,21 +89,52 @@ let vueApplication = new Vue({
     data: generateDeepCopy(initialDataSet),
     methods: {
         resetVueData: function() {
-            this.$data = copyContents(initialDataSet, this);
+            this.$data = deepCopyTo(initialDataSet, this);
         },
         logOutUser: function() {
             removeJwt();
             clearApolloClientCache();
             redirectIfUnauthorized();
         },
+        resetPopUpValues: function() {
+            deepCopyTo(initialDataSet.popup, this.popup);
+            deepCopyTo(initialDataSet.popupLending, this.popupLending);
+        },
         showAddPopup: function() {
+            this.resetPopUpValues();
+
             this.popup.mode = POPUP_ADD_MODE;
             this.popup.visible = true;
         },
         showEditPopup: function(lending) {
+            this.resetPopUpValues();
+
+            this.popupLending.cleared = lending.cleared;
+            this.popupLending.description = lending.description;
+            
+            this.popupLending.dueDate =
+                new Date(lending.dueDate.year, lending.dueDate.month, lending.dueDate.day);
+            
+            this.popupLending.id = lending.id;
+            this.popupLending.isBorrowed = lending.isBorrowed;
+            this.popupLending.friendString = getFriendDisplayName(lending.participant);
+
+            this.popupLending.discriminator = lending.discriminator;
+            
+            if (this.popupLending.discriminator === MoneyLendingDiscriminator) {
+                this.popupLending.amount = lending.amount;
+                this.popupLending.currencyString = getCurrencyDisplayValue(lending.currency);
+            } else {
+                this.popupLending.emoji = lending.emoji;
+                this.popupLending.thingString = lending.thing.label;
+            }
+
             this.popup.mode = POPUP_EDIT_MODE;
             this.popup.editLending = lending;
             this.popup.visible = true;
+        },
+        popUpInEditMode: function() {
+            return this.popup.mode === POPUP_EDIT_MODE;
         },
         hidePopup: function() {
             this.popup.mode = "";

@@ -117,11 +117,17 @@ export function handleGraphQlException(errorContainer, errorStore) {
     handleExceptionList(errorContainer.networkError, errorStore);
 }
 
-export function generateDeepCopy(object) {
-    return JSON.parse(JSON.stringify(object));
+export function generateDeepCopy(source) {
+    if (typeof {} === typeof source
+        || typeof [] === typeof source) {
+
+        return JSON.parse(JSON.stringify(source));
+    } else {
+        return source;
+    }
 }
 
-export function copyContents(source, target) {
+export function deepCopyTo(source, target) {
     for (let key in source) {
         target[key] = generateDeepCopy(source[key]);
     }
