@@ -14,7 +14,11 @@ import {
     createMoneyLendingMutation,
     createThingLendingMutation,
     createThingMutation,
-    createFriendMutation
+    createFriendMutation,
+    updateMoneyLendingMutation,
+    updateThingLendingMutation,
+    deleteMoneyLendingMutation,
+    deleteThingLendingMutation
 } from "./graphql"
 
 import {
@@ -29,30 +33,24 @@ import {
     getFriendDisplayName,
     getCurrencyDisplayValue,
     getFormattedDateString,
-    handleGraphQlException
+    handleGraphQlException,
+    generateDeepCopy,
+    deepCopyTo
 } from "./data_processing"
 
 const POPUP_ADD_MODE = "add";
 const POPUP_EDIT_MODE = "edit";
+const POPUP_DELETE_MODE = "delete";
 
 redirectIfUnauthorized();
 
 Vue.use(VueApollo);
 
 const initialDataSet = {
-    popup: {
-        addNewFriend: false,
-        visible: false,
-        mode: "",
-        editLending: undefined,
-        addNewThing: false,
-        errorStore: []
-    },
     dataFetched: false,
-    userMessage: "be patient, we just need to fetch your data",
     user: {
-        firstName: ", just loading",
-        lastName: "data from server",
+        firstName: "",
+        lastName: "",
         lendings: [],
         friends: [],
         things: []
@@ -61,7 +59,15 @@ const initialDataSet = {
         ThingLendingDiscriminator,
         MoneyLendingDiscriminator
     ],
-    newLending: {
+    popup: {
+        addNewFriend: false,
+        visible: false,
+        mode: "",
+        editLending: undefined,
+        addNewThing: false,
+        errorStore: []
+    },
+    popupModel: {
         amount: 0,
         description: "",
         dueDate: new Date(),
@@ -85,161 +91,252 @@ let vueApplication = new Vue({
     components: {
         Datepicker
     },
-    data: initialDataSet,
+    data: generateDeepCopy(initialDataSet),
     methods: {
         resetVueData: function() {
-            this.$data = initialDataSet;
+            this.$data = deepCopyTo(initialDataSet, this);
         },
         logOutUser: function() {
             removeJwt();
             clearApolloClientCache();
             redirectIfUnauthorized();
         },
+        resetPopUpValues: function() {
+            deepCopyTo(initialDataSet.popup, this.popup);
+            deepCopyTo(initialDataSet.popupModel, this.popupModel);
+        },
         showAddPopup: function() {
+            this.resetPopUpValues();
+
             this.popup.mode = POPUP_ADD_MODE;
             this.popup.visible = true;
         },
+        setPopupModel: function(lending) {
+            this.resetPopUpValues();
+
+            this.popupModel.cleared = lending.cleared;
+            this.popupModel.description = lending.description;
+            
+            this.popupModel.dueDate =
+                new Date(lending.dueDate.year, lending.dueDate.month, lending.dueDate.day);
+            
+            this.popupModel.id = lending.id;
+            this.popupModel.isBorrowed = lending.isBorrowed;
+            this.popupModel.friendString = getFriendDisplayName(lending.participant);
+
+            this.popupModel.discriminator = lending.discriminator;
+            
+            if (this.popupModel.discriminator === MoneyLendingDiscriminator) {
+                this.popupModel.amount = lending.amount;
+                this.popupModel.currencyString = getCurrencyDisplayValue(lending.currency);
+            } else {
+                this.popupModel.emoji = lending.emoji;
+                this.popupModel.thingString = lending.thing.label;
+            }
+        },
         showEditPopup: function(lending) {
+            this.setPopupModel(lending);
+
             this.popup.mode = POPUP_EDIT_MODE;
-            this.popup.editLending = lending;
             this.popup.visible = true;
+        },
+        showDeletePopup: function(lending) {
+            this.setPopupModel(lending);
+
+            this.popup.mode = POPUP_DELETE_MODE;
+            this.popup.visible = true;
+        },
+        popupInAddMode: function() {
+            return this.popup.mode === POPUP_ADD_MODE;
+        },
+        popupInEditMode: function() {
+            return this.popup.mode === POPUP_EDIT_MODE;
+        },
+        popupInDeleteMode: function() {
+            return this.popup.mode === POPUP_DELETE_MODE;
         },
         hidePopup: function() {
             this.popup.mode = "";
-            this.popup.editLending = undefined;
             this.popup.visible = false;
         },
         isNotLastLendingEntry: function(lending) {
             return lending !== this.user.lendings[this.user.lendings.length - 1];
         },
-        saveLending: async function() {
+        submitPopup: async function() {
             this.popup.errorStore = [];
 
             let participantId;
 
-            let newFriend = {};
-            newFriend["firstName"] = this.newLending.firstName;
-            newFriend["lastName"]  = this.newLending.lastName;
+            let newFriend = {
+                firstName: this.popupModel.firstName,
+                lastName: this.popupModel.lastName
+            };
 
-            let matchingFriends =
-                this.user
-                    .friends
-                    .filter((friend) => {
-                        return getFriendDisplayName(newFriend) === getFriendDisplayName(friend)
-                    });
+            if (this.popup.addNewFriend
+                && !this.popupInDeleteMode()) {
+                let matchingFriends =
+                    this.user
+                        .friends
+                        .filter((friend) => {
+                            return getFriendDisplayName(newFriend) === getFriendDisplayName(friend)
+                        });
 
-            if (matchingFriends.length > 0 && this.popup.addNewFriend) {
-                this.popup.errorStore.push("Friend already existing.");
-                return;
-            } else if (matchingFriends.length > 0 && !this.popup.addNewFriend) {
-                participantId = matchingFriends[0].id;
-            } else {
-                await this.$apollo
-                    .mutate({
-                        mutation: gql`${createFriendMutation}`,
-                        variables: {
-                            firstName: this.newLending.firstName,
-                            lastName: this.newLending.lastName
-                        }
-                    }).then((data) => {
-                        participantId = data.data.createAnonymousUser.id;
-                    }).catch((error) => {
-                        handleGraphQlException(error, this.popup.errorStore);
-                    });
+                if (matchingFriends.length > 0) {
+                    this.popup.errorStore.push("Friend already existing.");
+                    return;
+                } else {
+                    await this.$apollo
+                        .mutate({
+                            mutation: gql`${createFriendMutation}`,
+                            variables: {
+                                firstName: this.popupModel.firstName,
+                                lastName: this.popupModel.lastName
+                            }
+                        }).then((data) => {
+                            participantId = data.data.createAnonymousUser.id;
+                        }).catch((error) => {
+                            handleGraphQlException(error, this.popup.errorStore);
+                        });
+                }
+            } else if(!this.popupInDeleteMode()) {
+                let matchingFriends =
+                    this.user
+                        .friends
+                        .filter((friend) => {
+                            return this.popupModel.friendString === getFriendDisplayName(friend)
+                        });
+
+                if (matchingFriends.length > 0) {
+                    participantId = matchingFriends[0].id;
+                } else {
+                    this.popup.errorStore.push("Selected friend not existing.");
+                    return;
+                }
             }
 
             let thingId;
 
-            let matchingThings =
-                this.user
-                    .things
-                    .filter((thing) => {
-                        return this.newLending.newThingStr === thing.label
-                    });
+            if (this.isThingLending(this.popupModel)
+            && !this.popupInDeleteMode()) {
+                if (this.popup.addNewThing) {
+                    let matchingThings =
+                        this.user
+                            .things
+                            .filter((thing) => {
+                                return this.popupModel.newThingStr === thing.label
+                            });
+                    
+                    if (matchingThings.length > 0) {
+                        this.popup.errorStore.push("Thing already existing.");
+                        return;
+                    } else {
+                        await this.$apollo
+                            .mutate({
+                                mutation: gql`${createThingMutation}`,
+                                variables: {
+                                    label: this.popupModel.newThingStr
+                                }
+                            }).then((data) => {
+                                thingId = data.data.createThing.id;
+                            }).catch((error) => {
+                                handleGraphQlException(error, this.popup.errorStore);
+                            });
+                    }
+                } else if(!this.popupInDeleteMode()) {
+                    let matchingThings =
+                        this.user
+                            .things
+                            .filter((thing) => {
+                                return this.popupModel.thingString === thing.label
+                            });
 
-            if (matchingThings.length > 0
-                && this.isThingLending(this.newLending)
-                && this.popup.addNewThing) {
-
-                this.popup.errorStore.push("Thing already existing");
-                return;
-            } else if (matchingThings.length > 0
-                    && this.isThingLending(this.newLending)
-                    && !this.popup.addNewThing) {
-
-                thingId = matchingThings[0].id;
-            } else if (this.isThingLending(this.newLending)) {
-                await this.$apollo
-                    .mutate({
-                        mutation: gql`${createThingMutation}`,
-                        variables: {
-                            label: this.newLending.newThingStr
-                        }
-                    }).then((data) => {
-                        thingId = data.data.createThing.id;
-                    }).catch((error) => {
-                        handleGraphQlException(error, this.popup.errorStore);
-                    });
+                    if (matchingThings.length > 0) {
+                        thingId = matchingThings[0].id;
+                    } else {
+                        this.popup.errorStore.push("Selected thing not existing.");
+                        return;
+                    }
+                }
             }
+
+            // real thingid: "cjr1em22901ej08334yi6u8vp"
+            // 
 
             let graphQlMutation;
             let graphQlVariables;
             
-            if (this.isThingLending(this.newLending)) {
-                if (this.popup.mode === POPUP_ADD_MODE) {
-                    graphQlMutation = createThingLendingMutation;
-                } else if (this.popup.mode === POPUP_EDIT_MODE) {
-                    graphQlMutation = undefined;
-                }
-
+            if (this.isThingLending(this.popupModel)) {
                 graphQlVariables = {
-                    dueDate: getFormattedDateString(this.newLending.dueDate),
-                    description: this.newLending.description,
+                    dueDate: getFormattedDateString(this.popupModel.dueDate),
+                    description: this.popupModel.description,
                     participantId: participantId,
-                    isBorrowed: this.newLending.isBorrowed,
-                    emoji: this.newLending.emoji,
+                    isBorrowed: this.popupModel.isBorrowed,
+                    emoji: this.popupModel.emoji,
                     thingId: thingId
                 };
-            } else {
-                if (this.popup.mode === POPUP_ADD_MODE) {
-                    graphQlMutation = createMoneyLendingMutation;
-                } else if (this.popup.mode === POPUP_EDIT_MODE) {
-                    graphQlMutation = undefined;
-                }
 
+                if (this.popupInAddMode()) {
+                    graphQlMutation = createThingLendingMutation;
+                } else if (this.popupInEditMode()) {
+                    graphQlMutation = updateThingLendingMutation;
+                } else if (this.popupInDeleteMode()) {
+                    graphQlMutation = deleteThingLendingMutation;
+
+                    graphQlVariables = {
+                        "thingLendingId": this.popupModel.id
+                    };
+                }
+            } else {
                 let currencyId =
                     this.currencies
                     .filter(currency => {
-                        return getCurrencyDisplayValue(currency) === this.newLending.currencyString
+                        return getCurrencyDisplayValue(currency) === this.popupModel.currencyString
                     })[0]
                     .id;
 
                 graphQlVariables = {
-                    dueDate: getFormattedDateString(this.newLending.dueDate),
-                    description: this.newLending.description,
+                    dueDate: getFormattedDateString(this.popupModel.dueDate),
+                    description: this.popupModel.description,
                     participantId: participantId,
-                    isBorrowed: this.newLending.isBorrowed,
-                    amount: parseInt(this.newLending.amount),
+                    isBorrowed: this.popupModel.isBorrowed,
+                    amount: parseInt(this.popupModel.amount),
                     currencyId: currencyId
                 };
+
+                if (this.popupInAddMode()) {
+                    graphQlMutation = createMoneyLendingMutation;
+                } else if (this.popupInEditMode()) {
+                    graphQlMutation = updateMoneyLendingMutation;
+                } else if (this.popupInDeleteMode()) {
+                    graphQlMutation = deleteMoneyLendingMutation;
+
+                    graphQlVariables = {
+                        "moneyLendingId": this.popupModel.id
+                    };
+                }
             }
 
-            let mutationPromise = this.$apollo
+            if (this.popup.mode === POPUP_EDIT_MODE) {
+                graphQlVariables["id"] = this.popupModel.id;
+                graphQlVariables["cleared"] = this.popupModel.cleared;
+            }
+
+            await this.$apollo
                 .mutate({
                     mutation: gql`${graphQlMutation}`,
                     variables: graphQlVariables
                 }).catch((error) => {
                     handleGraphQlException(error, this.popup.errorStore);
-                });;
-            
-            this.hidePopup();
-            
-            this.resetVueData();
+                });
+                
+            if (this.popup.errorStore.length == 0) {
+                this.hidePopup();
 
-            await mutationPromise;
+                this.resetVueData();
+                clearApolloClientCache();
 
-            clearApolloClientCache();
-            this.fetchUserData();
+                this.fetchUserData();
+            }
         },
         getCurrencyString: function(currency) {
             return getCurrencyDisplayValue(currency);

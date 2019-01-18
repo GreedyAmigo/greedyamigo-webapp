@@ -45,7 +45,7 @@
     
             <main class="main__container" v-bind:class="{ item__blurr: popup.visible }">
                 <h1 v-if="dataFetched">Hi {{ user.firstName }} {{ user.lastName }}</h1>
-                <h2 v-else>{{ userMessage }}</h2>
+                <h2 v-else>Please be patient, we just need to fetch your data</h2>
 
                 <ul class="errorlist__default" v-if="errorStore.length > 0">
                     <li v-for="error in errorStore" :value="error" class="errorlist__entry">{{ error }}</li>
@@ -85,8 +85,8 @@
                                 </em>
                             </div>
                             <div class="lending__elem_container">
-                                <img class="lending__edit" src="../img/edit.svg" alt="lent ressource">
-                                <img class="lending__delete" src="../img/delete.svg" alt="lent ressource">
+                                <img class="lending__edit" src="../img/edit.svg" alt="lent ressource" v-on:click="showEditPopup(lending)">
+                                <img class="lending__delete" src="../img/delete.svg" alt="lent ressource" v-on:click="showDeletePopup(lending)">
                             </div>
                         </div>
                         <hr v-if="isNotLastLendingEntry(lending)" class="lending__seperator">
@@ -99,59 +99,68 @@
             </main>
 
             <div v-if="popup.visible" class="popup__background">
-                <form class="popup__container" v-on:submit.prevent="saveLending" >
-                    <h2 class="popup__header">add new lending</h2>
+                <form class="popup__container" v-on:submit.prevent="submitPopup">
+                    <h2 v-if="popupInAddMode()" class="popup__header">add new lending</h2>
+                    <h2 v-else-if="popupInDeleteMode()" class="popup__header">delete lending?</h2>
+                    <h2 v-else class="popup__header">edit lending</h2>
 
                     <div class="popup__value_container">
-                        <input class="popup__item input__default popup__description" placeholder="Description" v-model="newLending.description" required>
+                        <input class="popup__item input__default popup__description" placeholder="Description" v-model="popupModel.description" required v-bind:disabled="popupInDeleteMode()">
 
                         <label class="popup__item popup__duedate_label">Due date</label>
-                        <datepicker class="popup__lending_duedate" v-model="newLending.dueDate" id="duedatepicker" name="duedatepicker"></datepicker>
+                        <datepicker class="popup__lending_duedate" v-model="popupModel.dueDate" id="duedatepicker" name="duedatepicker" v-bind:disabled="popupInDeleteMode()"></datepicker>
 
                         <label class="popup__item popup__is_borrowed_label" for="popup__is_borrowed">Borrowed?</label>
-                        <input id="popup__is_borrowed" type="checkbox" class="popup__item popup__is_borrowed" v-model="newLending.isBorrowed">
+                        <input id="popup__is_borrowed" type="checkbox" class="popup__item popup__checkbox popup__is_borrowed" v-model="popupModel.isBorrowed" v-bind:disabled="popupInDeleteMode()">
 
                         <label class="popup__item popup__add_friend_label" for="create_new_friend_label">New friend?</label>
-                        <input id="create_new_friend" type="checkbox" class="popup__item popup__add_friend" v-model="popup.addNewFriend">
+                        <input id="create_new_friend" type="checkbox" class="popup__item popup__checkbox popup__add_friend" v-model="popup.addNewFriend" v-bind:disabled="popupInDeleteMode()">
     
-                        <input v-if="popup.addNewFriend" class="popup__item input__default popup__firstname" placeholder="Firstname" v-model="newLending.firstName" required>
-                        <input v-if="popup.addNewFriend" class="popup__item input__default popup__lastname" placeholder="Lastname" v-model="newLending.lastName" required>
-                        <select v-else class="popup__item popup__select popup__friend_search" v-model="newLending.friendString" required>
+                        <input v-if="popup.addNewFriend" class="popup__item input__default popup__firstname" placeholder="Firstname" v-model="popupModel.firstName" required v-bind:disabled="popupInDeleteMode()">
+                        <input v-if="popup.addNewFriend" class="popup__item input__default popup__lastname" placeholder="Lastname" v-model="popupModel.lastName" required v-bind:disabled="popupInDeleteMode()">
+                        <select v-else class="popup__item popup__select popup__friend_search" v-model="popupModel.friendString" required v-bind:disabled="popupInDeleteMode()">
                             <option v-for="friend in getFriends()" :value="friend">{{ friend }}</option>
                         </select>
 
                         <label class="popup__item popup__type_label" for="lendingType">Lending type</label>
-                        <select class="popup__item popup__type" id="lendingType" v-model="newLending.discriminator">
+                        <select class="popup__item popup__type" id="lendingType" v-model="popupModel.discriminator" v-bind:disabled="!popupInAddMode()">
                             <option v-for="lendingType in lendingTypes" :value="lendingType">{{ lendingType }}</option>
                         </select>
 
-                        <input v-if="isMoneyLending(newLending)" class="popup__item input__default popup__amount" type="number" step="0.01" placeholder="Amount" v-model="newLending.amount" required>
+                        <input v-if="isMoneyLending(popupModel)" class="popup__item input__default popup__amount" type="number" step="0.01" placeholder="Amount" v-model="popupModel.amount" required v-bind:disabled="popupInDeleteMode()">
 
-                        <label v-if="isMoneyLending(newLending)" class="popup__item popup__currency_select_label" for="currencySelect">Currency</label>
-                        <select v-if="isMoneyLending(newLending)" id="currencySelect" class="popup__item popup__currency_select" v-model="newLending.currencyString" required>
+                        <label v-if="isMoneyLending(popupModel)" class="popup__item popup__currency_select_label" for="currencySelect">Currency</label>
+                        <select v-if="isMoneyLending(popupModel)" id="currencySelect" class="popup__item popup__currency_select" v-model="popupModel.currencyString" required v-bind:disabled="popupInDeleteMode()">
                             <option v-for="currency in currencies" :value="getCurrencyString(currency)">{{ getCurrencyString(currency) }}</option>
                         </select>
 
-                        <label v-if="isThingLending(newLending)" class="popup__item popup__add_thing_label" for="create_new_thing">New thing?</label>
-                        <input v-if="isThingLending(newLending)" id="create_new_thing" type="checkbox" class="popup__item popup__add_thing" v-model="popup.addNewThing">
+                        <label v-if="isThingLending(popupModel)" class="popup__item popup__add_thing_label" for="create_new_thing">New thing?</label>
+                        <input v-if="isThingLending(popupModel)" id="create_new_thing" type="checkbox" class="popup__item popup__checkbox popup__add_thing" v-model="popup.addNewThing" v-bind:disabled="popupInDeleteMode()">
                         
-                        <input v-if="isNewThingLending(newLending)" class="popup__item input__default popup__new_thing" placeholder="Thing" v-model="newLending.newThingStr" required>
+                        <input v-if="isNewThingLending(popupModel)" class="popup__item input__default popup__new_thing" placeholder="Thing" v-model="popupModel.newThingStr" required v-bind:disabled="popupInDeleteMode()">
 
-                        <input v-if="isThingLending(newLending)" class="popup__item input__default popup__emoji" placeholder="Emoji" maxlength="2" v-model="newLending.emoji" required>
+                        <input v-if="isThingLending(popupModel)" class="popup__item input__default popup__emoji" placeholder="Emoji" maxlength="2" v-model="popupModel.emoji" required v-bind:disabled="popupInDeleteMode()">
                         
-                        <label v-if="isOldThingLending(newLending)" class="popup__item popup__thing_select_label" for="thingSelector">Thing</label>
-                        <select v-if="isOldThingLending(newLending)" id="thingSelector" class="popup__item popup__thing_select" v-model="newLending.thingString" required>
+                        <label v-if="isOldThingLending(popupModel)" class="popup__item popup__thing_select_label" for="thingSelector">Thing</label>
+                        <select v-if="isOldThingLending(popupModel)" id="thingSelector" class="popup__item popup__thing_select" v-model="popupModel.thingString" required v-bind:disabled="popupInDeleteMode()">
                             <option v-for="thing in getThings()" :value="thing">{{ thing }}</option>
                         </select>
+
+                        <label v-if="!popupInAddMode()" class="popup__item popup__cleared_label" for="popup__cleared">Cleared?</label>
+                        <input v-if="!popupInAddMode()" class="popup__item popup__checkbox popup__cleared" id="popup__cleared" type="checkbox" v-model="popupModel.cleared" v-bind:disabled="popupInDeleteMode()">
                     </div>
 
                     <ul class="errorlist__default" v-if="popup.errorStore.length > 0">
                         <li v-for="error in popup.errorStore" :value="error" class="errorlist__entry">{{ error }}</li>
                     </ul>
 
-                    <div class="popup__button_container">
+                    <div v-if="!popupInDeleteMode()" class="popup__button_container">
                         <button type="button" class="button__default popup__lending_button" v-on:click="hidePopup">Cancel</button>
                         <button type="submit" class="button__default popup__lending_button">Save</button>
+                    </div>
+                    <div v-else class="popup__button_container">
+                        <button type="button" class="button__default popup__lending_button" v-on:click="hidePopup">No</button>
+                        <button type="submit" class="button__default popup__lending_button">Yes</button>
                     </div>
                 </form>
             </div>
