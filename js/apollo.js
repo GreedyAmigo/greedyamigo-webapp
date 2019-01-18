@@ -1,6 +1,6 @@
 import ApolloClient from "apollo-boost"
 import VueApollo from "vue-apollo"
-import { isAuthenticated, getJwt } from "./authentication"
+import {getJwt, isAuthenticated} from "./authentication"
 
 const APOLLO_URI = "https://graph.greedy-amigo.com:4000/graphql";
 
@@ -21,6 +21,6 @@ export const apolloProvider = new VueApollo({
     defaultClient: apolloClient
 });
 
-export function clearApolloClientCache() {
-    apolloClient.cache.reset();
+export async function clearApolloClientCache() {
+    await apolloClient.cache.reset();
 }

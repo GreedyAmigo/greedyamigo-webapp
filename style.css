@@ -20,7 +20,7 @@ body {
     --container_border_radius: 2.5px;
     --border_radius: 3.5px;
 
-    font-family:  'Work Sans', Helvetica, Arial, sans-serif;
+    font-family: 'Work Sans', Helvetica, Arial, sans-serif;
 
     min-width: 250px;
     margin: 0px 0px 0px 0px;
@@ -34,7 +34,7 @@ input, textarea {
 input, textarea, span {
     border-radius: 3.5px;
     border-width: 0px;
-    margin:  1% 1% 1% 1%;
+    margin: 1% 1% 1% 1%;
     padding: 2% 2% 2% 2%;
 }
 
@@ -145,7 +145,7 @@ h3 {
 
 .nav__menu_item {
     font-size: 1.1rem;
-    
+
     margin: 23px 7px 0px 7px;
     padding: 10px 7px 0px 7px;
 }

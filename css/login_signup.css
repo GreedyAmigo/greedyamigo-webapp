@@ -23,24 +23,24 @@
 
 @media screen and (max-width: 499px) {
     .main__container {
-        margin:  7% 2% 0% 2%;
+        margin: 7% 2% 0% 2%;
     }
 }
 
 @media screen and (min-width: 500px) {
     .main__container {
-        margin:  7% 10% 0% 10%;
+        margin: 7% 10% 0% 10%;
     }
 }
 
 @media screen and (min-width: 600px) {
     .main__container {
-        margin:  7% 17% 0% 17%;
+        margin: 7% 17% 0% 17%;
     }
 }
 
 @media screen and (min-width: 1000px) {
     .main__container {
-        margin:  7% 25% 0% 25%;
+        margin: 7% 25% 0% 25%;
     }
 }

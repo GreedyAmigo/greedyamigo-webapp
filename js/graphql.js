@@ -1,4 +1,4 @@
-export const currenciesQuery = 
+export const currenciesQuery =
     `query{
         currencies{
             id,
@@ -102,7 +102,7 @@ export const createThingLendingMutation =
         ) {
             id
         }
-    }`
+    }`;
 
 export const createThingMutation =
     `mutation($label: String!) {

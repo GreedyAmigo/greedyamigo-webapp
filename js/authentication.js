@@ -1,4 +1,4 @@
-import { redirectToDashboard, redirectToIndex } from "./redirection"
+import {redirectToDashboard, redirectToIndex} from "./redirection"
 
 const LOCAL_STORAGE_JWT_ID = "greedyamigo_jwt";
 
