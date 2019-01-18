@@ -14,7 +14,9 @@ import {
     createMoneyLendingMutation,
     createThingLendingMutation,
     createThingMutation,
-    createFriendMutation
+    createFriendMutation,
+    updateMoneyLendingMutation,
+    updateThingLendingMutation
 } from "./graphql"
 
 import {
@@ -245,7 +247,7 @@ let vueApplication = new Vue({
                 if (this.popup.mode === POPUP_ADD_MODE) {
                     graphQlMutation = createThingLendingMutation;
                 } else if (this.popup.mode === POPUP_EDIT_MODE) {
-                    graphQlMutation = undefined;
+                    graphQlMutation = updateThingLendingMutation;
                 }
 
                 graphQlVariables = {
@@ -260,7 +262,7 @@ let vueApplication = new Vue({
                 if (this.popup.mode === POPUP_ADD_MODE) {
                     graphQlMutation = createMoneyLendingMutation;
                 } else if (this.popup.mode === POPUP_EDIT_MODE) {
-                    graphQlMutation = undefined;
+                    graphQlMutation = updateMoneyLendingMutation;
                 }
 
                 let currencyId =
@@ -278,6 +280,11 @@ let vueApplication = new Vue({
                     amount: parseInt(this.popupLending.amount),
                     currencyId: currencyId
                 };
+            }
+
+            if (this.popup.mode === POPUP_EDIT_MODE) {
+                graphQlVariables["id"] = this.popupLending.id;
+                graphQlVariables["cleared"] = this.popupLending.cleared;
             }
 
             let mutationPromise = this.$apollo
