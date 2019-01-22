@@ -1,3 +1,6 @@
+/* ------------------------------------------------------------------ */
+/* base styling                                                       */
+/* ------------------------------------------------------------------ */
 html {
     box-sizing: border-box;
 }
@@ -24,7 +27,6 @@ body {
 
     min-width: 250px;
     margin: 0px 0px 0px 0px;
-    background: var(--background_color);
 }
 
 input, textarea {
@@ -92,6 +94,38 @@ h3 {
     padding: 2px;
 }
 
+.main__container {
+    text-align: center;
+
+    padding: 0% 3% 5% 3%;
+}
+
+@media screen and (max-width: 499px) {
+    .main__container {
+        margin: 5% 1% 0% 1%;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .main__container {
+        margin: 5% 7% 0% 7%;
+    }
+}
+
+@media screen and (min-width: 600px) {.main__container {
+        margin: 5% 10% 0% 10%;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .main__container {
+        margin: 5% 15% 0% 15%;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* navbar styling                                                     */
+/* ------------------------------------------------------------------ */
 .nav__style {
     height: 60px;
     background: linear-gradient(to right, var(--brand_color_begin), var(--brand_color_end));
@@ -150,20 +184,10 @@ h3 {
     padding: 10px 7px 0px 7px;
 }
 
-.main__container {
-    text-align: center;
-
-    padding: 0% 3% 5% 3%;
-}
-
 @media screen and (max-width: 499px) {
     .nav__style {
         padding-left: 1%;
         padding-right: 1%;
-    }
-
-    .main__container {
-        margin: 5% 1% 0% 1%;
     }
 }
 
@@ -172,9 +196,11 @@ h3 {
         padding-left: 5%;
         padding-right: 5%;
     }
+}
 
-    .main__container {
-        margin: 5% 7% 0% 7%;
+@media screen and (max-width: 599px) {
+    .nav__collapse_button {
+        display: block;
     }
 }
 
@@ -184,8 +210,8 @@ h3 {
         padding-right: 8.5%;
     }
 
-    .main__container {
-        margin: 5% 10% 0% 10%;
+    .nav__collapse_button {
+        display: none;
     }
 }
 
@@ -193,9 +219,5 @@ h3 {
     .nav__style {
         padding-left: 12.5%;
         padding-right: 12.5%;
-    }
-
-    .main__container {
-        margin: 5% 15% 0% 15%;
     }
 }
