@@ -29,21 +29,29 @@
 </head>
 <body>
 <div id="dashboard">
-    <nav class="nav__style" v-bind:class="{ item__blurr: popup.visible }">
-        <div class="nav__left">
-            <a href="dashboard.html">
-                <img alt="greedy amigo logo" class="nav__item nav__brand_logo" src="../img/logo.svg"></object>
+    <nav id="navbar" class="nav__style" v-bind:class="{ item__blurr: popup.visible }">
+        <div class="nav__start">
+            <a id="btn__collapse" class="nav__collapse_button">
+                &#9776;
             </a>
-            <a class="nav__item nav__brand_text" href="dashboard.html">Greedy Amigo</a>
-        </div>
-        <div class="nav__right">
+            <a href="../index.html">
+                <img alt="brand logo" class="nav__item nav__brand_logo" src="../img/logo.svg">
+            </a>
+            <a class="nav__item nav__brand_text" href="../index.html">
+                Greedy Amigo
+            </a>
+            <div class="nav__item nav__brand_separator_container">
+                <hr class="nav__brand_separator">
+            </div>
+            </div>
+            <div class="nav__end">
             <a class="nav__item nav__menu_item" href="../index.html" v-on:click="logOutUser">
                 Log out
             </a>
         </div>
     </nav>
 
-    <main class="main__container" v-bind:class="{ item__blurr: popup.visible }">
+    <main class="main__container element__hidden_until_ready" v-bind:class="{ item__blurr: popup.visible }">
         <h1 v-if="dataFetched">Hi {{ user.firstName }} {{ user.lastName }}</h1>
         <h2 v-else>Please be patient, we just need to fetch your data</h2>
 
@@ -56,12 +64,17 @@
                 <div class="lending__style">
                     <div class="lending__elem_container">
                         <p class="p__default lending__date_text"
-                           v-bind:class="{ lending__style_cleared: lending.cleared }">{{ lending.dueDate.monthName
-                            }}</p>
+                           v-bind:class="{ lending__style_cleared: lending.cleared }">
+                            {{ lending.dueDate.monthName }}
+                        </p>
                         <p class="p__default lending__date_number"
-                           v-bind:class="{ lending__style_cleared: lending.cleared }">{{ lending.dueDate.day }}</p>
+                           v-bind:class="{ lending__style_cleared: lending.cleared }">
+                            {{ lending.dueDate.day }}
+                        </p>
                         <p class="p__default lending__date_text"
-                           v-bind:class="{ lending__style_cleared: lending.cleared }">{{ lending.dueDate.year }}</p>
+                           v-bind:class="{ lending__style_cleared: lending.cleared }">
+                            {{ lending.dueDate.year }}
+                        </p>
                     </div>
 
                     <span class="lending__emoji" v-if="lending.emoji">{{ lending.emoji }}</span>
@@ -107,103 +120,105 @@
         </button>
     </main>
 
-    <div class="popup__background" v-if="popup.visible">
-        <form class="popup__container" v-on:submit.prevent="submitPopup">
-            <h2 class="popup__header" v-if="popupInAddMode()">add new lending</h2>
-            <h2 class="popup__header" v-else-if="popupInDeleteMode()">delete lending?</h2>
-            <h2 class="popup__header" v-else>edit lending</h2>
+    <div class="element__hidden_until_ready">
+        <div class="popup__background" v-if="popup.visible">
+            <form class="popup__container" v-on:submit.prevent="submitPopup">
+                <h2 class="popup__header" v-if="popupInAddMode()">add new lending</h2>
+                <h2 class="popup__header" v-else-if="popupInDeleteMode()">delete lending?</h2>
+                <h2 class="popup__header" v-else>edit lending</h2>
 
-            <div class="popup__value_container">
-                <input class="popup__item input__default popup__description" placeholder="Description"
-                       required v-bind:disabled="popupInDeleteMode()" v-model="popupModel.description">
+                <div class="popup__value_container">
+                    <input class="popup__item input__default popup__description" placeholder="Description"
+                           required v-bind:disabled="popupInDeleteMode()" v-model="popupModel.description">
 
-                <label class="popup__item popup__duedate_label">Due date</label>
-                <datepicker class="popup__lending_duedate" id="duedatepicker" name="duedatepicker"
-                            v-bind:disabled="popupInDeleteMode()" v-model="popupModel.dueDate"></datepicker>
+                    <label class="popup__item popup__duedate_label">Due date</label>
+                    <datepicker class="popup__lending_duedate" id="duedatepicker" name="duedatepicker"
+                                v-bind:disabled="popupInDeleteMode()" v-model="popupModel.dueDate"></datepicker>
 
-                <label class="popup__item popup__is_borrowed_label" for="popup__is_borrowed">Borrowed?</label>
-                <input class="popup__item popup__checkbox popup__is_borrowed" id="popup__is_borrowed" type="checkbox"
-                       v-bind:disabled="popupInDeleteMode()" v-model="popupModel.isBorrowed">
+                    <label class="popup__item popup__is_borrowed_label" for="popup__is_borrowed">Borrowed?</label>
+                    <input class="popup__item popup__checkbox popup__is_borrowed" id="popup__is_borrowed" type="checkbox"
+                           v-bind:disabled="popupInDeleteMode()" v-model="popupModel.isBorrowed">
 
-                <label class="popup__item popup__add_friend_label" for="create_new_friend">New friend?</label>
-                <input class="popup__item popup__checkbox popup__add_friend" id="create_new_friend" type="checkbox"
-                       v-bind:disabled="popupInDeleteMode()" v-model="popup.addNewFriend">
+                    <label class="popup__item popup__add_friend_label" for="create_new_friend">New friend?</label>
+                    <input class="popup__item popup__checkbox popup__add_friend" id="create_new_friend" type="checkbox"
+                           v-bind:disabled="popupInDeleteMode()" v-model="popup.addNewFriend">
 
-                <input class="popup__item input__default popup__firstname" placeholder="Firstname"
-                       required v-bind:disabled="popupInDeleteMode()" v-if="popup.addNewFriend"
-                       v-model="popupModel.firstName">
-                <input class="popup__item input__default popup__lastname" placeholder="Lastname"
-                       required v-bind:disabled="popupInDeleteMode()" v-if="popup.addNewFriend"
-                       v-model="popupModel.lastName">
-                <select class="popup__item popup__select popup__friend_search" required
-                        v-bind:disabled="popupInDeleteMode()"
-                        v-else v-model="popupModel.friendString">
-                    <option :value="friend" v-for="friend in getFriends()">{{ friend }}</option>
-                </select>
+                    <input class="popup__item input__default popup__firstname" placeholder="Firstname"
+                           required v-bind:disabled="popupInDeleteMode()" v-if="popup.addNewFriend"
+                           v-model="popupModel.firstName">
+                    <input class="popup__item input__default popup__lastname" placeholder="Lastname"
+                           required v-bind:disabled="popupInDeleteMode()" v-if="popup.addNewFriend"
+                           v-model="popupModel.lastName">
+                    <select class="popup__item popup__select popup__friend_search" required
+                            v-bind:disabled="popupInDeleteMode()"
+                            v-else v-model="popupModel.friendString">
+                        <option :value="friend" v-for="friend in getFriends()">{{ friend }}</option>
+                    </select>
 
-                <label class="popup__item popup__type_label" for="lendingType">Lending type</label>
-                <select class="popup__item popup__type" id="lendingType" v-bind:disabled="!popupInAddMode()"
-                        v-model="popupModel.discriminator">
-                    <option :value="lendingType" v-for="lendingType in lendingTypes">{{ lendingType }}</option>
-                </select>
+                    <label class="popup__item popup__type_label" for="lendingType">Lending type</label>
+                    <select class="popup__item popup__type" id="lendingType" v-bind:disabled="!popupInAddMode()"
+                            v-model="popupModel.discriminator">
+                        <option :value="lendingType" v-for="lendingType in lendingTypes">{{ lendingType }}</option>
+                    </select>
 
-                <input class="popup__item input__default popup__amount" placeholder="Amount" required
-                       step="0.01" type="number" v-bind:disabled="popupInDeleteMode()" v-if="isMoneyLending(popupModel)"
-                       v-model="popupModel.amount">
+                    <input class="popup__item input__default popup__amount" placeholder="Amount" required
+                           step="0.01" type="number" v-bind:disabled="popupInDeleteMode()" v-if="isMoneyLending(popupModel)"
+                           v-model="popupModel.amount">
 
-                <label class="popup__item popup__currency_select_label" for="currencySelect"
-                       v-if="isMoneyLending(popupModel)">Currency</label>
-                <select class="popup__item popup__currency_select" id="currencySelect" required
-                        v-bind:disabled="popupInDeleteMode()" v-if="isMoneyLending(popupModel)"
-                        v-model="popupModel.currencyString">
-                    <option :value="getCurrencyString(currency)" v-for="currency in currencies">{{
-                        getCurrencyString(currency) }}
-                    </option>
-                </select>
+                    <label class="popup__item popup__currency_select_label" for="currencySelect"
+                           v-if="isMoneyLending(popupModel)">Currency</label>
+                    <select class="popup__item popup__currency_select" id="currencySelect" required
+                            v-bind:disabled="popupInDeleteMode()" v-if="isMoneyLending(popupModel)"
+                            v-model="popupModel.currencyString">
+                        <option :value="getCurrencyString(currency)" v-for="currency in currencies">{{
+                            getCurrencyString(currency) }}
+                        </option>
+                    </select>
 
-                <label class="popup__item popup__add_thing_label" for="create_new_thing"
-                       v-if="isThingLending(popupModel)">New thing?</label>
-                <input class="popup__item popup__checkbox popup__add_thing" id="create_new_thing" type="checkbox"
-                       v-bind:disabled="popupInDeleteMode()" v-if="isThingLending(popupModel)"
-                       v-model="popup.addNewThing">
+                    <label class="popup__item popup__add_thing_label" for="create_new_thing"
+                           v-if="isThingLending(popupModel)">New thing?</label>
+                    <input class="popup__item popup__checkbox popup__add_thing" id="create_new_thing" type="checkbox"
+                           v-bind:disabled="popupInDeleteMode()" v-if="isThingLending(popupModel)"
+                           v-model="popup.addNewThing">
 
-                <input class="popup__item input__default popup__new_thing" placeholder="Thing"
-                       required v-bind:disabled="popupInDeleteMode()" v-if="isNewThingLending(popupModel)"
-                       v-model="popupModel.newThingStr">
+                    <input class="popup__item input__default popup__new_thing" placeholder="Thing"
+                           required v-bind:disabled="popupInDeleteMode()" v-if="isNewThingLending(popupModel)"
+                           v-model="popupModel.newThingStr">
 
-                <input class="popup__item input__default popup__emoji" maxlength="2"
-                       placeholder="Emoji" required v-bind:disabled="popupInDeleteMode()"
-                       v-if="isThingLending(popupModel)"
-                       v-model="popupModel.emoji">
+                    <input class="popup__item input__default popup__emoji" maxlength="2"
+                           placeholder="Emoji" required v-bind:disabled="popupInDeleteMode()"
+                           v-if="isThingLending(popupModel)"
+                           v-model="popupModel.emoji">
 
-                <label class="popup__item popup__thing_select_label" for="thingSelector"
-                       v-if="isOldThingLending(popupModel)">Thing</label>
-                <select class="popup__item popup__thing_select" id="thingSelector" required
-                        v-bind:disabled="popupInDeleteMode()" v-if="isOldThingLending(popupModel)"
-                        v-model="popupModel.thingString">
-                    <option :value="thing" v-for="thing in getThings()">{{ thing }}</option>
-                </select>
+                    <label class="popup__item popup__thing_select_label" for="thingSelector"
+                           v-if="isOldThingLending(popupModel)">Thing</label>
+                    <select class="popup__item popup__thing_select" id="thingSelector" required
+                            v-bind:disabled="popupInDeleteMode()" v-if="isOldThingLending(popupModel)"
+                            v-model="popupModel.thingString">
+                        <option :value="thing" v-for="thing in getThings()">{{ thing }}</option>
+                    </select>
 
-                <label class="popup__item popup__cleared_label" for="popup__cleared"
-                       v-if="!popupInAddMode()">Cleared?</label>
-                <input class="popup__item popup__checkbox popup__cleared" id="popup__cleared" type="checkbox"
-                       v-bind:disabled="popupInDeleteMode()" v-if="!popupInAddMode()" v-model="popupModel.cleared">
-            </div>
+                    <label class="popup__item popup__cleared_label" for="popup__cleared"
+                           v-if="!popupInAddMode()">Cleared?</label>
+                    <input class="popup__item popup__checkbox popup__cleared" id="popup__cleared" type="checkbox"
+                           v-bind:disabled="popupInDeleteMode()" v-if="!popupInAddMode()" v-model="popupModel.cleared">
+                </div>
 
-            <ul class="errorlist__default" v-if="popup.errorStore.length > 0">
-                <li :value="error" class="errorlist__entry" v-for="error in popup.errorStore">{{ error }}</li>
-            </ul>
+                <ul class="errorlist__default" v-if="popup.errorStore.length > 0">
+                    <li :value="error" class="errorlist__entry" v-for="error in popup.errorStore">{{ error }}</li>
+                </ul>
 
-            <div class="popup__button_container" v-if="!popupInDeleteMode()">
-                <button class="button__default popup__lending_button" type="button" v-on:click="hidePopup">Cancel
-                </button>
-                <button class="button__default popup__lending_button" type="submit">Save</button>
-            </div>
-            <div class="popup__button_container" v-else>
-                <button class="button__default popup__lending_button" type="button" v-on:click="hidePopup">No</button>
-                <button class="button__default popup__lending_button" type="submit">Yes</button>
-            </div>
-        </form>
+                <div class="popup__button_container" v-if="!popupInDeleteMode()">
+                    <button class="button__default popup__lending_button" type="button" v-on:click="hidePopup">Cancel
+                    </button>
+                    <button class="button__default popup__lending_button" type="submit">Save</button>
+                </div>
+                <div class="popup__button_container" v-else>
+                    <button class="button__default popup__lending_button" type="button" v-on:click="hidePopup">No</button>
+                    <button class="button__default popup__lending_button" type="submit">Yes</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

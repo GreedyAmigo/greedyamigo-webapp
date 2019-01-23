@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
+        index: "./js/index.js",
         login: "./js/login.js",
         signup: "./js/signup.js",
         dashboard: "./js/dashboard.js"

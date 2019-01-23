@@ -31,12 +31,18 @@ import {
     processUserInfo,
     ThingLendingDiscriminator
 } from "./data_processing"
+import {addNavbarCollapseFunctionality, displayHiddenElements} from "./user_interface";
 
 const POPUP_ADD_MODE = "add";
 const POPUP_EDIT_MODE = "edit";
 const POPUP_DELETE_MODE = "delete";
 
 redirectIfUnauthorized();
+
+window.onload = function() {
+    addNavbarCollapseFunctionality();
+    displayHiddenElements();
+}
 
 Vue.use(VueApollo);
 

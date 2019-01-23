@@ -10,7 +10,14 @@ import {redirectIfAuthorized, saveJwt} from "./authentication"
 
 import {handleGraphQlException} from "./data_processing"
 
+import {addNavbarCollapseFunctionality, displayHiddenElements} from "./user_interface"
+
 redirectIfAuthorized();
+
+window.onload = function() {
+    addNavbarCollapseFunctionality();
+    displayHiddenElements();
+}
 
 Vue.use(VueApollo);
 

@@ -1,3 +1,6 @@
+/* ------------------------------------------------------------------ */
+/* base styling                                                       */
+/* ------------------------------------------------------------------ */
 html {
     box-sizing: border-box;
 }
@@ -22,9 +25,8 @@ body {
 
     font-family: 'Work Sans', Helvetica, Arial, sans-serif;
 
-    min-width: 250px;
+    min-width: 330px;
     margin: 0px 0px 0px 0px;
-    background: var(--background_color);
 }
 
 input, textarea {
@@ -92,100 +94,201 @@ h3 {
     padding: 2px;
 }
 
-.nav__style {
-    height: 60px;
-    background: linear-gradient(to right, var(--brand_color_begin), var(--brand_color_end));
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.nav__left {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-}
-
-.nav__right {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-}
-
-.nav__item {
-    font-size: 1rem;
-    text-decoration: none;
-    color: var(--inverse_text_color);
-    background-color: rgba(0, 0, 0, 0);
-    border: 30px black;
-
-    padding-top: 7px;
-}
-
-.nav__item_selected {
-    color: var(--text_color);
-    background: var(--selected_color);
-    border-radius: 5px 5px 0px 0px;
-}
-
-.nav__brand_logo {
-    width: 33px;
-
-    padding-top: 10px;
-}
-
-.nav__brand_text {
-    font-size: 1.5rem;
-    font-family: 'Sarabun', Helvetica, Arial, sans-serif;
-
-    padding: 16px 0px 0px 7px;
-}
-
-.nav__menu_item {
-    font-size: 1.1rem;
-
-    margin: 23px 7px 0px 7px;
-    padding: 10px 7px 0px 7px;
+.element__hidden_until_ready {
+    visibility: hidden;
 }
 
 .main__container {
     text-align: center;
 
-    padding: 0% 3% 5% 3%;
+    padding: 5% 3% 5% 3%;
 }
 
 @media screen and (max-width: 499px) {
-    .nav__style {
-        padding-left: 1%;
-        padding-right: 1%;
-    }
-
     .main__container {
-        margin: 5% 1% 0% 1%;
+        margin: 0% 1% 0% 11%;
     }
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (max-width: 599px) {
+    .main__container {
+        margin: 0% 7% 0% 17%;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .main__container {
+        margin: 0% 10% 0% 10%;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .main__container {
+        margin: 0% 15% 0% 15%;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* navbar styling                                                     */
+/* ------------------------------------------------------------------ */
+@media screen and (max-width: 599px) {
     .nav__style {
-        padding-left: 5%;
-        padding-right: 5%;
+        position: fixed;
+        height: 100%;
+        width: 10%;
+        top: 0;
+
+        background: linear-gradient(to bottom, var(--brand_color_begin), var(--brand_color_end));
+
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        transition: 0.25s;
     }
 
-    .main__container {
-        margin: 5% 7% 0% 7%;
+    .nav__start {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .nav__end {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        margin-bottom: 12.5%;
+    }
+
+    .nav__item {
+        visibility: hidden;
+        font-size: 1rem;
+        text-decoration: none;
+        color: var(--inverse_text_color);
+    }
+
+    .nav__item_selected {
+        color: var(--text_color);
+        background: var(--selected_color);
+        border-radius: 5px 5px 5px 5px;
+    }
+
+    .nav__brand_logo {
+        width: 40px;
+        display: block;
+
+        padding-top: 15px;
+
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .nav__brand_separator_container {
+        width: 100%;
+
+        flex-direction: column;
+
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .nav__brand_separator {
+        border-style: solid;
+        border-color: var(--inverse_text_color);
+        border-width: 0.5px;
+        width: 80%;
+    }
+
+    .nav__brand_text {
+        display: none;
+    }
+
+    .nav__menu_item {
+        font-size: 1.1rem;
+
+        margin: 1.875% auto 1.875% 10%;
+        padding: 1.875% 5% 1.875% 5%;
+    }
+
+    .nav__collapse_button {
+        font-size: 5.5vw;
+        color: var(--inverse_text_color);
+
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 7px;
     }
 }
 
 @media screen and (min-width: 600px) {
     .nav__style {
+        height: 60px;
+        width: 100%;
+        background: linear-gradient(to right, var(--brand_color_begin), var(--brand_color_end));
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
         padding-left: 8.5%;
         padding-right: 8.5%;
     }
 
-    .main__container {
-        margin: 5% 10% 0% 10%;
+    .nav__start {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .nav__end {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    .nav__item {
+        font-size: 1rem;
+        text-decoration: none;
+        color: var(--inverse_text_color);
+
+        padding-top: 7px;
+    }
+
+    .nav__item_selected {
+        color: var(--text_color);
+        background: var(--selected_color);
+        border-radius: 5px 5px 0px 0px;
+    }
+
+    .nav__brand_logo {
+        width: 33px;
+
+        padding-top: 10px;
+    }
+
+    .nav__brand_separator {
+        visibility: hidden;
+    }
+
+    .nav__brand_text {
+        font-size: 1.5rem;
+        font-family: 'Sarabun', Helvetica, Arial, sans-serif;
+
+        padding: 16px 0px 0px 7px;
+    }
+
+    .nav__menu_item {
+        font-size: 1.1rem;
+
+        margin: 23px 7px 0px 7px;
+        padding: 10px 7px 0px 7px;
+    }
+
+    .nav__collapse_button {
+        display: none;
     }
 }
 
@@ -193,9 +296,5 @@ h3 {
     .nav__style {
         padding-left: 12.5%;
         padding-right: 12.5%;
-    }
-
-    .main__container {
-        margin: 5% 15% 0% 15%;
     }
 }

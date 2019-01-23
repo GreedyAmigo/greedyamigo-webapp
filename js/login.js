@@ -9,9 +9,16 @@ import {logInQuery} from "./graphql"
 
 import {handleGraphQlException} from "./data_processing"
 
+import {addNavbarCollapseFunctionality, displayHiddenElements} from "./user_interface";
+
 redirectIfAuthorized();
 
 Vue.use(VueApollo);
+
+window.onload = function() {
+    addNavbarCollapseFunctionality();
+    displayHiddenElements();
+}
 
 let vueLoginForm = new Vue({
     el: "#form__login",

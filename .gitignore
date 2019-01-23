@@ -1,4 +1,5 @@
 # Don't track content of these folders
+.idea/
 node_modules/
 dist/
 
@@ -28,4 +29,3 @@ dist/
 
 # Files #
 js/settings.js
-package-lock.json

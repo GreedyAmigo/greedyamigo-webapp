@@ -11,7 +11,18 @@
     margin: 0px 0px 0px 0px;
 
     display: grid;
-    grid-template-columns: 10% 7.5% 5% auto 17% 5%;
+}
+
+@media screen and (max-width: 399px) {
+    .lending__style {
+        grid-template-columns: 12.5% 12.5% 10% auto 22.5% 5%;
+    }
+}
+
+@media screen and (min-width: 400px) {
+    .lending__style {
+        grid-template-columns: 10% 7.5% 7.5% auto 17% 5%;
+    }
 }
 
 .lending__style_cleared {
@@ -26,7 +37,7 @@
 
 .lending__seperator {
     border-style: solid;
-    border-color: black;
+    border-color: var(--text_color);
     border-width: 0.5px;
 }
 
