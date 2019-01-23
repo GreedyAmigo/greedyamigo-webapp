@@ -29,14 +29,22 @@
     <title>Greedy Amigo - Log In</title>
 </head>
 <body>
-<nav class="nav__style">
-    <div class="nav__left">
-        <a href="../index.html">
-            <img alt="greedy amigo logo" class="nav__item nav__brand_logo" src="../img/logo.svg"></object>
+<nav id="navbar" class="nav__style">
+    <div class="nav__start">
+        <a id="btn__collapse" class="nav__collapse_button">
+            &#9776;
         </a>
-        <a class="nav__item nav__brand_text" href="../index.html">Greedy Amigo</a>
+        <a href="../index.html">
+            <img alt="brand logo" class="nav__item nav__brand_logo" src="../img/logo.svg">
+        </a>
+        <a class="nav__item nav__brand_text" href="../index.html">
+            Greedy Amigo
+        </a>
+        <div class="nav__item nav__brand_separator_container">
+            <hr class="nav__brand_separator">
+        </div>
     </div>
-    <div class="nav__right">
+    <div class="nav__end">
         <a class="nav__item nav__menu_item nav__item_selected" href="login.html">
             Log in
         </a>
@@ -54,9 +62,11 @@
         <input class="input__default" name="login_password" placeholder="Password" required type="password"
                v-model="password"><br>
 
-        <ul class="errorlist__default" v-if="errorStore.length > 0">
-            <li :value="error" class="errorlist__entry" v-for="error in errorStore">{{ error }}</li>
-        </ul>
+        <div class="element__hidden_until_ready">
+            <ul class="errorlist__default" v-if="errorStore.length > 0">
+                <li :value="error" class="errorlist__entry" v-for="error in errorStore">{{ error }}</li>
+            </ul>
+        </div>
 
         <button class="button__default" type="submit">Log in</button>
     </form>

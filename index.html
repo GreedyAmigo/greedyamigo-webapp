@@ -28,19 +28,22 @@
     <title>Greedy Amigo - Landing page</title>
 </head>
 <body>
-<nav class="nav__style">
-    <div class="nav__left">
-        <a class="nav__item nav__collapse_button">
+<nav id="navbar" class="nav__style">
+    <div class="nav__start">
+        <a id="btn__collapse" class="nav__collapse_button">
             &#9776;
         </a>
         <a href="index.html">
-            <img alt="brand logo" class="nav__item nav__brand_logo" src="../img/logo.svg"></object>
+            <img alt="brand logo" class="nav__item nav__brand_logo" src="../img/logo.svg">
         </a>
         <a class="nav__item nav__brand_text" href="index.html">
             Greedy Amigo
         </a>
+        <div class="nav__item nav__brand_separator_container">
+            <hr class="nav__brand_separator">
+        </div>
     </div>
-    <div class="nav__right">
+    <div class="nav__end">
         <a class="nav__item nav__menu_item" href="/pages/login.html">
             Log in
         </a>
@@ -59,7 +62,8 @@
         A lending can be about money or a thing.<br>
         <br>
         Unfortunately we are currently not able to connect your lendings with
-        other real users <strong>yet</strong>, but we are working day and night
+        other real users <strong>yet</strong>,<br>
+        but we are working day and night
         to implement this and other great new features for you.<br>
         <br>
         This web application was developed by two students of the<br>
@@ -69,12 +73,14 @@
         To be more precise, by
         <a href="https://www.linkedin.com/in/ammerzon/">Simon Ammer</a>
         in the backend and <br>
-        <a href="https://www.linkedin.com/in/manuel-fuchs-9a0a57158/">Manuel Fuchs</a>
+        <a href="https://www.linkedin.com/in/manuel-fuchs/">Manuel Fuchs</a>
         in the frontend.<br>
         <br>
         If you got any trouble, feel free to contact us at
         <a href="mailto:support@greedy-amigo.com">support@greedy-amigo.com</a>.
     </p>
 </main>
+
+<script src="./dist/index.bundle.js"></script>
 </body>
 </html>
