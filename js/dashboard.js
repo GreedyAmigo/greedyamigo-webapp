@@ -296,7 +296,7 @@ let vueApplication = new Vue({
                     description: this.popupModel.description,
                     participantId: participantId,
                     isBorrowed: this.popupModel.isBorrowed,
-                    amount: parseInt(this.popupModel.amount),
+                    amount: parseFloat(this.popupModel.amount),
                     currencyId: currencyId
                 };
 
